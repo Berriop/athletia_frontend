@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { MainLayout } from '../layouts/MainLayout';
+import { ProtectedRoute } from './ProtectedRoute';
 import { LoginPage } from '../pages/LoginPage';
 import { RegisterPage } from '../pages/RegisterPage';
 import { DashboardPage } from '../pages/DashboardPage';
@@ -19,14 +20,16 @@ export const AppRouter: React.FC = () => {
       <Route path="/register" element={<RegisterPage />} />
       
       {/* Protected Routes Wrapper */}
-      <Route path="/" element={<MainLayout />}>
-        <Route index element={<Navigate to="/dashboard" replace />} />
-        <Route path="dashboard" element={<DashboardPage />} />
-        <Route path="workouts" element={<WorkoutsPage />} />
-        <Route path="meals" element={<MealsPage />} />
-        <Route path="sleep" element={<SleepPage />} />
-        <Route path="injuries" element={<InjuriesPage />} />
-        <Route path="profile" element={<ProfilePage />} />
+      <Route element={<ProtectedRoute />}>
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<Navigate to="/dashboard" replace />} />
+          <Route path="dashboard" element={<DashboardPage />} />
+          <Route path="workouts" element={<WorkoutsPage />} />
+          <Route path="meals" element={<MealsPage />} />
+          <Route path="sleep" element={<SleepPage />} />
+          <Route path="injuries" element={<InjuriesPage />} />
+          <Route path="profile" element={<ProfilePage />} />
+        </Route>
       </Route>
 
       {/* 404 Not Found */}
