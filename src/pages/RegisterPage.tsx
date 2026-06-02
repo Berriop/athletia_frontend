@@ -37,31 +37,43 @@ export const RegisterPage: React.FC = () => {
         {error && <div style={{ color: 'red', marginBottom: '1rem', textAlign: 'center' }}>{error}</div>}
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <input 
-            type="text" 
-            placeholder="Nombre" 
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            style={{ padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid var(--border)' }} 
-          />
-          <input 
-            type="email" 
-            placeholder="Email" 
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={{ padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid var(--border)' }} 
-          />
-          <input 
-            type="password" 
-            placeholder="Contraseña" 
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            minLength={6}
-            style={{ padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid var(--border)' }} 
-          />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <label htmlFor="name" style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Nombre completo</label>
+            <input 
+              id="name"
+              type="text" 
+              placeholder="Ej. Jane Doe" 
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              style={{ padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid var(--border)' }} 
+            />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <label htmlFor="email" style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Email</label>
+            <input 
+              id="email"
+              type="email" 
+              placeholder="tu@email.com" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              style={{ padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid var(--border)' }} 
+            />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <label htmlFor="password" style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Contraseña</label>
+            <input 
+              id="password"
+              type="password" 
+              placeholder="••••••••" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={6}
+              style={{ padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid var(--border)' }} 
+            />
+          </div>
           <button type="submit" disabled={isLoading} className="btn-primary" style={{ marginTop: '1rem' }}>
             {isLoading ? 'Cargando...' : 'Registrarse'}
           </button>

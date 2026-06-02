@@ -1,73 +1,47 @@
-# React + TypeScript + Vite
+# Athletia Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación cliente para Athletia, desarrollada con React, Vite y TypeScript.
 
-Currently, two official plugins are available:
+## 🚀 Tecnologías
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+* React 18
+* Vite
+* TypeScript
+* React Router DOM v6
+* Axios
+* Lucide React (Iconos)
+* CSS puro (Glassmorphism design)
 
-## React Compiler
+## 📁 Estructura del Proyecto
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* `src/components/` → UI reutilizable y presentacional (Header, Sidebar).
+* `src/contexts/` → `AuthContext` para el manejo de sesión global.
+* `src/layouts/` → Layouts principales (MainLayout).
+* `src/pages/` → Las distintas vistas de la aplicación.
+* `src/routes/` → Definición de rutas, `ProtectedRoute` y `PublicRoute`.
+* `src/services/` → Cliente Axios (`api.ts`) centralizado y servicios para consumo de endpoints.
+* `src/types/` → Definiciones estrictas de TypeScript.
 
-## Expanding the ESLint configuration
+## 🛠️ Instalación y Setup
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. Clonar el repositorio.
+2. Instalar dependencias:
+   ```bash
+   npm install
+   ```
+3. Iniciar el servidor de desarrollo:
+   ```bash
+   npm run dev
+   ```
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+La aplicación estará corriendo en `http://localhost:5173`.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🔐 Características implementadas
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+* **Autenticación completa**: Login, Registro, Logout.
+* **Persistencia de sesión**: El JWT se guarda en `localStorage`.
+* **Protección de rutas**: 
+  * `ProtectedRoute` bloquea acceso sin token.
+  * `PublicRoute` bloquea `/login` si ya hay sesión.
+  * Interceptor Axios: Redirige automáticamente al detectar 401.
+* **Dashboard unificado**: Consumo de endpoints en paralelo con `Promise.all`.

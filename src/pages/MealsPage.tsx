@@ -63,17 +63,35 @@ export const MealsPage: React.FC = () => {
       <div className="card glass-panel" style={{ marginBottom: '2rem' }}>
         <h3>Registrar Comida</h3>
         <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
-          <input required type="text" placeholder="Nombre (ej. Pollo con Arroz)" value={name} onChange={e => setName(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px' }} />
-          <select value={mealType} onChange={e => setMealType(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', backgroundColor: 'var(--bg-card)' }}>
-            <option value="breakfast">Desayuno</option>
-            <option value="lunch">Almuerzo</option>
-            <option value="dinner">Cena</option>
-            <option value="snack">Snack</option>
-          </select>
-          <label>Calorías: <input type="number" min="0" value={calories} onChange={e => setCalories(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px', width: '100px' }} /></label>
-          <label>Proteína (g): <input type="number" min="0" value={protein} onChange={e => setProtein(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px', width: '100px' }} /></label>
-          <label>Carbos (g): <input type="number" min="0" value={carbs} onChange={e => setCarbs(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px', width: '100px' }} /></label>
-          <label>Grasa (g): <input type="number" min="0" value={fat} onChange={e => setFat(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px', width: '100px' }} /></label>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <label htmlFor="name" style={{ fontSize: '0.9rem' }}>Nombre de la comida</label>
+            <input id="name" required type="text" placeholder="Ej. Pollo con Arroz" value={name} onChange={e => setName(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <label htmlFor="mealType" style={{ fontSize: '0.9rem' }}>Tipo</label>
+            <select id="mealType" value={mealType} onChange={e => setMealType(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', backgroundColor: 'var(--bg-card)' }}>
+              <option value="breakfast">Desayuno</option>
+              <option value="lunch">Almuerzo</option>
+              <option value="dinner">Cena</option>
+              <option value="snack">Snack</option>
+            </select>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <label htmlFor="calories" style={{ fontSize: '0.9rem' }}>Calorías</label>
+            <input id="calories" type="number" min="0" value={calories} onChange={e => setCalories(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <label htmlFor="protein" style={{ fontSize: '0.9rem' }}>Proteína (g)</label>
+            <input id="protein" type="number" min="0" value={protein} onChange={e => setProtein(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <label htmlFor="carbs" style={{ fontSize: '0.9rem' }}>Carbohidratos (g)</label>
+            <input id="carbs" type="number" min="0" value={carbs} onChange={e => setCarbs(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <label htmlFor="fat" style={{ fontSize: '0.9rem' }}>Grasa (g)</label>
+            <input id="fat" type="number" min="0" value={fat} onChange={e => setFat(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+          </div>
           <button type="submit" disabled={isLoading} className="btn-primary" style={{ gridColumn: 'span 2' }}>{isLoading ? 'Guardando...' : 'Guardar Comida'}</button>
         </form>
       </div>

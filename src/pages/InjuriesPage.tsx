@@ -12,6 +12,7 @@ export const InjuriesPage: React.FC = () => {
   const [injuryName, setInjuryName] = useState('');
   const [bodyArea, setBodyArea] = useState('');
   const [severity, setSeverity] = useState(5);
+  const [isActive, setIsActive] = useState(true);
   const [notes, setNotes] = useState('');
 
   const fetchInjuries = async () => {
@@ -60,11 +61,29 @@ export const InjuriesPage: React.FC = () => {
       <div className="card glass-panel" style={{ marginBottom: '2rem' }}>
         <h3>Reportar Lesión</h3>
         <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
-          <input required type="text" placeholder="Nombre (ej. Tendinitis)" value={injuryName} onChange={e => setInjuryName(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px' }} />
-          <input required type="text" placeholder="Área (ej. Rodilla derecha)" value={bodyArea} onChange={e => setBodyArea(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px' }} />
-          <label style={{ gridColumn: 'span 2' }}>Severidad (1-10): <input type="number" min="1" max="10" value={severity} onChange={e => setSeverity(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px', width: '100px' }} /></label>
-          <input type="text" placeholder="Notas (opcional)" value={notes} onChange={e => setNotes(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', gridColumn: 'span 2' }} />
-          <button type="submit" disabled={isLoading} className="btn-primary" style={{ gridColumn: 'span 2' }}>{isLoading ? 'Guardando...' : 'Reportar'}</button>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <label htmlFor="bodyArea" style={{ fontSize: '0.9rem' }}>Área del cuerpo</label>
+            <input id="bodyArea" required type="text" placeholder="Ej. Rodilla Derecha" value={bodyArea} onChange={e => setBodyArea(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <label htmlFor="injuryName" style={{ fontSize: '0.9rem' }}>Nombre de la lesión</label>
+            <input id="injuryName" required type="text" placeholder="Ej. Esguince" value={injuryName} onChange={e => setInjuryName(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <label htmlFor="severity" style={{ fontSize: '0.9rem' }}>Severidad (1-10)</label>
+            <input id="severity" required type="number" min="1" max="10" value={severity} onChange={e => setSeverity(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', justifyContent: 'center' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', cursor: 'pointer' }}>
+              <input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} />
+              ¿Está activa actualmente?
+            </label>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', gridColumn: 'span 2' }}>
+            <label htmlFor="notes" style={{ fontSize: '0.9rem' }}>Notas sobre la lesión</label>
+            <textarea id="notes" placeholder="Notas sobre el tratamiento o dolor..." value={notes} onChange={e => setNotes(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', minHeight: '80px', backgroundColor: 'var(--bg-card)', color: 'inherit', border: '1px solid var(--border)' }} />
+          </div>
+          <button type="submit" disabled={isLoading} className="btn-primary" style={{ gridColumn: 'span 2' }}>{isLoading ? 'Guardando...' : 'Registrar Lesión'}</button>
         </form>
       </div>
 

@@ -65,12 +65,30 @@ export const WorkoutsPage: React.FC = () => {
       <div className="card glass-panel" style={{ marginBottom: '2rem' }}>
         <h3>Nuevo Entrenamiento</h3>
         <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
-          <input required type="text" placeholder="Título" value={title} onChange={e => setTitle(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px' }} />
-          <input required type="text" placeholder="Parte del cuerpo" value={bodyPart} onChange={e => setBodyPart(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px' }} />
-          <label>Duración (min): <input type="number" min="1" value={duration} onChange={e => setDuration(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px', width: '100px' }} /></label>
-          <label>Energía (1-10): <input type="number" min="1" max="10" value={energyLevel} onChange={e => setEnergyLevel(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px', width: '100px' }} /></label>
-          <label>Fatiga (1-10): <input type="number" min="1" max="10" value={fatigueLevel} onChange={e => setFatigueLevel(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px', width: '100px' }} /></label>
-          <label>Dolor (1-10): <input type="number" min="1" max="10" value={painLevel} onChange={e => setPainLevel(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px', width: '100px' }} /></label>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <label htmlFor="title" style={{ fontSize: '0.9rem' }}>Título</label>
+            <input id="title" required type="text" placeholder="Título" value={title} onChange={e => setTitle(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <label htmlFor="bodyPart" style={{ fontSize: '0.9rem' }}>Parte del cuerpo</label>
+            <input id="bodyPart" required type="text" placeholder="Parte del cuerpo" value={bodyPart} onChange={e => setBodyPart(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <label htmlFor="duration" style={{ fontSize: '0.9rem' }}>Duración (min)</label>
+            <input id="duration" type="number" min="1" value={duration} onChange={e => setDuration(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <label htmlFor="energy" style={{ fontSize: '0.9rem' }}>Energía (1-10)</label>
+            <input id="energy" type="number" min="1" max="10" value={energyLevel} onChange={e => setEnergyLevel(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <label htmlFor="fatigue" style={{ fontSize: '0.9rem' }}>Fatiga (1-10)</label>
+            <input id="fatigue" type="number" min="1" max="10" value={fatigueLevel} onChange={e => setFatigueLevel(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <label htmlFor="pain" style={{ fontSize: '0.9rem' }}>Dolor (1-10)</label>
+            <input id="pain" type="number" min="1" max="10" value={painLevel} onChange={e => setPainLevel(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+          </div>
           <button type="submit" disabled={isLoading} className="btn-primary" style={{ gridColumn: 'span 2' }}>{isLoading ? 'Guardando...' : 'Guardar Entrenamiento'}</button>
         </form>
       </div>
