@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { 
   Activity, 
   Apple, 
@@ -8,24 +8,33 @@ import {
   User as UserIcon, 
   LayoutDashboard,
   Menu,
-  ChevronLeft
+  ChevronLeft,
+  LogOut
 } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 import './Sidebar.css';
 
 export const Sidebar: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/login', { replace: true });
+  };
+
   const navItems = [
     { path: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { path: '/workouts', icon: Activity, label: 'Workouts' },
-    { path: '/meals', icon: Apple, label: 'Meals' },
-    { path: '/sleep', icon: Moon, label: 'Sleep' },
-    { path: '/injuries', icon: Bandage, label: 'Injuries' },
-    { path: '/profile', icon: UserIcon, label: 'Profile' },
+    { path: '/workouts', icon: Activity, label: 'Entrenamientos' },
+    { path: '/meals', icon: Apple, label: 'Alimentación' },
+    { path: '/sleep', icon: Moon, label: 'Sueño' },
+    { path: '/injuries', icon: Bandage, label: 'Lesiones' },
+    { path: '/profile', icon: UserIcon, label: 'Perfil' },
   ];
 
   return (
@@ -50,6 +59,17 @@ export const Sidebar: React.FC = () => {
           </NavLink>
         ))}
       </nav>
+
+      <div className="sidebar-footer">
+        <button
+          className="nav-item logout-btn"
+          onClick={handleLogout}
+          title={collapsed ? 'Cerrar sesión' : undefined}
+        >
+          <LogOut size={24} className="nav-icon" />
+          {!collapsed && <span className="nav-label">Cerrar sesión</span>}
+        </button>
+      </div>
     </aside>
   );
 };
