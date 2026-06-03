@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { Edit2, Trash2 } from 'lucide-react';
 import type { Meal } from '../types';
 import { mealService } from '../services/meal.service';
 import type { CreateMealDTO } from '../services/meal.service';
+import { useNotification } from '../contexts/NotificationContext';
+import { ConfirmDialog } from '../components/ConfirmDialog';
 
 export const MealsPage: React.FC = () => {
   const [meals, setMeals] = useState<Meal[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const { addNotification } = useNotification();
 
   // Form states
   const [name, setName] = useState('');
@@ -31,9 +37,20 @@ export const MealsPage: React.FC = () => {
     fetchMeals();
   }, []);
 
+  const resetForm = () => {
+    setName('');
+    setCalories(500);
+    setMealType('lunch');
+    setProtein(30);
+    setCarbs(50);
+    setFat(15);
+    setEditingId(null);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError('');
     try {
       const data: CreateMealDTO = {
         name,
@@ -44,12 +61,50 @@ export const MealsPage: React.FC = () => {
         fatG: fat,
         date: new Date().toISOString()
       };
-      await mealService.create(data);
-      setName('');
+      
+      if (editingId) {
+        await mealService.update(editingId, data);
+        addNotification('Comida actualizada correctamente', 'success');
+      } else {
+        await mealService.create(data);
+        addNotification('Comida registrada correctamente', 'success');
+      }
+      
+      resetForm();
       await fetchMeals();
     } catch (err) {
-      setError('Error al crear comida. Verifica los campos.');
+      setError(editingId ? 'Error al actualizar comida. Verifica los campos.' : 'Error al crear comida. Verifica los campos.');
+      addNotification(editingId ? 'Error al actualizar comida' : 'Error al registrar comida', 'error');
       setIsLoading(false);
+    }
+  };
+
+  const handleEdit = (meal: Meal) => {
+    setEditingId(meal.id);
+    setName(meal.name);
+    setCalories(meal.calories);
+    setMealType(meal.mealType);
+    setProtein(meal.proteinG);
+    setCarbs(meal.carbsG);
+    setFat(meal.fatG);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteId) return;
+    try {
+      await mealService.delete(deleteId);
+      addNotification('Comida eliminada correctamente', 'success');
+      
+      if (editingId === deleteId) {
+        resetForm();
+      }
+      
+      setMeals(prev => prev.filter(m => m.id !== deleteId));
+    } catch (err) {
+      addNotification('Error al eliminar la comida', 'error');
+    } finally {
+      setDeleteId(null);
     }
   };
 
@@ -60,8 +115,13 @@ export const MealsPage: React.FC = () => {
       
       {error && <div style={{ color: 'red', marginBottom: '1rem' }}>{error}</div>}
 
-      <div className="card glass-panel" style={{ marginBottom: '2rem' }}>
-        <h3>Registrar Comida</h3>
+      <div className="card glass-panel" style={{ marginBottom: '2rem', position: 'relative' }}>
+        {editingId && (
+          <div style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'var(--accent)', color: 'white', padding: '0.25rem 0.75rem', borderRadius: '1rem', fontSize: '0.8rem', fontWeight: 'bold' }}>
+            Modo Edición
+          </div>
+        )}
+        <h3>{editingId ? 'Editar Comida' : 'Registrar Comida'}</h3>
         <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="name" style={{ fontSize: '0.9rem' }}>Nombre de la comida</label>
@@ -92,7 +152,16 @@ export const MealsPage: React.FC = () => {
             <label htmlFor="fat" style={{ fontSize: '0.9rem' }}>Grasa (g)</label>
             <input id="fat" type="number" min="0" value={fat} onChange={e => setFat(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
-          <button type="submit" disabled={isLoading} className="btn-primary" style={{ gridColumn: 'span 2' }}>{isLoading ? 'Guardando...' : 'Guardar Comida'}</button>
+          <div style={{ gridColumn: 'span 2', display: 'flex', gap: '1rem' }}>
+            <button type="submit" disabled={isLoading} className="btn-primary" style={{ flex: 1 }}>
+              {isLoading ? 'Guardando...' : (editingId ? 'Actualizar Comida' : 'Guardar Comida')}
+            </button>
+            {editingId && (
+              <button type="button" onClick={resetForm} disabled={isLoading} className="btn-secondary" style={{ flex: 1, backgroundColor: 'transparent', border: '1px solid var(--border)', color: 'var(--text-primary)' }}>
+                Cancelar Edición
+              </button>
+            )}
+          </div>
         </form>
       </div>
 
@@ -105,13 +174,31 @@ export const MealsPage: React.FC = () => {
               <h4 style={{ margin: 0, color: 'var(--accent)' }}>{m.name}</h4>
               <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-secondary)' }}>{m.mealType} - {m.calories} kcal</p>
             </div>
-            <div style={{ textAlign: 'right', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-              <p style={{ margin: 0 }}>P: {m.proteinG}g / C: {m.carbsG}g / G: {m.fatG}g</p>
+            <div style={{ textAlign: 'right', fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <p style={{ margin: 0 }}>P: {m.proteinG}g / C: {m.carbsG}g / G: {m.fatG}g</p>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <button onClick={() => handleEdit(m)} title="Editar" style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', padding: '0.25rem' }}>
+                    <Edit2 size={16} />
+                  </button>
+                  <button onClick={() => setDeleteId(m.id)} title="Eliminar" style={{ background: 'none', border: 'none', color: 'red', cursor: 'pointer', padding: '0.25rem' }}>
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              </div>
               <p style={{ margin: 0 }}>{new Date(m.date).toLocaleDateString()}</p>
             </div>
           </div>
         ))}
       </div>
+
+      <ConfirmDialog
+        isOpen={deleteId !== null}
+        title="Eliminar Comida"
+        message="¿Estás seguro de que deseas eliminar esta comida? Esta acción no se puede deshacer."
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteId(null)}
+      />
     </div>
   );
 };

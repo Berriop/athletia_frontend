@@ -13,7 +13,7 @@ import './DashboardPage.css';
 
 interface DashboardStats {
   totalWorkouts: number;
-  totalMeals: number;
+  mealsToday: number;
   lastSleep: SleepLog | null;
   activeInjuries: number;
   recentWorkouts: Workout[];
@@ -24,7 +24,7 @@ export const DashboardPage: React.FC = () => {
   const { user } = useAuth();
   const [stats, setStats] = useState<DashboardStats>({
     totalWorkouts: 0,
-    totalMeals: 0,
+    mealsToday: 0,
     lastSleep: null,
     activeInjuries: 0,
     recentWorkouts: [],
@@ -37,16 +37,24 @@ export const DashboardPage: React.FC = () => {
       try {
         const [workoutsRes, mealsRes, sleepsRes, injuriesRes] = await Promise.all([
           workoutService.getAll(1, 5),
-          mealService.getAll(1, 5),
+          mealService.getAll(1, 50),
           sleepService.getAll(1, 1),
           injuryService.getAll(1, 50),
         ]);
 
         const activeInjuries = injuriesRes.data.filter(i => i.isActive).length;
+        
+        const today = new Date();
+        const mealsToday = mealsRes.data.filter(m => {
+          const d = new Date(m.date);
+          return d.getDate() === today.getDate() &&
+                 d.getMonth() === today.getMonth() &&
+                 d.getFullYear() === today.getFullYear();
+        }).length;
 
         setStats({
-          totalWorkouts: injuriesRes.meta?.total ?? workoutsRes.data.length,
-          totalMeals: mealsRes.meta?.total ?? mealsRes.data.length,
+          totalWorkouts: workoutsRes.meta?.total ?? workoutsRes.data.length,
+          mealsToday,
           lastSleep: sleepsRes.data[0] ?? null,
           activeInjuries,
           recentWorkouts: workoutsRes.data.slice(0, 3),
@@ -91,7 +99,7 @@ export const DashboardPage: React.FC = () => {
               </div>
               <div className="stat-info">
                 <h3>Comidas Hoy</h3>
-                <p className="stat-value">{stats.recentMeals.length} registradas</p>
+                <p className="stat-value">{stats.mealsToday} registradas</p>
               </div>
             </div>
 

@@ -22,7 +22,13 @@ export const sleepService = {
     return response.data.data;
   },
 
+  update: async (id: string, data: Partial<CreateSleepDTO>): Promise<SleepLog> => {
+    const response = await api.put<ApiResponse<SleepLog>>(`/sleeps/${id}`, data);
+    return response.data.data;
+  },
+
   delete: async (id: string): Promise<void> => {
     await api.delete(`/sleeps/${id}`);
   }
 };
+

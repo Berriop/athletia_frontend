@@ -23,7 +23,13 @@ export const mealService = {
     return response.data.data;
   },
 
+  update: async (id: string, data: Partial<CreateMealDTO>): Promise<Meal> => {
+    const response = await api.put<ApiResponse<Meal>>(`/meals/${id}`, data);
+    return response.data.data;
+  },
+
   delete: async (id: string): Promise<void> => {
     await api.delete(`/meals/${id}`);
   }
 };
+
