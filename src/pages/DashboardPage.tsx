@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Activity, Moon, Apple, Bandage, ChevronRight } from 'lucide-react';
+import { Activity, Moon, Apple, Bandage, ChevronRight, HeartPulse } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { workoutService } from '../services/workout.service';
@@ -9,6 +9,7 @@ import { injuryService } from '../services/injury.service';
 import type { Workout } from '../types';
 import type { Meal } from '../types';
 import type { SleepLog } from '../types';
+import { calculateRecoveryScore, type RecoveryScoreResult } from '../utils/recoveryScore';
 import './DashboardPage.css';
 
 interface DashboardStats {
@@ -18,6 +19,7 @@ interface DashboardStats {
   activeInjuries: number;
   recentWorkouts: Workout[];
   recentMeals: Meal[];
+  recoveryScore: RecoveryScoreResult | null;
 }
 
 export const DashboardPage: React.FC = () => {
@@ -29,6 +31,7 @@ export const DashboardPage: React.FC = () => {
     activeInjuries: 0,
     recentWorkouts: [],
     recentMeals: [],
+    recoveryScore: null,
   });
   const [isLoading, setIsLoading] = useState(true);
 
@@ -36,7 +39,7 @@ export const DashboardPage: React.FC = () => {
     const loadStats = async () => {
       try {
         const [workoutsRes, mealsRes, sleepsRes, injuriesRes] = await Promise.all([
-          workoutService.getAll(1, 5),
+          workoutService.getAll(1, 50),
           mealService.getAll(1, 50),
           sleepService.getAll(1, 1),
           injuryService.getAll(1, 50),
@@ -52,13 +55,23 @@ export const DashboardPage: React.FC = () => {
                  d.getFullYear() === today.getFullYear();
         }).length;
 
+        // Get workouts from the last 7 days for the recovery score
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+        const workoutsLast7Days = workoutsRes.data.filter(w => new Date(w.date) >= sevenDaysAgo);
+
+        const lastSleep = sleepsRes.data[0] ?? null;
+        
+        const recoveryScore = calculateRecoveryScore(lastSleep, activeInjuries, workoutsLast7Days);
+
         setStats({
           totalWorkouts: workoutsRes.meta?.total ?? workoutsRes.data.length,
           mealsToday,
-          lastSleep: sleepsRes.data[0] ?? null,
+          lastSleep,
           activeInjuries,
           recentWorkouts: workoutsRes.data.slice(0, 3),
           recentMeals: mealsRes.data.slice(0, 3),
+          recoveryScore,
         });
       } catch (err) {
         console.error('Error loading dashboard stats', err);
@@ -81,6 +94,38 @@ export const DashboardPage: React.FC = () => {
         <p style={{ color: 'var(--text-secondary)' }}>Cargando datos...</p>
       ) : (
         <>
+          {/* Recovery Score Card */}
+          {stats.recoveryScore && (
+            <div className="card glass-panel" style={{ 
+              marginBottom: '2rem', 
+              background: `linear-gradient(135deg, ${stats.recoveryScore.color}20 0%, transparent 100%)`,
+              borderLeft: `4px solid ${stats.recoveryScore.color}`
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div>
+                  <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: '0 0 0.5rem 0' }}>
+                    <HeartPulse color={stats.recoveryScore.color} />
+                    Recovery Score
+                  </h3>
+                  <p style={{ color: 'var(--text-secondary)', margin: 0 }}>
+                    Tu estado de recuperación actual es <strong style={{ color: stats.recoveryScore.color }}>{stats.recoveryScore.status}</strong>
+                  </p>
+                </div>
+                <div style={{ 
+                  fontSize: '2.5rem', 
+                  fontWeight: 800, 
+                  color: stats.recoveryScore.color,
+                  backgroundColor: `${stats.recoveryScore.color}15`,
+                  padding: '1rem 1.5rem',
+                  borderRadius: '1rem'
+                }}>
+                  {stats.recoveryScore.score}
+                  <span style={{ fontSize: '1rem', color: 'var(--text-secondary)', fontWeight: 500 }}>/100</span>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Stats Cards */}
           <div className="dashboard-grid">
             <div className="card glass-panel stat-card">
@@ -177,3 +222,4 @@ export const DashboardPage: React.FC = () => {
     </div>
   );
 };
+
