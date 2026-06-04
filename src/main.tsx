@@ -4,6 +4,7 @@ import App from './App.tsx'
 import { AuthProvider } from './contexts/AuthContext.tsx'
 import { NotificationProvider } from './contexts/NotificationContext.tsx'
 import './index.css'
+import './styles/public.css'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

@@ -29,7 +29,9 @@ export const LoginPage: React.FC = () => {
 
   return (
     <div className="page-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', flexDirection: 'column' }}>
-      <h1 className="logo" style={{ fontSize: '3rem', marginBottom: '2rem' }}>Athletia</h1>
+      <h1 className="logo" style={{ fontSize: '3rem', marginBottom: '2rem' }}>
+        <Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}>Athletia</Link>
+      </h1>
       <div className="card glass-panel" style={{ width: '100%', maxWidth: '400px' }}>
         <h2 style={{ marginBottom: '1.5rem', textAlign: 'center' }}>Iniciar Sesión</h2>
         
