@@ -15,9 +15,14 @@ import './DashboardPage.css';
 
 interface DashboardStats {
   totalWorkouts: number;
+  totalMeals: number;
+  totalSleepLogs: number;
+  totalInjuries: number;
+  workoutsLast7DaysCount: number;
+  activeInjuries: number;
+  avgSleep: number;
   mealsToday: number;
   lastSleep: SleepLog | null;
-  activeInjuries: number;
   recentWorkouts: Workout[];
   recentMeals: Meal[];
   recoveryScore: RecoveryScoreResult | null;
@@ -28,9 +33,14 @@ export const DashboardPage: React.FC = () => {
   const { user } = useAuth();
   const [stats, setStats] = useState<DashboardStats>({
     totalWorkouts: 0,
+    totalMeals: 0,
+    totalSleepLogs: 0,
+    totalInjuries: 0,
+    workoutsLast7DaysCount: 0,
+    activeInjuries: 0,
+    avgSleep: 0,
     mealsToday: 0,
     lastSleep: null,
-    activeInjuries: 0,
     recentWorkouts: [],
     recentMeals: [],
     recoveryScore: null,
@@ -44,7 +54,7 @@ export const DashboardPage: React.FC = () => {
         const [workoutsRes, mealsRes, sleepsRes, injuriesRes] = await Promise.all([
           workoutService.getAll(1, 50),
           mealService.getAll(1, 50),
-          sleepService.getAll(1, 1),
+          sleepService.getAll(1, 50), // Changed to 50 to calculate averages properly
           injuryService.getAll(1, 50),
         ]);
 
@@ -68,11 +78,27 @@ export const DashboardPage: React.FC = () => {
         const recoveryScore = calculateRecoveryScore(lastSleep, activeInjuries, workoutsLast7Days);
         const coachRecommendation = getCoachRecommendation(lastSleep, activeInjuries, workoutsLast7Days);
 
+        const totalWorkouts = workoutsRes.meta?.total ?? workoutsRes.data.length;
+        const totalMeals = mealsRes.meta?.total ?? mealsRes.data.length;
+        const totalSleepLogs = sleepsRes.meta?.total ?? sleepsRes.data.length;
+        const totalInjuries = injuriesRes.meta?.total ?? injuriesRes.data.length;
+
+        let avgSleep = 0;
+        if (sleepsRes.data.length > 0) {
+          const totalHours = sleepsRes.data.reduce((sum, log) => sum + log.hoursSlept, 0);
+          avgSleep = totalHours / sleepsRes.data.length;
+        }
+
         setStats({
-          totalWorkouts: workoutsRes.meta?.total ?? workoutsRes.data.length,
+          totalWorkouts,
+          totalMeals,
+          totalSleepLogs,
+          totalInjuries,
+          workoutsLast7DaysCount: workoutsLast7Days.length,
+          activeInjuries,
+          avgSleep,
           mealsToday,
           lastSleep,
-          activeInjuries,
           recentWorkouts: workoutsRes.data.slice(0, 3),
           recentMeals: mealsRes.data.slice(0, 3),
           recoveryScore,
@@ -163,6 +189,10 @@ export const DashboardPage: React.FC = () => {
             )}
           </div>
 
+          <div className="section-header" style={{ marginBottom: '1rem', marginTop: '2rem' }}>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 600 }}>Métricas y Tendencias</h2>
+          </div>
+
           {/* Stats Cards */}
           <div className="dashboard-grid">
             <div className="card glass-panel stat-card">
@@ -171,7 +201,8 @@ export const DashboardPage: React.FC = () => {
               </div>
               <div className="stat-info">
                 <h3>Entrenamientos</h3>
-                <p className="stat-value">{stats.recentWorkouts.length} recientes</p>
+                <p className="stat-value">{stats.totalWorkouts} total</p>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>{stats.workoutsLast7DaysCount} en la última semana</p>
               </div>
             </div>
             
@@ -180,8 +211,9 @@ export const DashboardPage: React.FC = () => {
                 <Apple size={24} />
               </div>
               <div className="stat-info">
-                <h3>Comidas Hoy</h3>
-                <p className="stat-value">{stats.mealsToday} registradas</p>
+                <h3>Comidas</h3>
+                <p className="stat-value">{stats.totalMeals} total</p>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>{stats.mealsToday} registradas hoy</p>
               </div>
             </div>
 
@@ -190,9 +222,10 @@ export const DashboardPage: React.FC = () => {
                 <Moon size={24} />
               </div>
               <div className="stat-info">
-                <h3>Último Sueño</h3>
-                <p className="stat-value">
-                  {stats.lastSleep ? `${stats.lastSleep.hoursSlept}h — Calidad ${stats.lastSleep.sleepQuality}/10` : 'Sin registro'}
+                <h3>Sueño</h3>
+                <p className="stat-value">{stats.totalSleepLogs} registros</p>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+                  {stats.avgSleep > 0 ? `Promedio: ${stats.avgSleep.toFixed(1)}h/noche` : 'Sin promedio'}
                 </p>
               </div>
             </div>
@@ -202,8 +235,9 @@ export const DashboardPage: React.FC = () => {
                 <Bandage size={24} />
               </div>
               <div className="stat-info">
-                <h3>Lesiones Activas</h3>
-                <p className="stat-value">{stats.activeInjuries === 0 ? '¡Sin lesiones!' : `${stats.activeInjuries} activa(s)`}</p>
+                <h3>Lesiones</h3>
+                <p className="stat-value">{stats.totalInjuries} historial</p>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>{stats.activeInjuries === 0 ? 'Ninguna activa' : `${stats.activeInjuries} activas actualmente`}</p>
               </div>
             </div>
           </div>
@@ -259,4 +293,5 @@ export const DashboardPage: React.FC = () => {
     </div>
   );
 };
+
 
