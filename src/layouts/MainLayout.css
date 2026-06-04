@@ -18,3 +18,18 @@
   display: flex;
   flex-direction: column;
 }
+
+/* ── GymFinder: remove all padding so the map fills the viewport ── */
+.layout-main:has(.gym-finder-page) {
+  padding: 0;
+  overflow: hidden;
+}
+
+.layout-main:has(.gym-finder-page) .header {
+  margin: 1rem 1.5rem;
+}
+
+.layout-content:has(.gym-finder-page) {
+  overflow: hidden;
+  min-height: 0;
+}

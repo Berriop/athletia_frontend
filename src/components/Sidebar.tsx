@@ -9,7 +9,8 @@ import {
   LayoutDashboard,
   Menu,
   ChevronLeft,
-  LogOut
+  LogOut,
+  MapPin
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import './Sidebar.css';
@@ -34,6 +35,7 @@ export const Sidebar: React.FC = () => {
     { path: '/meals', icon: Apple, label: 'Alimentación' },
     { path: '/sleep', icon: Moon, label: 'Sueño' },
     { path: '/injuries', icon: Bandage, label: 'Lesiones' },
+    { path: '/gyms', icon: MapPin, label: 'Gimnasios' },
     { path: '/profile', icon: UserIcon, label: 'Perfil' },
   ];
 

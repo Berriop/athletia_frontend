@@ -11,6 +11,7 @@ import { MealsPage } from '../pages/MealsPage';
 import { SleepPage } from '../pages/SleepPage';
 import { InjuriesPage } from '../pages/InjuriesPage';
 import { ProfilePage } from '../pages/ProfilePage';
+import { GymFinderPage } from '../pages/GymFinderPage';
 import { NotFoundPage } from '../pages/NotFoundPage';
 
 export const AppRouter: React.FC = () => {
@@ -31,6 +32,7 @@ export const AppRouter: React.FC = () => {
           <Route path="meals" element={<MealsPage />} />
           <Route path="sleep" element={<SleepPage />} />
           <Route path="injuries" element={<InjuriesPage />} />
+          <Route path="gyms" element={<GymFinderPage />} />
           <Route path="profile" element={<ProfilePage />} />
         </Route>
       </Route>
