@@ -1,8 +1,10 @@
+export type MealType = 'BREAKFAST' | 'LUNCH' | 'DINNER' | 'SNACK';
+
 export interface Meal {
   id: string;
   name: string;
   calories: number;
-  mealType: string;
+  mealType: MealType;
   proteinG: number;
   carbsG: number;
   fatG: number;

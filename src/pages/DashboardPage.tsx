@@ -10,6 +10,18 @@ import type { Workout } from '../types';
 import type { Meal } from '../types';
 import type { SleepLog } from '../types';
 import { calculateRecoveryScore, type RecoveryScoreResult } from '../utils/recoveryScore';
+import type { BodyPart } from '../types/Workout';
+import type { MealType } from '../types/Meal';
+
+const BODY_PART_LABELS: Record<BodyPart, string> = {
+  CHEST: 'Pecho', BACK: 'Espalda', SHOULDERS: 'Hombros', BICEPS: 'Bíceps',
+  TRICEPS: 'Tríceps', LEGS: 'Piernas', CORE: 'Core', CARDIO: 'Cardio',
+  FULL_BODY: 'Cuerpo completo', OTHER: 'Otro',
+};
+
+const MEAL_TYPE_LABELS: Record<MealType, string> = {
+  BREAKFAST: 'Desayuno', LUNCH: 'Almuerzo', DINNER: 'Cena', SNACK: 'Snack',
+};
 import { getCoachRecommendation, type CoachRecommendation } from '../utils/smartCoach';
 import './DashboardPage.css';
 
@@ -128,7 +140,7 @@ export const DashboardPage: React.FC = () => {
           {/* Top Highlight Cards: Recovery Score & Smart Coach */}
           <div className="top-dashboard-cards">
             {stats.recoveryScore && (
-              <div className="card glass-panel" style={{ 
+              <div className="card glass-panel" style={{
                 margin: 0,
                 background: `linear-gradient(135deg, ${stats.recoveryScore.color}20 0%, transparent 100%)`,
                 borderLeft: `4px solid ${stats.recoveryScore.color}`
@@ -140,12 +152,14 @@ export const DashboardPage: React.FC = () => {
                       Recovery Score
                     </h3>
                     <p style={{ color: 'var(--text-secondary)', margin: 0 }}>
-                      Tu estado actual es <strong style={{ color: stats.recoveryScore.color }}>{stats.recoveryScore.status}</strong>
+                      {stats.recoveryScore.status === 'Sin registros'
+                        ? 'Aún no tienes registros de sueño ni entrenamientos'
+                        : <>Tu estado actual es <strong style={{ color: stats.recoveryScore.color }}>{stats.recoveryScore.status}</strong></>}
                     </p>
                   </div>
-                  <div style={{ 
-                    fontSize: '2.5rem', 
-                    fontWeight: 800, 
+                  <div style={{
+                    fontSize: '2.5rem',
+                    fontWeight: 800,
                     color: stats.recoveryScore.color,
                     backgroundColor: `${stats.recoveryScore.color}15`,
                     padding: '1rem 1.5rem',
@@ -258,7 +272,7 @@ export const DashboardPage: React.FC = () => {
                       <div className="activity-icon">🏋️‍♂️</div>
                       <div className="activity-details">
                         <h4>{w.title}</h4>
-                        <p>{w.bodyPart} · {w.durationMinutes} min · Energía {w.energyLevel}/10</p>
+                        <p>{BODY_PART_LABELS[w.bodyPart as BodyPart] ?? w.bodyPart} · {w.durationMinutes} min · Energía {w.energyLevel}/10</p>
                       </div>
                     </div>
                   ))
@@ -280,7 +294,7 @@ export const DashboardPage: React.FC = () => {
                       <div className="activity-icon">🥗</div>
                       <div className="activity-details">
                         <h4>{m.name}</h4>
-                        <p>{m.mealType} · {m.calories} kcal · P:{m.proteinG}g C:{m.carbsG}g G:{m.fatG}g</p>
+                        <p>{MEAL_TYPE_LABELS[m.mealType as MealType] ?? m.mealType} · {m.calories} kcal · P:{m.proteinG}g C:{m.carbsG}g G:{m.fatG}g</p>
                       </div>
                     </div>
                   ))

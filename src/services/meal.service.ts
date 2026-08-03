@@ -1,11 +1,12 @@
 import { api } from './api';
 import type { Meal } from '../types';
 import type { ApiResponse } from '../types/api';
+import type { MealType } from '../types/Meal';
 
 export interface CreateMealDTO {
   name: string;
   calories: number;
-  mealType: string;
+  mealType: MealType;
   proteinG: number;
   carbsG: number;
   fatG: number;
@@ -30,6 +31,5 @@ export const mealService = {
 
   delete: async (id: string): Promise<void> => {
     await api.delete(`/meals/${id}`);
-  }
+  },
 };
-

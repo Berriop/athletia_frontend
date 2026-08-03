@@ -1,11 +1,12 @@
 import { api } from './api';
 import type { Workout } from '../types';
 import type { ApiResponse } from '../types/api';
+import type { BodyPart } from '../types/Workout';
 
 export interface CreateWorkoutDTO {
   title: string;
   description?: string;
-  bodyPart: string;
+  bodyPart: BodyPart;
   durationMinutes: number;
   energyLevel: number;
   fatigueLevel: number;
@@ -18,7 +19,7 @@ export const workoutService = {
     const response = await api.get<ApiResponse<Workout[]>>('/workouts', { params: { page, limit } });
     return response.data;
   },
-  
+
   getById: async (id: string): Promise<Workout> => {
     const response = await api.get<ApiResponse<Workout>>(`/workouts/${id}`);
     return response.data.data;
@@ -36,5 +37,5 @@ export const workoutService = {
 
   delete: async (id: string): Promise<void> => {
     await api.delete(`/workouts/${id}`);
-  }
+  },
 };

@@ -1,10 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Edit2, Trash2 } from 'lucide-react';
 import type { Workout } from '../types';
+import type { BodyPart } from '../types/Workout';
 import { workoutService } from '../services/workout.service';
 import type { CreateWorkoutDTO } from '../services/workout.service';
 import { useNotification } from '../contexts/NotificationContext';
 import { ConfirmDialog } from '../components/ConfirmDialog';
+
+const BODY_PART_LABELS: Record<BodyPart, string> = {
+  CHEST: 'Pecho',
+  BACK: 'Espalda',
+  SHOULDERS: 'Hombros',
+  BICEPS: 'Bíceps',
+  TRICEPS: 'Tríceps',
+  LEGS: 'Piernas',
+  CORE: 'Core / Abdomen',
+  CARDIO: 'Cardio',
+  FULL_BODY: 'Cuerpo completo',
+  OTHER: 'Otro',
+};
+
+const BODY_PARTS = Object.keys(BODY_PART_LABELS) as BodyPart[];
 
 export const WorkoutsPage: React.FC = () => {
   const [workouts, setWorkouts] = useState<Workout[]>([]);
@@ -16,7 +32,7 @@ export const WorkoutsPage: React.FC = () => {
 
   // Form states
   const [title, setTitle] = useState('');
-  const [bodyPart, setBodyPart] = useState('');
+  const [bodyPart, setBodyPart] = useState<BodyPart>('CHEST');
   const [duration, setDuration] = useState(30);
   const [energyLevel, setEnergyLevel] = useState(5);
   const [fatigueLevel, setFatigueLevel] = useState(5);
@@ -39,7 +55,7 @@ export const WorkoutsPage: React.FC = () => {
 
   const resetForm = () => {
     setTitle('');
-    setBodyPart('');
+    setBodyPart('CHEST');
     setDuration(30);
     setEnergyLevel(5);
     setFatigueLevel(5);
@@ -59,9 +75,9 @@ export const WorkoutsPage: React.FC = () => {
         energyLevel,
         fatigueLevel,
         painLevel,
-        date: new Date().toISOString() // Assuming date is kept as current on update or handled by backend
+        date: new Date().toISOString(),
       };
-      
+
       if (editingId) {
         await workoutService.update(editingId, data);
         addNotification('Entrenamiento actualizado correctamente', 'success');
@@ -69,12 +85,15 @@ export const WorkoutsPage: React.FC = () => {
         await workoutService.create(data);
         addNotification('Entrenamiento creado correctamente', 'success');
       }
-      
+
       resetForm();
       await fetchWorkouts();
-    } catch (err) {
-      setError(editingId ? 'Error al actualizar entrenamiento' : 'Error al crear entrenamiento');
-      addNotification(editingId ? 'Error al actualizar entrenamiento' : 'Error al registrar entrenamiento', 'error');
+    } catch (err: any) {
+      const msg =
+        err.response?.data?.error?.message ||
+        (editingId ? 'Error al actualizar entrenamiento' : 'Error al crear entrenamiento');
+      setError(msg);
+      addNotification(msg, 'error');
       setIsLoading(false);
     }
   };
@@ -95,12 +114,12 @@ export const WorkoutsPage: React.FC = () => {
     try {
       await workoutService.delete(deleteId);
       addNotification('Entrenamiento eliminado correctamente', 'success');
-      
+
       if (editingId === deleteId) {
         resetForm();
       }
-      
-      setWorkouts(prev => prev.filter(w => w.id !== deleteId));
+
+      setWorkouts((prev) => prev.filter((w) => w.id !== deleteId));
     } catch (err) {
       addNotification('Error al eliminar el entrenamiento', 'error');
     } finally {
@@ -112,7 +131,7 @@ export const WorkoutsPage: React.FC = () => {
     <div className="page-container">
       <h1 className="page-title">Entrenamientos</h1>
       <p className="page-subtitle">Registra y visualiza tus rutinas</p>
-      
+
       {error && <div style={{ color: 'red', marginBottom: '1rem' }}>{error}</div>}
 
       <div className="card glass-panel" style={{ marginBottom: '2rem', position: 'relative' }}>
@@ -125,31 +144,41 @@ export const WorkoutsPage: React.FC = () => {
         <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="title" style={{ fontSize: '0.9rem' }}>Título</label>
-            <input id="title" required type="text" placeholder="Título" value={title} onChange={e => setTitle(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <input id="title" required type="text" placeholder="Ej. Día de pecho" value={title} onChange={(e) => setTitle(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="bodyPart" style={{ fontSize: '0.9rem' }}>Parte del cuerpo</label>
-            <input id="bodyPart" required type="text" placeholder="Parte del cuerpo" value={bodyPart} onChange={e => setBodyPart(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <select
+              id="bodyPart"
+              required
+              value={bodyPart}
+              onChange={(e) => setBodyPart(e.target.value as BodyPart)}
+              style={{ padding: '0.5rem', borderRadius: '4px', backgroundColor: 'var(--bg-card)' }}
+            >
+              {BODY_PARTS.map((bp) => (
+                <option key={bp} value={bp}>{BODY_PART_LABELS[bp]}</option>
+              ))}
+            </select>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="duration" style={{ fontSize: '0.9rem' }}>Duración (min)</label>
-            <input id="duration" type="number" min="1" value={duration} onChange={e => setDuration(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <input id="duration" type="number" min="1" value={duration} onChange={(e) => setDuration(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="energy" style={{ fontSize: '0.9rem' }}>Energía (1-10)</label>
-            <input id="energy" type="number" min="1" max="10" value={energyLevel} onChange={e => setEnergyLevel(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <input id="energy" type="number" min="1" max="10" value={energyLevel} onChange={(e) => setEnergyLevel(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="fatigue" style={{ fontSize: '0.9rem' }}>Fatiga (1-10)</label>
-            <input id="fatigue" type="number" min="1" max="10" value={fatigueLevel} onChange={e => setFatigueLevel(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <input id="fatigue" type="number" min="1" max="10" value={fatigueLevel} onChange={(e) => setFatigueLevel(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="pain" style={{ fontSize: '0.9rem' }}>Dolor (1-10)</label>
-            <input id="pain" type="number" min="1" max="10" value={painLevel} onChange={e => setPainLevel(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <input id="pain" type="number" min="1" max="10" value={painLevel} onChange={(e) => setPainLevel(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <div style={{ gridColumn: 'span 2', display: 'flex', gap: '1rem' }}>
             <button type="submit" disabled={isLoading} className="btn-primary" style={{ flex: 1 }}>
-              {isLoading ? 'Guardando...' : (editingId ? 'Actualizar Entrenamiento' : 'Guardar Entrenamiento')}
+              {isLoading ? 'Guardando...' : editingId ? 'Actualizar Entrenamiento' : 'Guardar Entrenamiento'}
             </button>
             {editingId && (
               <button type="button" onClick={resetForm} disabled={isLoading} className="btn-secondary" style={{ flex: 1, backgroundColor: 'transparent', border: '1px solid var(--border)', color: 'var(--text-primary)' }}>
@@ -163,11 +192,13 @@ export const WorkoutsPage: React.FC = () => {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {isLoading && workouts.length === 0 ? <p>Cargando...</p> : null}
         {!isLoading && workouts.length === 0 ? <p>No hay entrenamientos registrados.</p> : null}
-        {workouts.map(w => (
+        {workouts.map((w) => (
           <div key={w.id} className="card glass-panel" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
               <h4 style={{ margin: 0, color: 'var(--accent)' }}>{w.title}</h4>
-              <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-secondary)' }}>{w.bodyPart} - {w.durationMinutes} min</p>
+              <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
+                {BODY_PART_LABELS[w.bodyPart] ?? w.bodyPart} · {w.durationMinutes} min
+              </p>
             </div>
             <div style={{ textAlign: 'right', fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.5rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>

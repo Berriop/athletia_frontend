@@ -2,7 +2,7 @@ import type { SleepLog, Workout } from '../types';
 
 export interface RecoveryScoreResult {
   score: number;
-  status: 'Excelente' | 'Bueno' | 'Moderado' | 'Riesgo';
+  status: 'Excelente' | 'Bueno' | 'Moderado' | 'Riesgo' | 'Sin registros';
   color: string;
 }
 
@@ -11,6 +11,15 @@ export function calculateRecoveryScore(
   activeInjuries: number,
   recentWorkouts: Workout[] // Should be filtered to last 7 days
 ): RecoveryScoreResult {
+  // Si no hay registros de sueño ni entrenamientos registrados, devolver 0 (Sin registros)
+  if (!lastSleep && recentWorkouts.length === 0) {
+    return {
+      score: 0,
+      status: 'Sin registros',
+      color: '#9ca3af', // Gray neutral
+    };
+  }
+
   let score = 0;
 
   // 1. Sueño (40%)
@@ -36,7 +45,8 @@ export function calculateRecoveryScore(
   const workoutsCount = recentWorkouts.length;
   if (workoutsCount >= 3 && workoutsCount <= 5) score += 10;
   else if (workoutsCount > 5) score += 5;
-  else score += 8; // Menos de 3
+  else if (workoutsCount > 0) score += 8; // Menos de 3 pero al menos 1
+  else score += 0;
 
   let status: RecoveryScoreResult['status'] = 'Riesgo';
   let color = '#ef4444'; // Red (Riesgo)

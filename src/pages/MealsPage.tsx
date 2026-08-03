@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Edit2, Trash2 } from 'lucide-react';
 import type { Meal } from '../types';
+import type { MealType } from '../types/Meal';
 import { mealService } from '../services/meal.service';
 import type { CreateMealDTO } from '../services/meal.service';
 import { useNotification } from '../contexts/NotificationContext';
 import { ConfirmDialog } from '../components/ConfirmDialog';
+
+const MEAL_TYPE_LABELS: Record<MealType, string> = {
+  BREAKFAST: 'Desayuno',
+  LUNCH: 'Almuerzo',
+  DINNER: 'Cena',
+  SNACK: 'Snack',
+};
+
+const MEAL_TYPES = Object.keys(MEAL_TYPE_LABELS) as MealType[];
 
 export const MealsPage: React.FC = () => {
   const [meals, setMeals] = useState<Meal[]>([]);
@@ -17,7 +27,7 @@ export const MealsPage: React.FC = () => {
   // Form states
   const [name, setName] = useState('');
   const [calories, setCalories] = useState(500);
-  const [mealType, setMealType] = useState('lunch');
+  const [mealType, setMealType] = useState<MealType>('LUNCH');
   const [protein, setProtein] = useState(30);
   const [carbs, setCarbs] = useState(50);
   const [fat, setFat] = useState(15);
@@ -40,7 +50,7 @@ export const MealsPage: React.FC = () => {
   const resetForm = () => {
     setName('');
     setCalories(500);
-    setMealType('lunch');
+    setMealType('LUNCH');
     setProtein(30);
     setCarbs(50);
     setFat(15);
@@ -59,9 +69,9 @@ export const MealsPage: React.FC = () => {
         proteinG: protein,
         carbsG: carbs,
         fatG: fat,
-        date: new Date().toISOString()
+        date: new Date().toISOString(),
       };
-      
+
       if (editingId) {
         await mealService.update(editingId, data);
         addNotification('Comida actualizada correctamente', 'success');
@@ -69,12 +79,15 @@ export const MealsPage: React.FC = () => {
         await mealService.create(data);
         addNotification('Comida registrada correctamente', 'success');
       }
-      
+
       resetForm();
       await fetchMeals();
-    } catch (err) {
-      setError(editingId ? 'Error al actualizar comida. Verifica los campos.' : 'Error al crear comida. Verifica los campos.');
-      addNotification(editingId ? 'Error al actualizar comida' : 'Error al registrar comida', 'error');
+    } catch (err: any) {
+      const msg =
+        err.response?.data?.error?.message ||
+        (editingId ? 'Error al actualizar comida' : 'Error al crear comida');
+      setError(msg);
+      addNotification(msg, 'error');
       setIsLoading(false);
     }
   };
@@ -95,12 +108,12 @@ export const MealsPage: React.FC = () => {
     try {
       await mealService.delete(deleteId);
       addNotification('Comida eliminada correctamente', 'success');
-      
+
       if (editingId === deleteId) {
         resetForm();
       }
-      
-      setMeals(prev => prev.filter(m => m.id !== deleteId));
+
+      setMeals((prev) => prev.filter((m) => m.id !== deleteId));
     } catch (err) {
       addNotification('Error al eliminar la comida', 'error');
     } finally {
@@ -112,7 +125,7 @@ export const MealsPage: React.FC = () => {
     <div className="page-container">
       <h1 className="page-title">Alimentación</h1>
       <p className="page-subtitle">Controla tus macros y calorías</p>
-      
+
       {error && <div style={{ color: 'red', marginBottom: '1rem' }}>{error}</div>}
 
       <div className="card glass-panel" style={{ marginBottom: '2rem', position: 'relative' }}>
@@ -125,36 +138,40 @@ export const MealsPage: React.FC = () => {
         <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="name" style={{ fontSize: '0.9rem' }}>Nombre de la comida</label>
-            <input id="name" required type="text" placeholder="Ej. Pollo con Arroz" value={name} onChange={e => setName(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <input id="name" required type="text" placeholder="Ej. Pollo con Arroz" value={name} onChange={(e) => setName(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-            <label htmlFor="mealType" style={{ fontSize: '0.9rem' }}>Tipo</label>
-            <select id="mealType" value={mealType} onChange={e => setMealType(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', backgroundColor: 'var(--bg-card)' }}>
-              <option value="breakfast">Desayuno</option>
-              <option value="lunch">Almuerzo</option>
-              <option value="dinner">Cena</option>
-              <option value="snack">Snack</option>
+            <label htmlFor="mealType" style={{ fontSize: '0.9rem' }}>Tipo de comida</label>
+            <select
+              id="mealType"
+              value={mealType}
+              onChange={(e) => setMealType(e.target.value as MealType)}
+              style={{ padding: '0.5rem', borderRadius: '4px', backgroundColor: 'var(--bg-card)' }}
+            >
+              {MEAL_TYPES.map((type) => (
+                <option key={type} value={type}>{MEAL_TYPE_LABELS[type]}</option>
+              ))}
             </select>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="calories" style={{ fontSize: '0.9rem' }}>Calorías</label>
-            <input id="calories" type="number" min="0" value={calories} onChange={e => setCalories(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <input id="calories" type="number" min="0" value={calories} onChange={(e) => setCalories(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="protein" style={{ fontSize: '0.9rem' }}>Proteína (g)</label>
-            <input id="protein" type="number" min="0" value={protein} onChange={e => setProtein(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <input id="protein" type="number" min="0" value={protein} onChange={(e) => setProtein(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="carbs" style={{ fontSize: '0.9rem' }}>Carbohidratos (g)</label>
-            <input id="carbs" type="number" min="0" value={carbs} onChange={e => setCarbs(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <input id="carbs" type="number" min="0" value={carbs} onChange={(e) => setCarbs(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="fat" style={{ fontSize: '0.9rem' }}>Grasa (g)</label>
-            <input id="fat" type="number" min="0" value={fat} onChange={e => setFat(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <input id="fat" type="number" min="0" value={fat} onChange={(e) => setFat(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <div style={{ gridColumn: 'span 2', display: 'flex', gap: '1rem' }}>
             <button type="submit" disabled={isLoading} className="btn-primary" style={{ flex: 1 }}>
-              {isLoading ? 'Guardando...' : (editingId ? 'Actualizar Comida' : 'Guardar Comida')}
+              {isLoading ? 'Guardando...' : editingId ? 'Actualizar Comida' : 'Guardar Comida'}
             </button>
             {editingId && (
               <button type="button" onClick={resetForm} disabled={isLoading} className="btn-secondary" style={{ flex: 1, backgroundColor: 'transparent', border: '1px solid var(--border)', color: 'var(--text-primary)' }}>
@@ -168,11 +185,13 @@ export const MealsPage: React.FC = () => {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {isLoading && meals.length === 0 ? <p>Cargando...</p> : null}
         {!isLoading && meals.length === 0 ? <p>No hay comidas registradas.</p> : null}
-        {meals.map(m => (
+        {meals.map((m) => (
           <div key={m.id} className="card glass-panel" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
               <h4 style={{ margin: 0, color: 'var(--accent)' }}>{m.name}</h4>
-              <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-secondary)' }}>{m.mealType} - {m.calories} kcal</p>
+              <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
+                {MEAL_TYPE_LABELS[m.mealType] ?? m.mealType} · {m.calories} kcal
+              </p>
             </div>
             <div style={{ textAlign: 'right', fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.5rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
