@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Edit2, Save, X } from 'lucide-react';
+import { Edit2, Save, X, Download } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { authService } from '../services/auth.service';
 import type { UpdateProfileDTO } from '../services/auth.service';
@@ -12,6 +12,7 @@ export const ProfilePage: React.FC = () => {
   const { addNotification } = useNotification();
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
 
   // Form fields
   const [name, setName] = useState(user?.name || '');
@@ -26,6 +27,29 @@ export const ProfilePage: React.FC = () => {
   const handleLogout = () => {
     logout();
     navigate('/login', { replace: true });
+  };
+
+  const handleExportCSV = async () => {
+    setIsExporting(true);
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/user/export`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!response.ok) throw new Error('Error al exportar');
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'athletia_export.csv';
+      a.click();
+      window.URL.revokeObjectURL(url);
+      addNotification('Datos exportados correctamente', 'success');
+    } catch {
+      addNotification('Error al exportar los datos', 'error');
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   const handleEdit = () => {
@@ -208,13 +232,28 @@ export const ProfilePage: React.FC = () => {
           </form>
         )}
 
-        <button
-          onClick={handleLogout}
-          className="btn-primary"
-          style={{ marginTop: '2rem', backgroundColor: '#ef4444', width: '100%' }}
-        >
-          Cerrar sesión
-        </button>
+        <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          <button
+            onClick={handleExportCSV}
+            disabled={isExporting}
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+              padding: '0.75rem 1.5rem', borderRadius: '0.5rem', cursor: 'pointer',
+              backgroundColor: 'transparent', border: '1px solid var(--primary)',
+              color: 'var(--primary)', fontWeight: 600, fontSize: '0.95rem',
+            }}
+          >
+            <Download size={16} />
+            {isExporting ? 'Exportando...' : 'Exportar mis datos (CSV)'}
+          </button>
+          <button
+            onClick={handleLogout}
+            className="btn-primary"
+            style={{ backgroundColor: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            Cerrar sesión
+          </button>
+        </div>
       </div>
     </div>
   );

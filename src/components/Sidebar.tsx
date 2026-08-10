@@ -10,14 +10,15 @@ import {
   Menu,
   ChevronLeft,
   LogOut,
-  MapPin
+  MapPin,
+  Shield
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import './Sidebar.css';
 
 export const Sidebar: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const navigate = useNavigate();
 
   const toggleSidebar = () => {
@@ -37,6 +38,7 @@ export const Sidebar: React.FC = () => {
     { path: '/injuries', icon: Bandage, label: 'Lesiones' },
     { path: '/gyms', icon: MapPin, label: 'Gimnasios' },
     { path: '/profile', icon: UserIcon, label: 'Perfil' },
+    ...(user?.role === 'ADMIN' ? [{ path: '/admin', icon: Shield, label: 'Admin' }] : []),
   ];
 
   return (
