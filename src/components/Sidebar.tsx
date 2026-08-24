@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { 
-  Activity, 
-  Apple, 
-  Moon, 
-  Bandage, 
-  User as UserIcon, 
+import {
+  Activity,
+  Apple,
+  Moon,
+  Bandage,
+  User as UserIcon,
   LayoutDashboard,
   Menu,
   ChevronLeft,
@@ -52,9 +52,9 @@ export const Sidebar: React.FC = () => {
 
       <nav className="sidebar-nav">
         {navItems.map((item) => (
-          <NavLink 
-            key={item.path} 
-            to={item.path} 
+          <NavLink
+            key={item.path}
+            to={item.path}
             className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
             title={collapsed ? item.label : undefined}
           >
