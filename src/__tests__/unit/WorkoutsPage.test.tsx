@@ -152,3 +152,113 @@ describe('WorkoutsPage.confirmDelete (RF-09)', () => {
     await waitFor(() => expect(screen.queryByText('Modo Edición')).not.toBeInTheDocument());
   });
 });
+
+describe('WorkoutsPage casos extra (carga, edición de campos, cancelar diálogo)', () => {
+  beforeEach(() => {
+    addNotification.mockClear();
+    vi.mocked(workoutService.create).mockClear();
+    vi.mocked(workoutService.delete).mockClear();
+  });
+
+  // fetchWorkouts en error (catch)
+  it('la carga inicial falla → muestra "Error al cargar entrenamientos"', async () => {
+    // Arrange
+    vi.mocked(workoutService.getAll).mockRejectedValue(new Error('network error'));
+
+    // Act
+    renderPage();
+
+    // Assert
+    expect(await screen.findByText('Error al cargar entrenamientos')).toBeInTheDocument();
+  });
+
+  // Fallback de error al actualizar (rama editingId=true del ternario)
+  it('al actualizar, el backend falla sin mensaje → "Error al actualizar entrenamiento"', async () => {
+    // Arrange
+    vi.mocked(workoutService.getAll).mockResolvedValue({ data: [existingWorkout], meta: {} } as any);
+    vi.mocked(workoutService.update).mockRejectedValue(new Error('network error'));
+    const user = userEvent.setup();
+    renderPage();
+    await user.click(await screen.findByTitle('Editar'));
+
+    // Act
+    await user.click(screen.getByRole('button', { name: 'Actualizar Entrenamiento' }));
+
+    // Assert
+    expect(await screen.findByText('Error al actualizar entrenamiento')).toBeInTheDocument();
+    expect(addNotification).toHaveBeenCalledWith('Error al actualizar entrenamiento', 'error');
+  });
+
+  // Inputs onChange (bodyPart, duration, energy, fatigue, pain)
+  it('modifica todos los campos → el DTO enviado refleja los nuevos valores', async () => {
+    // Arrange
+    vi.mocked(workoutService.create).mockResolvedValue({} as Workout);
+    const user = userEvent.setup();
+    renderPage();
+    await user.type(await screen.findByLabelText('Título'), 'Pierna');
+
+    // Act
+    await user.selectOptions(screen.getByLabelText('Parte del cuerpo'), 'CARDIO');
+    const duration = screen.getByLabelText('Duración (min)');
+    await user.clear(duration);
+    await user.type(duration, '60');
+    const energy = screen.getByLabelText('Energía (1-10)');
+    await user.clear(energy);
+    await user.type(energy, '8');
+    const fatigue = screen.getByLabelText('Fatiga (1-10)');
+    await user.clear(fatigue);
+    await user.type(fatigue, '3');
+    const pain = screen.getByLabelText('Dolor (1-10)');
+    await user.clear(pain);
+    await user.type(pain, '5');
+    await user.click(screen.getByRole('button', { name: 'Guardar Entrenamiento' }));
+
+    // Assert
+    await waitFor(() =>
+      expect(workoutService.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          title: 'Pierna',
+          bodyPart: 'CARDIO',
+          durationMinutes: 60,
+          energyLevel: 8,
+          fatigueLevel: 3,
+          painLevel: 5,
+        }),
+      ),
+    );
+  });
+
+  // Fallback del label para bodyPart desconocido (?? w.bodyPart)
+  it('un bodyPart fuera del mapa de etiquetas → se muestra el valor tal cual', async () => {
+    // Arrange
+    const weirdWorkout: Workout = {
+      ...existingWorkout,
+      bodyPart: 'STRETCHING',
+    } as unknown as Workout;
+    vi.mocked(workoutService.getAll).mockResolvedValue({ data: [weirdWorkout], meta: {} } as any);
+
+    // Act
+    renderPage();
+
+    // Assert
+    expect(await screen.findByText(/STRETCHING · 45 min/)).toBeInTheDocument();
+  });
+
+  // Botón Cancelar del ConfirmDialog (onCancel)
+  it('al confirmar la eliminación, "Cancelar" cierra el diálogo sin eliminar', async () => {
+    // Arrange
+    vi.mocked(workoutService.getAll).mockResolvedValue({ data: [existingWorkout], meta: {} } as any);
+    const user = userEvent.setup();
+    renderPage();
+    await user.click(await screen.findByTitle('Eliminar'));
+    expect(screen.getByText('Eliminar Entrenamiento')).toBeInTheDocument();
+
+    // Act
+    await user.click(screen.getByRole('button', { name: 'Cancelar' }));
+
+    // Assert
+    await waitFor(() => expect(screen.queryByText('Eliminar Entrenamiento')).not.toBeInTheDocument());
+    expect(workoutService.delete).not.toHaveBeenCalled();
+    expect(screen.getByText('Pierna')).toBeInTheDocument();
+  });
+});

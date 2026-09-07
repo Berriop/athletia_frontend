@@ -233,3 +233,103 @@ describe('InjuriesPage.confirmDelete (RF-21)', () => {
     await waitFor(() => expect(screen.queryByText('Modo Edición')).not.toBeInTheDocument());
   });
 });
+
+describe('InjuriesPage casos extra (carga, campos, lesión recuperada, cancelar diálogo)', () => {
+  beforeEach(() => {
+    addNotification.mockClear();
+    vi.mocked(injuryService.create).mockClear();
+    vi.mocked(injuryService.delete).mockClear();
+  });
+
+  // fetchInjuries en error (catch)
+  it('la carga inicial falla → muestra "Error al cargar lesiones"', async () => {
+    // Arrange
+    vi.mocked(injuryService.getAll).mockRejectedValue(new Error('network error'));
+
+    // Act
+    renderPage();
+
+    // Assert
+    expect(await screen.findByText('Error al cargar lesiones')).toBeInTheDocument();
+  });
+
+  // Fallback de error al actualizar (rama sin details del catch)
+  it('al actualizar, el backend falla sin details → "Error al actualizar lesión"', async () => {
+    // Arrange
+    vi.mocked(injuryService.getAll).mockResolvedValue({ data: [existingInjury], meta: {} } as any);
+    vi.mocked(injuryService.update).mockRejectedValue(new Error('network error'));
+    const user = userEvent.setup();
+    renderPage();
+    await user.click(await screen.findByTitle('Editar'));
+
+    // Act
+    await user.click(screen.getByRole('button', { name: 'Actualizar Lesión' }));
+
+    // Assert
+    expect(await screen.findByText('Error al actualizar lesión')).toBeInTheDocument();
+    expect(addNotification).toHaveBeenCalledWith('Error al actualizar lesión', 'error');
+  });
+
+  // Inputs onChange (severity, checkbox isActive, notes)
+  it('modifica severidad, desactiva la lesión y agrega notas → el DTO lo refleja', async () => {
+    // Arrange
+    vi.mocked(injuryService.create).mockResolvedValue({} as Injury);
+    const user = userEvent.setup();
+    renderPage();
+    await user.type(await screen.findByLabelText('Área del cuerpo'), 'Hombro');
+    await user.type(screen.getByLabelText('Nombre de la lesión'), 'Tendinitis');
+
+    // Act
+    const severity = screen.getByLabelText('Severidad (1-10)');
+    await user.clear(severity);
+    await user.type(severity, '9');
+    await user.click(screen.getByLabelText('¿Está activa actualmente?'));
+    const notes = screen.getByLabelText('Notas sobre la lesión');
+    await user.type(notes, 'Tratamiento con fisioterapia');
+    await user.click(screen.getByRole('button', { name: 'Registrar Lesión' }));
+
+    // Assert
+    await waitFor(() =>
+      expect(injuryService.create).toHaveBeenCalledWith({
+        injuryName: 'Tendinitis',
+        bodyArea: 'Hombro',
+        severity: 9,
+        isActive: false,
+        notes: 'Tratamiento con fisioterapia',
+      }),
+    );
+  });
+
+  // Rama inactiva del ternario isActive (RECUPERADA)
+  it('una lesión inactiva → muestra "RECUPERADA"', async () => {
+    // Arrange
+    const recoveredInjury: Injury = {
+      ...existingInjury,
+      isActive: false,
+    } as unknown as Injury;
+    vi.mocked(injuryService.getAll).mockResolvedValue({ data: [recoveredInjury], meta: {} } as any);
+
+    // Act
+    renderPage();
+
+    // Assert
+    expect(await screen.findByText('RECUPERADA')).toBeInTheDocument();
+  });
+
+  // Botón Cancelar del ConfirmDialog (onCancel)
+  it('al confirmar la eliminación, "Cancelar" cierra el diálogo sin eliminar', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    renderPage();
+    await user.click(await screen.findByTitle('Eliminar'));
+    expect(screen.getByText('Eliminar Lesión')).toBeInTheDocument();
+
+    // Act
+    await user.click(screen.getByRole('button', { name: 'Cancelar' }));
+
+    // Assert
+    await waitFor(() => expect(screen.queryByText('Eliminar Lesión')).not.toBeInTheDocument());
+    expect(injuryService.delete).not.toHaveBeenCalled();
+    expect(screen.getByText('Esguince')).toBeInTheDocument();
+  });
+});

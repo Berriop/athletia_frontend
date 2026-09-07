@@ -50,4 +50,12 @@ describe('NotificationContext', () => {
     // Assert
     expect(result.current.notifications).toHaveLength(0);
   });
+
+  // Guarda del hook: useNotification fuera de un NotificationProvider lanza error
+  it('useNotification sin provider → lanza un error', () => {
+    // Arrange, Act & Assert
+    expect(() => renderHook(() => useNotification())).toThrow(
+      'useNotification must be used within a NotificationProvider',
+    );
+  });
 });
