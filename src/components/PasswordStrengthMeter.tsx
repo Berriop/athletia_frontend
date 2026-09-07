@@ -91,7 +91,7 @@ export const PasswordStrengthMeter: React.FC<PasswordStrengthMeterProps> = ({ pa
             }}
           >
             <span style={{ fontWeight: 'bold' }}>{rule.pass ? '✓' : '○'}</span>
-            <span style={{ textDecoration: rule.pass ? 'none' : 'none' }}>{rule.label}</span>
+            <span style={{ textDecoration: 'none' }}>{rule.label}</span>
           </div>
         ))}
       </div>
