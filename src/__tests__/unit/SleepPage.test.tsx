@@ -6,9 +6,10 @@ import { sleepService } from '../../services/sleep.service';
 import type { SleepLog } from '../../types';
 
 // RF-14 (crear), RF-16 (modificar) y RF-17 (eliminar) registro de sueño.
-// Basado en los diagramas "RF-16 Front (SleepPage.handleSubmit)" (Patrón C,
-// V(G)=3, compartido con RF-14) y "RF-17 Front (SleepPage.confirmDelete)"
-// (Patrón D, V(G)=4).
+// handleCreate (RF-14) y handleUpdate (RF-16) son funciones independientes
+// desde el refactor pedido por el profesor (antes eran una sola handleSubmit
+// con un if/else) — ver "RF-17 Front (SleepPage.confirmDelete)" (Patrón D,
+// V(G)=4) para el camino de eliminar.
 //
 // Nota: `addNotification` solo se pinta visualmente en <Header>, que no
 // forma parte de esta página. Por eso se espía el hook `useNotification` en
@@ -46,7 +47,7 @@ const existingSleep: SleepLog = {
   updatedAt: new Date().toISOString(),
 } as unknown as SleepLog;
 
-describe('SleepPage.handleSubmit (RF-14 crear / RF-16 modificar)', () => {
+describe('SleepPage.handleCreate (RF-14) / handleUpdate (RF-16)', () => {
   beforeEach(() => {
     addNotification.mockClear();
     vi.mocked(sleepService.getAll).mockResolvedValue({ data: [], meta: {} } as any);

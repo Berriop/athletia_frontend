@@ -45,33 +45,40 @@ export const SleepPage: React.FC = () => {
     setEditingId(null);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // RF-14 (crear) y RF-16 (modificar) quedan como funciones independientes,
+  // cada una con su propio try/catch, en vez de una sola función con un
+  // if/else por dentro.
+  const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
     try {
-      const data: CreateSleepDTO = {
-        hoursSlept,
-        sleepQuality,
-        hadNightmares,
-        stressLevel,
-        notes,
-        date: new Date().toISOString()
-      };
-      
-      if (editingId) {
-        await sleepService.update(editingId, data);
-        addNotification('Registro de sueño actualizado', 'success');
-      } else {
-        await sleepService.create(data);
-        addNotification('Registro de sueño creado', 'success');
-      }
-      
+      const data: CreateSleepDTO = { hoursSlept, sleepQuality, hadNightmares, stressLevel, notes, date: new Date().toISOString() };
+      await sleepService.create(data);
+      addNotification('Registro de sueño creado', 'success');
       resetForm();
       await fetchSleeps();
     } catch (err) {
-      setError(editingId ? 'Error al actualizar el registro' : 'Error al guardar el registro');
-      addNotification(editingId ? 'Error al actualizar el registro' : 'Error al guardar el registro', 'error');
+      setError('Error al guardar el registro');
+      addNotification('Error al guardar el registro', 'error');
+      setIsLoading(false);
+    }
+  };
+
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingId) return;
+    setIsLoading(true);
+    setError('');
+    try {
+      const data: CreateSleepDTO = { hoursSlept, sleepQuality, hadNightmares, stressLevel, notes, date: new Date().toISOString() };
+      await sleepService.update(editingId, data);
+      addNotification('Registro de sueño actualizado', 'success');
+      resetForm();
+      await fetchSleeps();
+    } catch (err) {
+      setError('Error al actualizar el registro');
+      addNotification('Error al actualizar el registro', 'error');
       setIsLoading(false);
     }
   };
@@ -118,7 +125,7 @@ export const SleepPage: React.FC = () => {
           </div>
         )}
         <h3>{editingId ? 'Editar Registro' : 'Registrar Noche'}</h3>
-        <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
+        <form onSubmit={editingId ? handleUpdate : handleCreate} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="hours" style={{ fontSize: '0.9rem' }}>Horas de sueño</label>
             <input id="hours" required type="number" step="0.5" min="0" max="24" value={hoursSlept} onChange={e => setHoursSlept(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />

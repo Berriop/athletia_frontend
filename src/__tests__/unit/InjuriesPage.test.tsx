@@ -5,13 +5,14 @@ import { InjuriesPage } from '../../pages/InjuriesPage';
 import { injuryService } from '../../services/injury.service';
 import type { Injury } from '../../types';
 
-// RF-18 (crear), RF-20 (modificar) y RF-21 (eliminar) lesión. Basado en los
-// diagramas "RF-18 Front (InjuriesPage.handleSubmit)" (Patrón C, V(G)=3,
-// compartido con RF-20) y "RF-21 Front (InjuriesPage.confirmDelete)" (Patrón
-// D, V(G)=4). Ver la nota sobre `addNotification`/Header en
-// SleepPage.test.tsx.
+// RF-18 (crear), RF-20 (modificar) y RF-21 (eliminar) lesión. handleCreate
+// (RF-18) y handleUpdate (RF-20) son funciones independientes desde el
+// refactor pedido por el profesor (antes eran una sola handleSubmit con un
+// if/else) — ver "RF-21 Front (InjuriesPage.confirmDelete)" (Patrón D,
+// V(G)=4) para el camino de eliminar. Ver la nota sobre `addNotification`/
+// Header en SleepPage.test.tsx.
 //
-// Nota real encontrada al escribir esta prueba: en el catch de handleSubmit,
+// Nota real encontrada al escribir esta prueba: en el catch de handleCreate,
 // el mensaje que se muestra en pantalla (setError → "Error al reportar
 // lesión") NO es el mismo texto que se envía a la notificación
 // (addNotification → "Error al registrar lesión") para el camino de crear.
@@ -42,7 +43,7 @@ const existingInjury: Injury = {
   updatedAt: new Date().toISOString(),
 } as unknown as Injury;
 
-describe('InjuriesPage.handleSubmit (RF-18 crear / RF-20 modificar)', () => {
+describe('InjuriesPage.handleCreate (RF-18) / handleUpdate (RF-20)', () => {
   beforeEach(() => {
     addNotification.mockClear();
     vi.mocked(injuryService.getAll).mockResolvedValue({ data: [], meta: {} } as any);
@@ -99,6 +100,81 @@ describe('InjuriesPage.handleSubmit (RF-18 crear / RF-20 modificar)', () => {
     // Assert (texto en pantalla vs. texto de la notificación difieren — ver nota arriba)
     expect(await screen.findByText('Error al reportar lesión')).toBeInTheDocument();
     expect(addNotification).toHaveBeenCalledWith('Error al registrar lesión', 'error');
+  });
+
+  // Hallazgo real: el backend sí manda el detalle específico de la validación
+  // (Zod), pero antes el catch lo ignoraba y siempre mostraba el mismo texto
+  // genérico. Estas dos pruebas cubren que ahora sí se muestra ese mensaje.
+  it('el backend rechaza por validación (ej. nombre > 250 caracteres) → muestra el mensaje específico, no el genérico', async () => {
+    // Arrange
+    vi.mocked(injuryService.create).mockRejectedValue({
+      response: {
+        data: {
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: 'Validation failed',
+            details: [{ field: 'injuryName', message: 'El nombre de la lesión no puede superar los 250 caracteres' }],
+          },
+        },
+      },
+    });
+    const user = userEvent.setup();
+    renderPage();
+    await user.type(await screen.findByLabelText('Área del cuerpo'), 'Hombro');
+    await user.type(screen.getByLabelText('Nombre de la lesión'), 'Tendinitis');
+
+    // Act
+    await user.click(screen.getByRole('button', { name: 'Registrar Lesión' }));
+
+    // Assert
+    expect(await screen.findByText('El nombre de la lesión no puede superar los 250 caracteres')).toBeInTheDocument();
+    expect(addNotification).toHaveBeenCalledWith(
+      'El nombre de la lesión no puede superar los 250 caracteres',
+      'error',
+    );
+  });
+
+  it('al editar, el backend rechaza por validación → también muestra el mensaje específico', async () => {
+    // Arrange
+    vi.mocked(injuryService.getAll).mockResolvedValue({ data: [existingInjury], meta: {} } as any);
+    vi.mocked(injuryService.update).mockRejectedValue({
+      response: {
+        data: {
+          error: {
+            details: [{ field: 'bodyArea', message: 'El área del cuerpo solo puede contener letras y espacios' }],
+          },
+        },
+      },
+    });
+    const user = userEvent.setup();
+    renderPage();
+    await user.click(await screen.findByTitle('Editar'));
+
+    // Act
+    await user.click(screen.getByRole('button', { name: 'Actualizar Lesión' }));
+
+    // Assert
+    expect(await screen.findByText('El área del cuerpo solo puede contener letras y espacios')).toBeInTheDocument();
+    expect(addNotification).toHaveBeenCalledWith('El área del cuerpo solo puede contener letras y espacios', 'error');
+  });
+
+  // Hallazgo real: los campos de texto aceptaban números y símbolos. Ahora
+  // tienen `pattern` en el HTML, así que el navegador bloquea el envío antes
+  // de que React vea el evento — igual que el patrón ya usado para `required`
+  // en ForgotPasswordPage.test.tsx.
+  it('nombre de la lesión con caracteres no permitidos (números/símbolos) → el navegador bloquea el envío', async () => {
+    // Arrange
+    vi.mocked(injuryService.create).mockClear(); // limpia llamadas de pruebas anteriores en este archivo
+    const user = userEvent.setup();
+    renderPage();
+    await user.type(await screen.findByLabelText('Área del cuerpo'), 'Hombro');
+    await user.type(screen.getByLabelText('Nombre de la lesión'), 'Tendinitis2!');
+
+    // Act
+    await user.click(screen.getByRole('button', { name: 'Registrar Lesión' }));
+
+    // Assert
+    expect(injuryService.create).not.toHaveBeenCalled();
   });
 });
 

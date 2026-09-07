@@ -131,15 +131,10 @@ describe('calculateRecoveryScore', () => {
 
   // R8: fronteras de clasificación final
   it('R8: frontera de clasificación — 80/79, 60/59 y 40/39 caen en el estado correcto', () => {
-    // Arrange
-    const excellentInputs = [sleep({ hoursSlept: 8, stressLevel: 3 }), 0, workouts(4)] as const;
-    const goodInputs = [sleep({ hoursSlept: 7, stressLevel: 4 }), 0, workouts(1)] as const;
-    const riskInputs = [sleep({ hoursSlept: 5, stressLevel: 8 }), 1, []] as const;
-
     // Act
-    const excellent = calculateRecoveryScore(...excellentInputs);
-    const good = calculateRecoveryScore(...goodInputs);
-    const risk = calculateRecoveryScore(...riskInputs);
+    const excellent = calculateRecoveryScore(sleep({ hoursSlept: 8, stressLevel: 3 }), 0, workouts(4));
+    const good = calculateRecoveryScore(sleep({ hoursSlept: 7, stressLevel: 4 }), 0, workouts(1));
+    const risk = calculateRecoveryScore(sleep({ hoursSlept: 5, stressLevel: 8 }), 1, []);
 
     // Assert
     expect(excellent.status).toBe('Excelente'); // 40+30+20+10=100 ≥80

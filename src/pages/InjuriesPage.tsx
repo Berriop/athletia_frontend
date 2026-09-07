@@ -45,32 +45,52 @@ export const InjuriesPage: React.FC = () => {
     setEditingId(null);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Extrae el mensaje de validación específico que manda el backend (Zod
+  // details), en vez de mostrar siempre un texto genérico. Si el error no
+  // trae esa forma (ej. red caída, sin response), devuelve null y quien
+  // llama usa su propio mensaje de respaldo.
+  const getBackendValidationMessage = (err: unknown): string | null => {
+    const details = (err as { response?: { data?: { error?: { details?: { message: string }[] } } } })?.response
+      ?.data?.error?.details;
+    if (Array.isArray(details) && details.length > 0) {
+      return details.map((d) => d.message).join(' ');
+    }
+    return null;
+  };
+
+  const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
     try {
-      const data: CreateInjuryDTO = {
-        injuryName,
-        bodyArea,
-        severity,
-        isActive,
-        notes
-      };
-      
-      if (editingId) {
-        await injuryService.update(editingId, data);
-        addNotification('Lesión actualizada correctamente', 'success');
-      } else {
-        await injuryService.create(data);
-        addNotification('Lesión registrada correctamente', 'success');
-      }
-      
+      const data: CreateInjuryDTO = { injuryName, bodyArea, severity, isActive, notes };
+      await injuryService.create(data);
+      addNotification('Lesión registrada correctamente', 'success');
       resetForm();
       await fetchInjuries();
     } catch (err) {
-      setError(editingId ? 'Error al actualizar lesión' : 'Error al reportar lesión');
-      addNotification(editingId ? 'Error al actualizar lesión' : 'Error al registrar lesión', 'error');
+      const specificMessage = getBackendValidationMessage(err);
+      setError(specificMessage || 'Error al reportar lesión');
+      addNotification(specificMessage || 'Error al registrar lesión', 'error');
+      setIsLoading(false);
+    }
+  };
+
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingId) return;
+    setIsLoading(true);
+    setError('');
+    try {
+      const data: CreateInjuryDTO = { injuryName, bodyArea, severity, isActive, notes };
+      await injuryService.update(editingId, data);
+      addNotification('Lesión actualizada correctamente', 'success');
+      resetForm();
+      await fetchInjuries();
+    } catch (err) {
+      const specificMessage = getBackendValidationMessage(err);
+      setError(specificMessage || 'Error al actualizar lesión');
+      addNotification(specificMessage || 'Error al actualizar lesión', 'error');
       setIsLoading(false);
     }
   };
@@ -117,14 +137,14 @@ export const InjuriesPage: React.FC = () => {
           </div>
         )}
         <h3>{editingId ? 'Editar Lesión' : 'Reportar Lesión'}</h3>
-        <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
+        <form onSubmit={editingId ? handleUpdate : handleCreate} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="bodyArea" style={{ fontSize: '0.9rem' }}>Área del cuerpo</label>
-            <input id="bodyArea" required type="text" placeholder="Ej. Rodilla Derecha" value={bodyArea} onChange={e => setBodyArea(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <input id="bodyArea" required type="text" maxLength={250} pattern="[A-Za-zÀ-ÖØ-öø-ÿ\s]+" title="Solo letras y espacios" placeholder="Ej. Rodilla Derecha" value={bodyArea} onChange={e => setBodyArea(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="injuryName" style={{ fontSize: '0.9rem' }}>Nombre de la lesión</label>
-            <input id="injuryName" required type="text" placeholder="Ej. Esguince" value={injuryName} onChange={e => setInjuryName(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <input id="injuryName" required type="text" maxLength={250} pattern="[A-Za-zÀ-ÖØ-öø-ÿ\s]+" title="Solo letras y espacios" placeholder="Ej. Esguince" value={injuryName} onChange={e => setInjuryName(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="severity" style={{ fontSize: '0.9rem' }}>Severidad (1-10)</label>
