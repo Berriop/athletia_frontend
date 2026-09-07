@@ -31,6 +31,7 @@ export const MealsPage: React.FC = () => {
   const [protein, setProtein] = useState(30);
   const [carbs, setCarbs] = useState(50);
   const [fat, setFat] = useState(15);
+  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
 
   const fetchMeals = async () => {
     try {
@@ -54,10 +55,14 @@ export const MealsPage: React.FC = () => {
     setProtein(30);
     setCarbs(50);
     setFat(15);
+    setDate(new Date().toISOString().slice(0, 10));
     setEditingId(null);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // RF-10 (crear) y RF-12 (modificar) quedan como funciones independientes,
+  // cada una con su propio try/catch, en vez de una sola función con un
+  // if/else por dentro (mismo patrón que SleepPage).
+  const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
@@ -69,23 +74,41 @@ export const MealsPage: React.FC = () => {
         proteinG: protein,
         carbsG: carbs,
         fatG: fat,
-        date: new Date().toISOString(),
+        date: new Date(date).toISOString(),
       };
-
-      if (editingId) {
-        await mealService.update(editingId, data);
-        addNotification('Comida actualizada correctamente', 'success');
-      } else {
-        await mealService.create(data);
-        addNotification('Comida registrada correctamente', 'success');
-      }
-
+      await mealService.create(data);
+      addNotification('Comida registrada correctamente', 'success');
       resetForm();
       await fetchMeals();
     } catch (err: any) {
-      const msg =
-        err.response?.data?.error?.message ||
-        (editingId ? 'Error al actualizar comida' : 'Error al crear comida');
+      const msg = err.response?.data?.error?.message || 'Error al crear comida';
+      setError(msg);
+      addNotification(msg, 'error');
+      setIsLoading(false);
+    }
+  };
+
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingId) return;
+    setIsLoading(true);
+    setError('');
+    try {
+      const data: CreateMealDTO = {
+        name,
+        calories,
+        mealType,
+        proteinG: protein,
+        carbsG: carbs,
+        fatG: fat,
+        date: new Date(date).toISOString(),
+      };
+      await mealService.update(editingId, data);
+      addNotification('Comida actualizada correctamente', 'success');
+      resetForm();
+      await fetchMeals();
+    } catch (err: any) {
+      const msg = err.response?.data?.error?.message || 'Error al actualizar comida';
       setError(msg);
       addNotification(msg, 'error');
       setIsLoading(false);
@@ -100,6 +123,7 @@ export const MealsPage: React.FC = () => {
     setProtein(meal.proteinG);
     setCarbs(meal.carbsG);
     setFat(meal.fatG);
+    setDate(meal.date.slice(0, 10));
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -135,7 +159,7 @@ export const MealsPage: React.FC = () => {
           </div>
         )}
         <h3>{editingId ? 'Editar Comida' : 'Registrar Comida'}</h3>
-        <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
+        <form onSubmit={editingId ? handleUpdate : handleCreate} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="name" style={{ fontSize: '0.9rem' }}>Nombre de la comida</label>
             <input id="name" required type="text" placeholder="Ej. Pollo con Arroz" value={name} onChange={(e) => setName(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px' }} />
@@ -168,6 +192,10 @@ export const MealsPage: React.FC = () => {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="fat" style={{ fontSize: '0.9rem' }}>Grasa (g)</label>
             <input id="fat" type="number" min="0" value={fat} onChange={(e) => setFat(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <label htmlFor="date" style={{ fontSize: '0.9rem' }}>Fecha</label>
+            <input id="date" type="date" value={date} onChange={(e) => setDate(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', backgroundColor: 'var(--bg-card)', color: 'inherit', border: '1px solid var(--border)' }} />
           </div>
           <div style={{ gridColumn: 'span 2', display: 'flex', gap: '1rem' }}>
             <button type="submit" disabled={isLoading} className="btn-primary" style={{ flex: 1 }}>

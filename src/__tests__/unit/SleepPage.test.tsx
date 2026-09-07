@@ -70,7 +70,7 @@ describe('SleepPage.handleCreate (RF-14) / handleUpdate (RF-16)', () => {
   });
 
   // Camino RF-16: INICIO,1,2,3,5,6,FIN (editingId≠null → actualizar)
-  it('RF-16: editando un registro existente → llama a update y notifica éxito', async () => {
+  it('RF-16: editando un registro existente → llama a update, preserva la fecha original y notifica éxito', async () => {
     // Arrange
     vi.mocked(sleepService.getAll).mockResolvedValue({ data: [existingSleep], meta: {} } as any);
     vi.mocked(sleepService.update).mockResolvedValue({} as SleepLog);
@@ -84,6 +84,11 @@ describe('SleepPage.handleCreate (RF-14) / handleUpdate (RF-16)', () => {
 
     // Assert
     await waitFor(() => expect(sleepService.update).toHaveBeenCalledWith('sleep-1', expect.anything()));
+    // La fecha del registro se conserva (2026-08-01) en vez de resetearse a hoy
+    expect(sleepService.update).toHaveBeenCalledWith(
+      'sleep-1',
+      expect.objectContaining({ date: new Date('2026-08-01').toISOString() }),
+    );
     expect(addNotification).toHaveBeenCalledWith('Registro de sueño actualizado', 'success');
   });
 

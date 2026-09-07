@@ -20,6 +20,7 @@ export const SleepPage: React.FC = () => {
   const [hadNightmares, setHadNightmares] = useState(false);
   const [stressLevel, setStressLevel] = useState(5);
   const [notes, setNotes] = useState('');
+  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
 
   const fetchSleeps = async () => {
     try {
@@ -42,6 +43,7 @@ export const SleepPage: React.FC = () => {
     setHadNightmares(false);
     setStressLevel(5);
     setNotes('');
+    setDate(new Date().toISOString().slice(0, 10));
     setEditingId(null);
   };
 
@@ -53,7 +55,7 @@ export const SleepPage: React.FC = () => {
     setIsLoading(true);
     setError('');
     try {
-      const data: CreateSleepDTO = { hoursSlept, sleepQuality, hadNightmares, stressLevel, notes, date: new Date().toISOString() };
+      const data: CreateSleepDTO = { hoursSlept, sleepQuality, hadNightmares, stressLevel, notes, date: new Date(date).toISOString() };
       await sleepService.create(data);
       addNotification('Registro de sueño creado', 'success');
       resetForm();
@@ -71,7 +73,7 @@ export const SleepPage: React.FC = () => {
     setIsLoading(true);
     setError('');
     try {
-      const data: CreateSleepDTO = { hoursSlept, sleepQuality, hadNightmares, stressLevel, notes, date: new Date().toISOString() };
+      const data: CreateSleepDTO = { hoursSlept, sleepQuality, hadNightmares, stressLevel, notes, date: new Date(date).toISOString() };
       await sleepService.update(editingId, data);
       addNotification('Registro de sueño actualizado', 'success');
       resetForm();
@@ -90,6 +92,7 @@ export const SleepPage: React.FC = () => {
     setHadNightmares(sleep.hadNightmares);
     setStressLevel(sleep.stressLevel);
     setNotes(sleep.notes || '');
+    setDate(sleep.date.slice(0, 10));
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -137,6 +140,10 @@ export const SleepPage: React.FC = () => {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="stress" style={{ fontSize: '0.9rem' }}>Nivel de estrés (1-10)</label>
             <input id="stress" required type="number" min="1" max="10" value={stressLevel} onChange={e => setStressLevel(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <label htmlFor="date" style={{ fontSize: '0.9rem' }}>Fecha</label>
+            <input id="date" type="date" value={date} onChange={e => setDate(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', backgroundColor: 'var(--bg-card)', color: 'inherit', border: '1px solid var(--border)' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', justifyContent: 'center' }}>
             <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', cursor: 'pointer' }}>
