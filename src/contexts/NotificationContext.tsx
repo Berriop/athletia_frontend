@@ -21,7 +21,12 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({ childr
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   const addNotification = (message: string, type: 'success' | 'error' | 'info') => {
-    const id = Math.random().toString(36).substr(2, 9);
+    // crypto.randomUUID() en vez de Math.random(): este id solo se usa como
+    // key de React/identificador visual, pero Math.random() es un generador
+    // pseudoaleatorio no apto para nada relacionado con seguridad, y Sonar lo
+    // marca igual sin importar el uso — crypto.randomUUID() es la alternativa
+    // criptográficamente segura, disponible en navegadores modernos.
+    const id = crypto.randomUUID();
     setNotifications((prev) => [{ id, message, type, timestamp: new Date() }, ...prev]);
   };
 

@@ -44,6 +44,7 @@ export const GymFinderPage: React.FC = () => {
   const mapInstanceRef = useRef<google.maps.Map | null>(null);
   const markersRef = useRef<google.maps.Marker[]>([]);
   const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
+  const userLocationMarkerRef = useRef<google.maps.Marker | null>(null);
 
   const [gyms, setGyms] = useState<Gym[]>([]);
   const [selectedGym, setSelectedGym] = useState<Gym | null>(null);
@@ -100,8 +101,10 @@ export const GymFinderPage: React.FC = () => {
 
       infoWindowRef.current = new google.maps.InfoWindow();
 
-      // Add user location marker
-      new google.maps.Marker({
+      // Add user location marker (se guarda en un ref, igual que los demás
+      // marcadores del mapa, para poder referenciarlo/limpiarlo después en
+      // vez de crear el objeto y descartarlo de inmediato)
+      userLocationMarkerRef.current = new google.maps.Marker({
         position: { lat, lng },
         map: mapInstanceRef.current,
         title: 'Tu ubicación',
@@ -350,6 +353,14 @@ export const GymFinderPage: React.FC = () => {
               key={gym.place_id}
               className={`gym-card ${selectedGym?.place_id === gym.place_id ? 'selected' : ''}`}
               onClick={() => handleGymClick(gym)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleGymClick(gym);
+                }
+              }}
             >
               {gym.photoUrl && (
                 <div className="gym-card-photo">
