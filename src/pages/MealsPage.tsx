@@ -6,6 +6,7 @@ import { mealService } from '../services/meal.service';
 import type { CreateMealDTO } from '../services/meal.service';
 import { useNotification } from '../contexts/NotificationContext';
 import { ConfirmDialog } from '../components/ConfirmDialog';
+import { toLocalDateInput } from '../utils/date';
 
 const MEAL_TYPE_LABELS: Record<MealType, string> = {
   BREAKFAST: 'Desayuno',
@@ -31,7 +32,7 @@ export const MealsPage: React.FC = () => {
   const [protein, setProtein] = useState(30);
   const [carbs, setCarbs] = useState(50);
   const [fat, setFat] = useState(15);
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [date, setDate] = useState(() => toLocalDateInput(new Date()));
 
   const fetchMeals = async () => {
     try {
@@ -55,7 +56,7 @@ export const MealsPage: React.FC = () => {
     setProtein(30);
     setCarbs(50);
     setFat(15);
-    setDate(new Date().toISOString().slice(0, 10));
+    setDate(toLocalDateInput(new Date()));
     setEditingId(null);
   };
 
@@ -74,7 +75,7 @@ export const MealsPage: React.FC = () => {
         proteinG: protein,
         carbsG: carbs,
         fatG: fat,
-        date: new Date(date).toISOString(),
+        date: new Date(`${date}T00:00:00`).toISOString(),
       };
       await mealService.create(data);
       addNotification('Comida registrada correctamente', 'success');
@@ -101,7 +102,7 @@ export const MealsPage: React.FC = () => {
         proteinG: protein,
         carbsG: carbs,
         fatG: fat,
-        date: new Date(date).toISOString(),
+        date: new Date(`${date}T00:00:00`).toISOString(),
       };
       await mealService.update(editingId, data);
       addNotification('Comida actualizada correctamente', 'success');
@@ -123,7 +124,7 @@ export const MealsPage: React.FC = () => {
     setProtein(meal.proteinG);
     setCarbs(meal.carbsG);
     setFat(meal.fatG);
-    setDate(meal.date.slice(0, 10));
+    setDate(toLocalDateInput(new Date(meal.date)));
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -195,7 +196,7 @@ export const MealsPage: React.FC = () => {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="date" style={{ fontSize: '0.9rem' }}>Fecha</label>
-            <input id="date" type="date" value={date} onChange={(e) => setDate(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', backgroundColor: 'var(--bg-card)', color: 'inherit', border: '1px solid var(--border)' }} />
+            <input id="date" required type="date" value={date} onChange={(e) => setDate(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', backgroundColor: 'var(--bg-card)', color: 'inherit', border: '1px solid var(--border)' }} />
           </div>
           <div style={{ gridColumn: 'span 2', display: 'flex', gap: '1rem' }}>
             <button type="submit" disabled={isLoading} className="btn-primary" style={{ flex: 1 }}>

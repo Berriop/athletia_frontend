@@ -41,7 +41,8 @@ const existingSleep: SleepLog = {
   hadNightmares: false,
   stressLevel: 3,
   notes: null,
-  date: new Date('2026-08-01').toISOString(),
+  // Mediodía UTC: en cualquier zona horaria realista la fecha local es 2026-08-01
+  date: new Date('2026-08-01T12:00:00.000Z').toISOString(),
   userId: 'user-1',
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
@@ -84,11 +85,18 @@ describe('SleepPage.handleCreate (RF-14) / handleUpdate (RF-16)', () => {
 
     // Assert
     await waitFor(() => expect(sleepService.update).toHaveBeenCalledWith('sleep-1', expect.anything()));
-    // La fecha del registro se conserva (2026-08-01) en vez de resetearse a hoy
+    // La fecha del registro se conserva (2026-08-01) en vez de resetearse a hoy.
+    // Se compara con la misma expresión local-medianoche que usa la página para
+    // que el test sea determinista en cualquier zona horaria del runner.
     expect(sleepService.update).toHaveBeenCalledWith(
       'sleep-1',
-      expect.objectContaining({ date: new Date('2026-08-01').toISOString() }),
+      expect.objectContaining({ date: new Date('2026-08-01T00:00:00').toISOString() }),
     );
+    // Regresión TZ (UTC-): el instante guardado debe renderizar al día local elegido.
+    const payload = vi.mocked(sleepService.update).mock.calls[0][1] as { date: string };
+    const sent = new Date(payload.date);
+    const localDay = `${sent.getFullYear()}-${String(sent.getMonth() + 1).padStart(2, '0')}-${String(sent.getDate()).padStart(2, '0')}`;
+    expect(localDay).toBe('2026-08-01');
     expect(addNotification).toHaveBeenCalledWith('Registro de sueño actualizado', 'success');
   });
 

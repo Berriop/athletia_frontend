@@ -5,6 +5,7 @@ import { sleepService } from '../services/sleep.service';
 import type { CreateSleepDTO } from '../services/sleep.service';
 import { useNotification } from '../contexts/NotificationContext';
 import { ConfirmDialog } from '../components/ConfirmDialog';
+import { toLocalDateInput } from '../utils/date';
 
 export const SleepPage: React.FC = () => {
   const [sleeps, setSleeps] = useState<SleepLog[]>([]);
@@ -20,7 +21,7 @@ export const SleepPage: React.FC = () => {
   const [hadNightmares, setHadNightmares] = useState(false);
   const [stressLevel, setStressLevel] = useState(5);
   const [notes, setNotes] = useState('');
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [date, setDate] = useState(() => toLocalDateInput(new Date()));
 
   const fetchSleeps = async () => {
     try {
@@ -43,7 +44,7 @@ export const SleepPage: React.FC = () => {
     setHadNightmares(false);
     setStressLevel(5);
     setNotes('');
-    setDate(new Date().toISOString().slice(0, 10));
+    setDate(toLocalDateInput(new Date()));
     setEditingId(null);
   };
 
@@ -55,7 +56,7 @@ export const SleepPage: React.FC = () => {
     setIsLoading(true);
     setError('');
     try {
-      const data: CreateSleepDTO = { hoursSlept, sleepQuality, hadNightmares, stressLevel, notes, date: new Date(date).toISOString() };
+      const data: CreateSleepDTO = { hoursSlept, sleepQuality, hadNightmares, stressLevel, notes, date: new Date(`${date}T00:00:00`).toISOString() };
       await sleepService.create(data);
       addNotification('Registro de sueño creado', 'success');
       resetForm();
@@ -73,7 +74,7 @@ export const SleepPage: React.FC = () => {
     setIsLoading(true);
     setError('');
     try {
-      const data: CreateSleepDTO = { hoursSlept, sleepQuality, hadNightmares, stressLevel, notes, date: new Date(date).toISOString() };
+      const data: CreateSleepDTO = { hoursSlept, sleepQuality, hadNightmares, stressLevel, notes, date: new Date(`${date}T00:00:00`).toISOString() };
       await sleepService.update(editingId, data);
       addNotification('Registro de sueño actualizado', 'success');
       resetForm();
@@ -92,7 +93,7 @@ export const SleepPage: React.FC = () => {
     setHadNightmares(sleep.hadNightmares);
     setStressLevel(sleep.stressLevel);
     setNotes(sleep.notes || '');
-    setDate(sleep.date.slice(0, 10));
+    setDate(toLocalDateInput(new Date(sleep.date)));
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -143,7 +144,7 @@ export const SleepPage: React.FC = () => {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="date" style={{ fontSize: '0.9rem' }}>Fecha</label>
-            <input id="date" type="date" value={date} onChange={e => setDate(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', backgroundColor: 'var(--bg-card)', color: 'inherit', border: '1px solid var(--border)' }} />
+            <input id="date" required type="date" value={date} onChange={e => setDate(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', backgroundColor: 'var(--bg-card)', color: 'inherit', border: '1px solid var(--border)' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', justifyContent: 'center' }}>
             <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', cursor: 'pointer' }}>
