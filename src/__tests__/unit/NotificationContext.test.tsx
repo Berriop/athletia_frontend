@@ -13,38 +13,41 @@ const wrapper = ({ children }: { children: ReactNode }) => (
 describe('NotificationContext', () => {
   // Camino 1: INICIO,1,2a,FIN
   it('Camino 1: eliminar una notificación individual la quita, las demás quedan intactas', () => {
+    // Arrange
     const { result } = renderHook(() => useNotification(), { wrapper });
-
     act(() => {
       result.current.addNotification('Primera', 'success');
       result.current.addNotification('Segunda', 'error');
     });
     expect(result.current.notifications).toHaveLength(2);
-
     const idToRemove = result.current.notifications[1].id; // la más antigua ('Primera')
 
+    // Act
     act(() => {
       result.current.removeNotification(idToRemove);
     });
 
+    // Assert
     expect(result.current.notifications).toHaveLength(1);
     expect(result.current.notifications[0].message).toBe('Segunda');
   });
 
   // Camino 2: INICIO,1,2b,FIN
   it('Camino 2: limpiar todas deja el arreglo de notificaciones vacío', () => {
+    // Arrange
     const { result } = renderHook(() => useNotification(), { wrapper });
-
     act(() => {
       result.current.addNotification('Una', 'info');
       result.current.addNotification('Otra', 'success');
     });
     expect(result.current.notifications).toHaveLength(2);
 
+    // Act
     act(() => {
       result.current.clearNotifications();
     });
 
+    // Assert
     expect(result.current.notifications).toHaveLength(0);
   });
 });

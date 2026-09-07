@@ -13,21 +13,21 @@ const fakeUser = { id: 'user-1', email: 'test@example.com', role: 'USER' } as un
 describe('AuthContext.logout', () => {
   // Camino único: INICIO,1,2,3,FIN
   it('Camino 1: al cerrar sesión, borra el token del localStorage y limpia el estado', async () => {
+    // Arrange
     const { result } = renderHook(() => useAuth(), { wrapper });
-
     await waitFor(() => expect(result.current.isLoading).toBe(false));
-
     act(() => {
       result.current.login('fake-jwt-token', fakeUser);
     });
-
     expect(localStorage.getItem('token')).toBe('fake-jwt-token');
     expect(result.current.isAuthenticated).toBe(true);
 
+    // Act
     act(() => {
       result.current.logout();
     });
 
+    // Assert
     expect(localStorage.getItem('token')).toBeNull();
     expect(result.current.token).toBeNull();
     expect(result.current.user).toBeNull();

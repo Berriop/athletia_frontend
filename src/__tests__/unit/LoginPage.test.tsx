@@ -44,6 +44,7 @@ describe('LoginPage.handleSubmit', () => {
 
   // Camino 1: INICIO,1,2,3,FIN
   it('Camino 1: credenciales válidas → inicia sesión y navega al dashboard', async () => {
+    // Arrange
     vi.mocked(authService.login).mockResolvedValue({
       token: 'jwt-token',
       user: { id: 'user-1', email: 'test@example.com' },
@@ -51,36 +52,44 @@ describe('LoginPage.handleSubmit', () => {
     const user = userEvent.setup();
     renderPage();
 
+    // Act
     await fillCredentials(user);
 
+    // Assert
     await waitFor(() => expect(login).toHaveBeenCalledWith('jwt-token', expect.objectContaining({ id: 'user-1' })));
     expect(navigate).toHaveBeenCalledWith('/dashboard', { replace: true });
   });
 
   // Camino 2: INICIO,1,2,4,5,FIN
   it('Camino 2: backend responde "Invalid credentials" → mensaje genérico', async () => {
+    // Arrange
     vi.mocked(authService.login).mockRejectedValue({
       response: { data: { error: { message: 'Invalid credentials' } } },
     });
     const user = userEvent.setup();
     renderPage();
 
+    // Act
     await fillCredentials(user);
 
+    // Assert
     expect(await screen.findByText('Correo o contraseña incorrectos. Por favor, verifica tus datos.')).toBeInTheDocument();
     expect(login).not.toHaveBeenCalled();
   });
 
   // Camino 3: INICIO,1,2,4,6,7,FIN
   it('Camino 3: backend responde con otro mensaje (ej. cuenta bloqueada) → se muestra tal cual', async () => {
+    // Arrange
     vi.mocked(authService.login).mockRejectedValue({
       response: { data: { error: { message: 'Tu cuenta se encuentra bloqueada. Contacta al administrador.' } } },
     });
     const user = userEvent.setup();
     renderPage();
 
+    // Act
     await fillCredentials(user);
 
+    // Assert
     expect(
       await screen.findByText('Tu cuenta se encuentra bloqueada. Contacta al administrador.'),
     ).toBeInTheDocument();
@@ -88,12 +97,15 @@ describe('LoginPage.handleSubmit', () => {
 
   // Camino 4: INICIO,1,2,4,6,8,FIN
   it('Camino 4: falla sin ningún mensaje del backend (ej. red caída) → mensaje de conexión', async () => {
+    // Arrange
     vi.mocked(authService.login).mockRejectedValue(new Error('Network Error'));
     const user = userEvent.setup();
     renderPage();
 
+    // Act
     await fillCredentials(user);
 
+    // Assert
     expect(await screen.findByText('Error al iniciar sesión. Comprueba tu conexión.')).toBeInTheDocument();
   });
 });

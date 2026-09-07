@@ -54,12 +54,15 @@ describe('SleepPage.handleSubmit (RF-14 crear / RF-16 modificar)', () => {
 
   // Camino RF-14: INICIO,1,2,4,5,6,FIN (editingId=null → crear)
   it('RF-14: sin edición en curso → llama a create y notifica éxito', async () => {
+    // Arrange
     const user = userEvent.setup();
     vi.mocked(sleepService.create).mockResolvedValue({} as SleepLog);
     renderPage();
 
+    // Act
     await user.click(await screen.findByRole('button', { name: 'Guardar Registro' }));
 
+    // Assert
     await waitFor(() => expect(sleepService.create).toHaveBeenCalledTimes(1));
     expect(sleepService.update).not.toHaveBeenCalled();
     expect(addNotification).toHaveBeenCalledWith('Registro de sueño creado', 'success');
@@ -67,28 +70,33 @@ describe('SleepPage.handleSubmit (RF-14 crear / RF-16 modificar)', () => {
 
   // Camino RF-16: INICIO,1,2,3,5,6,FIN (editingId≠null → actualizar)
   it('RF-16: editando un registro existente → llama a update y notifica éxito', async () => {
+    // Arrange
     vi.mocked(sleepService.getAll).mockResolvedValue({ data: [existingSleep], meta: {} } as any);
     vi.mocked(sleepService.update).mockResolvedValue({} as SleepLog);
     const user = userEvent.setup();
     renderPage();
-
     await user.click(await screen.findByTitle('Editar'));
     expect(screen.getByText('Modo Edición')).toBeInTheDocument();
 
+    // Act
     await user.click(screen.getByRole('button', { name: 'Actualizar Registro' }));
 
+    // Assert
     await waitFor(() => expect(sleepService.update).toHaveBeenCalledWith('sleep-1', expect.anything()));
     expect(addNotification).toHaveBeenCalledWith('Registro de sueño actualizado', 'success');
   });
 
   // Camino de error (aplica a RF-14 y RF-16): INICIO,1,2,{3 ó 4},5,7,FIN
   it('la llamada al backend falla → muestra el error en pantalla y notifica el fallo', async () => {
+    // Arrange
     vi.mocked(sleepService.create).mockRejectedValue(new Error('network error'));
     const user = userEvent.setup();
     renderPage();
 
+    // Act
     await user.click(await screen.findByRole('button', { name: 'Guardar Registro' }));
 
+    // Assert
     expect(await screen.findByText('Error al guardar el registro')).toBeInTheDocument();
     expect(addNotification).toHaveBeenCalledWith('Error al guardar el registro', 'error');
   });
@@ -102,28 +110,34 @@ describe('SleepPage.confirmDelete (RF-17)', () => {
 
   // Camino: INICIO,1,2,3,4,FIN
   it('Camino: la eliminación falla → notifica error y el registro sigue en la lista', async () => {
+    // Arrange
     vi.mocked(sleepService.delete).mockRejectedValue(new Error('network error'));
     const user = userEvent.setup();
     renderPage();
-
     await user.click(await screen.findByTitle('Eliminar'));
     expect(screen.getByText('Eliminar Registro de Sueño')).toBeInTheDocument();
+
+    // Act
     await user.click(screen.getByRole('button', { name: 'Aceptar' }));
 
+    // Assert
     await waitFor(() => expect(addNotification).toHaveBeenCalledWith('Error al eliminar el registro', 'error'));
     expect(screen.getByText('8 horas')).toBeInTheDocument(); // sigue en la lista
   });
 
   // Camino: INICIO,1,2,3,5,6,8,FIN (no era el que se estaba editando)
   it('Camino: se elimina bien y no estaba en edición → desaparece de la lista', async () => {
+    // Arrange
     vi.mocked(sleepService.delete).mockResolvedValue(undefined);
     const user = userEvent.setup();
     renderPage();
-
     await user.click(await screen.findByTitle('Eliminar'));
     expect(screen.getByText('Eliminar Registro de Sueño')).toBeInTheDocument();
+
+    // Act
     await user.click(screen.getByRole('button', { name: 'Aceptar' }));
 
+    // Assert
     await waitFor(() =>
       expect(addNotification).toHaveBeenCalledWith('Registro eliminado correctamente', 'success'),
     );
@@ -132,17 +146,19 @@ describe('SleepPage.confirmDelete (RF-17)', () => {
 
   // Camino: INICIO,1,2,3,5,6,7,8,FIN (sí era el que se estaba editando)
   it('Camino: se elimina bien y SÍ estaba en edición → además limpia el formulario', async () => {
+    // Arrange
     vi.mocked(sleepService.delete).mockResolvedValue(undefined);
     const user = userEvent.setup();
     renderPage();
-
     await user.click(await screen.findByTitle('Editar'));
     expect(screen.getByText('Modo Edición')).toBeInTheDocument();
-
     await user.click(screen.getByTitle('Eliminar'));
     expect(screen.getByText('Eliminar Registro de Sueño')).toBeInTheDocument();
+
+    // Act
     await user.click(screen.getByRole('button', { name: 'Aceptar' }));
 
+    // Assert
     await waitFor(() => expect(screen.queryByText('Modo Edición')).not.toBeInTheDocument());
   });
 });

@@ -56,35 +56,43 @@ describe('RegisterPage.handleSubmit', () => {
 
   // Caminos 1 y 2 (guardas internas): observables como botón deshabilitado
   it('Caminos 1/2: contraseña débil o que no coincide → el botón "Crear Cuenta" permanece deshabilitado', async () => {
+    // Arrange
     const user = userEvent.setup();
     renderPage();
-
     const submitButton = screen.getByRole('button', { name: /Crear Cuenta/i });
     expect(submitButton).toBeDisabled(); // sin contraseña todavía
 
+    // Act (Camino 1: contraseña débil)
     await user.type(screen.getByLabelText('Contraseña segura'), 'weak');
-    expect(submitButton).toBeDisabled(); // Camino 1: no cumple requisitos
 
+    // Assert (Camino 1)
+    expect(submitButton).toBeDisabled(); // no cumple requisitos
+
+    // Act (Camino 2: contraseñas que no coinciden)
     await user.clear(screen.getByLabelText('Contraseña segura'));
     await user.type(screen.getByLabelText('Contraseña segura'), 'StrongP@ss1234');
     await user.type(screen.getByLabelText('Confirmar contraseña'), 'OtraCosa@1234');
-    expect(submitButton).toBeDisabled(); // Camino 2: no coinciden
-    expect(screen.getByText('✗ Las contraseñas no coinciden')).toBeInTheDocument();
 
+    // Assert (Camino 2)
+    expect(submitButton).toBeDisabled(); // no coinciden
+    expect(screen.getByText('✗ Las contraseñas no coinciden')).toBeInTheDocument();
     expect(authService.register).not.toHaveBeenCalled();
   });
 
   // Camino 3: INICIO,1,3,5,6,7,FIN
   it('Camino 3: todo válido pero el backend falla → muestra el mensaje de error', async () => {
+    // Arrange
     vi.mocked(authService.register).mockRejectedValue({
       response: { data: { error: { message: 'Email already in use' } } },
     });
     const user = userEvent.setup();
     renderPage();
-
     await fillStrongMatchingPassword(user);
+
+    // Act
     await user.click(screen.getByRole('button', { name: /Crear Cuenta/i }));
 
+    // Assert
     expect(await screen.findByText('Email already in use')).toBeInTheDocument();
     expect(login).not.toHaveBeenCalled();
     expect(navigate).not.toHaveBeenCalled();
@@ -92,16 +100,19 @@ describe('RegisterPage.handleSubmit', () => {
 
   // Camino 4: INICIO,1,3,5,6(éxito),FIN
   it('Camino 4: todo válido y el backend acepta → inicia sesión y navega al dashboard', async () => {
+    // Arrange
     vi.mocked(authService.register).mockResolvedValue({
       token: 'jwt-token',
       user: { id: 'user-1', email: 'nuevo@example.com' },
     } as any);
     const user = userEvent.setup();
     renderPage();
-
     await fillStrongMatchingPassword(user);
+
+    // Act
     await user.click(screen.getByRole('button', { name: /Crear Cuenta/i }));
 
+    // Assert
     await waitFor(() => expect(login).toHaveBeenCalledWith('jwt-token', expect.objectContaining({ id: 'user-1' })));
     expect(navigate).toHaveBeenCalledWith('/dashboard', { replace: true });
   });

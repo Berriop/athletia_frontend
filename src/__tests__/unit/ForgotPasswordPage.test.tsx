@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { ForgotPasswordPage } from '../../pages/ForgotPasswordPage';
@@ -29,38 +29,47 @@ function renderPage() {
 describe('ForgotPasswordPage.handleSubmit', () => {
   // Camino 1: campo vacío, bloqueado por el navegador (required)
   it('Camino 1: correo vacío → el navegador bloquea el envío, no se llama al servicio', async () => {
+    // Arrange
     const user = userEvent.setup();
     renderPage();
 
+    // Act
     await user.click(screen.getByRole('button', { name: /Enviar Enlace de Recuperación/i }));
 
+    // Assert
     expect(authService.forgotPassword).not.toHaveBeenCalled();
     expect(screen.queryByText('¡Correo Enviado!')).not.toBeInTheDocument();
   });
 
   // Camino 2: INICIO,1,3,4,5,FIN
   it('Camino 2: correo válido pero el backend falla → muestra el mensaje de error', async () => {
+    // Arrange
     vi.mocked(authService.forgotPassword).mockRejectedValue({
       response: { data: { error: { message: 'Error al procesar la solicitud' } } },
     });
     const user = userEvent.setup();
     renderPage();
-
     await user.type(screen.getByLabelText('Correo electrónico'), 'test@example.com');
+
+    // Act
     await user.click(screen.getByRole('button', { name: /Enviar Enlace de Recuperación/i }));
 
+    // Assert
     expect(await screen.findByText('Error al procesar la solicitud')).toBeInTheDocument();
   });
 
   // Camino 3: INICIO,1,3,4,6,FIN
   it('Camino 3: correo enviado correctamente → muestra la pantalla de confirmación', async () => {
+    // Arrange
     vi.mocked(authService.forgotPassword).mockResolvedValue(undefined);
     const user = userEvent.setup();
     renderPage();
-
     await user.type(screen.getByLabelText('Correo electrónico'), 'test@example.com');
+
+    // Act
     await user.click(screen.getByRole('button', { name: /Enviar Enlace de Recuperación/i }));
 
+    // Assert
     expect(await screen.findByText('¡Correo Enviado!')).toBeInTheDocument();
     expect(authService.forgotPassword).toHaveBeenCalledWith('test@example.com');
   });

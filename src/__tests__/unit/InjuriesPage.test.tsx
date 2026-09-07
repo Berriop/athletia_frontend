@@ -50,15 +50,18 @@ describe('InjuriesPage.handleSubmit (RF-18 crear / RF-20 modificar)', () => {
 
   // Camino RF-18: INICIO,1,2,4,5,6,FIN
   it('RF-18: sin edición en curso → llama a create y notifica éxito', async () => {
+    // Arrange
     const user = userEvent.setup();
     vi.mocked(injuryService.create).mockResolvedValue({} as Injury);
     renderPage();
-
     // Campos obligatorios
     await user.type(await screen.findByLabelText('Área del cuerpo'), 'Hombro');
     await user.type(screen.getByLabelText('Nombre de la lesión'), 'Tendinitis');
+
+    // Act
     await user.click(screen.getByRole('button', { name: 'Registrar Lesión' }));
 
+    // Assert
     await waitFor(() => expect(injuryService.create).toHaveBeenCalledTimes(1));
     expect(injuryService.update).not.toHaveBeenCalled();
     expect(addNotification).toHaveBeenCalledWith('Lesión registrada correctamente', 'success');
@@ -66,29 +69,34 @@ describe('InjuriesPage.handleSubmit (RF-18 crear / RF-20 modificar)', () => {
 
   // Camino RF-20: INICIO,1,2,3,5,6,FIN
   it('RF-20: editando una lesión existente → llama a update y notifica éxito', async () => {
+    // Arrange
     vi.mocked(injuryService.getAll).mockResolvedValue({ data: [existingInjury], meta: {} } as any);
     vi.mocked(injuryService.update).mockResolvedValue({} as Injury);
     const user = userEvent.setup();
     renderPage();
-
     await user.click(await screen.findByTitle('Editar'));
+
+    // Act
     await user.click(screen.getByRole('button', { name: 'Actualizar Lesión' }));
 
+    // Assert
     await waitFor(() => expect(injuryService.update).toHaveBeenCalledWith('injury-1', expect.anything()));
     expect(addNotification).toHaveBeenCalledWith('Lesión actualizada correctamente', 'success');
   });
 
   // Camino de error (aplica a RF-18 y RF-20): INICIO,1,2,{3 ó 4},5,7,FIN
   it('la llamada al backend falla → muestra el error en pantalla y notifica el fallo', async () => {
+    // Arrange
     vi.mocked(injuryService.create).mockRejectedValue(new Error('network error'));
     const user = userEvent.setup();
     renderPage();
-
     await user.type(await screen.findByLabelText('Área del cuerpo'), 'Hombro');
     await user.type(screen.getByLabelText('Nombre de la lesión'), 'Tendinitis');
+
+    // Act
     await user.click(screen.getByRole('button', { name: 'Registrar Lesión' }));
 
-    // Texto en pantalla (setError) y texto de la notificación (addNotification) difieren — ver nota arriba.
+    // Assert (texto en pantalla vs. texto de la notificación difieren — ver nota arriba)
     expect(await screen.findByText('Error al reportar lesión')).toBeInTheDocument();
     expect(addNotification).toHaveBeenCalledWith('Error al registrar lesión', 'error');
   });
@@ -102,42 +110,50 @@ describe('InjuriesPage.confirmDelete (RF-21)', () => {
 
   // Camino: INICIO,1,2,3,4,FIN
   it('Camino: la eliminación falla → notifica error y la lesión sigue en la lista', async () => {
+    // Arrange
     vi.mocked(injuryService.delete).mockRejectedValue(new Error('network error'));
     const user = userEvent.setup();
     renderPage();
-
     await user.click(await screen.findByTitle('Eliminar'));
+
+    // Act
     await user.click(screen.getByRole('button', { name: 'Aceptar' }));
 
+    // Assert
     await waitFor(() => expect(addNotification).toHaveBeenCalledWith('Error al eliminar la lesión', 'error'));
     expect(screen.getByText('Esguince')).toBeInTheDocument();
   });
 
   // Camino: INICIO,1,2,3,5,6,8,FIN
   it('Camino: se elimina bien y no estaba en edición → desaparece de la lista', async () => {
+    // Arrange
     vi.mocked(injuryService.delete).mockResolvedValue(undefined);
     const user = userEvent.setup();
     renderPage();
-
     await user.click(await screen.findByTitle('Eliminar'));
+
+    // Act
     await user.click(screen.getByRole('button', { name: 'Aceptar' }));
 
+    // Assert
     await waitFor(() => expect(addNotification).toHaveBeenCalledWith('Lesión eliminada correctamente', 'success'));
     await waitFor(() => expect(screen.queryByText('Esguince')).not.toBeInTheDocument());
   });
 
   // Camino: INICIO,1,2,3,5,6,7,8,FIN
   it('Camino: se elimina bien y SÍ estaba en edición → además limpia el formulario', async () => {
+    // Arrange
     vi.mocked(injuryService.delete).mockResolvedValue(undefined);
     const user = userEvent.setup();
     renderPage();
-
     await user.click(await screen.findByTitle('Editar'));
     expect(screen.getByText('Modo Edición')).toBeInTheDocument();
 
+    // Act
     await user.click(screen.getByTitle('Eliminar'));
     await user.click(screen.getByRole('button', { name: 'Aceptar' }));
 
+    // Assert
     await waitFor(() => expect(screen.queryByText('Modo Edición')).not.toBeInTheDocument());
   });
 });

@@ -58,26 +58,32 @@ describe('ProfilePage.handleSave (RF-05)', () => {
 
   // Camino 1: INICIO,1,2,3,4,FIN
   it('Camino 1: la llamada falla → notifica error y permanece en modo edición', async () => {
+    // Arrange
     vi.mocked(authService.updateProfile).mockRejectedValue(new Error('network error'));
     const user = userEvent.setup();
     renderPage();
-
     await user.click(screen.getByRole('button', { name: /Editar perfil/i }));
+
+    // Act
     await user.click(screen.getByRole('button', { name: /Guardar cambios/i }));
 
+    // Assert
     await waitFor(() => expect(addNotification).toHaveBeenCalledWith('Error al actualizar el perfil', 'error'));
     expect(screen.getByRole('button', { name: /Guardar cambios/i })).toBeInTheDocument(); // sigue en edición
   });
 
   // Camino 2: INICIO,1,2,3,5,FIN
   it('Camino 2: la llamada tiene éxito → actualiza el contexto, notifica y sale de edición', async () => {
+    // Arrange
     vi.mocked(authService.updateProfile).mockResolvedValue({ ...fakeUser, name: 'Nuevo Nombre' } as User);
     const user = userEvent.setup();
     renderPage();
-
     await user.click(screen.getByRole('button', { name: /Editar perfil/i }));
+
+    // Act
     await user.click(screen.getByRole('button', { name: /Guardar cambios/i }));
 
+    // Assert
     await waitFor(() => expect(updateUser).toHaveBeenCalledWith(expect.objectContaining({ name: 'Nuevo Nombre' })));
     expect(addNotification).toHaveBeenCalledWith('Perfil actualizado correctamente', 'success');
     expect(screen.getByRole('button', { name: /Editar perfil/i })).toBeInTheDocument(); // salió de edición
@@ -94,17 +100,21 @@ describe('ProfilePage.handleExportCSV (RF-34)', () => {
 
   // Camino 1: INICIO,1,2,3,FIN
   it('Camino 1: la petición falla → notifica "Error al exportar los datos"', async () => {
+    // Arrange
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false }));
     const user = userEvent.setup();
     renderPage();
 
+    // Act
     await user.click(screen.getByRole('button', { name: /Exportar mis datos/i }));
 
+    // Assert
     await waitFor(() => expect(addNotification).toHaveBeenCalledWith('Error al exportar los datos', 'error'));
   });
 
   // Camino 2: INICIO,1,2,4,FIN
   it('Camino 2: la petición responde con éxito → descarga el CSV y notifica éxito', async () => {
+    // Arrange
     vi.stubGlobal(
       'fetch',
       vi.fn().mockResolvedValue({ ok: true, blob: () => Promise.resolve(new Blob(['csv-content'])) }),
@@ -112,8 +122,10 @@ describe('ProfilePage.handleExportCSV (RF-34)', () => {
     const user = userEvent.setup();
     renderPage();
 
+    // Act
     await user.click(screen.getByRole('button', { name: /Exportar mis datos/i }));
 
+    // Assert
     await waitFor(() => expect(addNotification).toHaveBeenCalledWith('Datos exportados correctamente', 'success'));
     expect(fetch).toHaveBeenCalledWith(
       expect.stringContaining('/user/export'),

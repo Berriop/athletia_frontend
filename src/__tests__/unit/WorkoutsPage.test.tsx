@@ -46,13 +46,16 @@ describe('WorkoutsPage.handleSubmit (RF-06 crear / RF-08 modificar)', () => {
 
   // Camino RF-06: INICIO,1,2,4,5,6,FIN
   it('RF-06: sin edición en curso → llama a create y notifica éxito', async () => {
+    // Arrange
     const user = userEvent.setup();
     vi.mocked(workoutService.create).mockResolvedValue({} as Workout);
     renderPage();
-
     await user.type(await screen.findByLabelText('Título'), 'Pierna'); // campo obligatorio
+
+    // Act
     await user.click(screen.getByRole('button', { name: 'Guardar Entrenamiento' }));
 
+    // Assert
     await waitFor(() => expect(workoutService.create).toHaveBeenCalledTimes(1));
     expect(workoutService.update).not.toHaveBeenCalled();
     expect(addNotification).toHaveBeenCalledWith('Entrenamiento creado correctamente', 'success');
@@ -60,27 +63,33 @@ describe('WorkoutsPage.handleSubmit (RF-06 crear / RF-08 modificar)', () => {
 
   // Camino RF-08: INICIO,1,2,3,5,6,FIN
   it('RF-08: editando un entrenamiento existente → llama a update y notifica éxito', async () => {
+    // Arrange
     vi.mocked(workoutService.getAll).mockResolvedValue({ data: [existingWorkout], meta: {} } as any);
     vi.mocked(workoutService.update).mockResolvedValue({} as Workout);
     const user = userEvent.setup();
     renderPage();
-
     await user.click(await screen.findByTitle('Editar'));
+
+    // Act
     await user.click(screen.getByRole('button', { name: 'Actualizar Entrenamiento' }));
 
+    // Assert
     await waitFor(() => expect(workoutService.update).toHaveBeenCalledWith('workout-1', expect.anything()));
     expect(addNotification).toHaveBeenCalledWith('Entrenamiento actualizado correctamente', 'success');
   });
 
   // Camino de error (aplica a RF-06 y RF-08): INICIO,1,2,{3 ó 4},5,7,FIN
   it('la llamada al backend falla → muestra el error y notifica el fallo', async () => {
+    // Arrange
     vi.mocked(workoutService.create).mockRejectedValue(new Error('network error'));
     const user = userEvent.setup();
     renderPage();
-
     await user.type(await screen.findByLabelText('Título'), 'Pierna'); // campo obligatorio
+
+    // Act
     await user.click(screen.getByRole('button', { name: 'Guardar Entrenamiento' }));
 
+    // Assert
     expect(await screen.findByText('Error al crear entrenamiento')).toBeInTheDocument();
     expect(addNotification).toHaveBeenCalledWith('Error al crear entrenamiento', 'error');
   });
@@ -94,26 +103,32 @@ describe('WorkoutsPage.confirmDelete (RF-09)', () => {
 
   // Camino: INICIO,1,2,3,4,FIN
   it('Camino: la eliminación falla → notifica error y el entrenamiento sigue en la lista', async () => {
+    // Arrange
     vi.mocked(workoutService.delete).mockRejectedValue(new Error('network error'));
     const user = userEvent.setup();
     renderPage();
-
     await user.click(await screen.findByTitle('Eliminar'));
+
+    // Act
     await user.click(screen.getByRole('button', { name: 'Aceptar' }));
 
+    // Assert
     await waitFor(() => expect(addNotification).toHaveBeenCalledWith('Error al eliminar el entrenamiento', 'error'));
     expect(screen.getByText('Pierna')).toBeInTheDocument();
   });
 
   // Camino: INICIO,1,2,3,5,6,8,FIN
   it('Camino: se elimina bien y no estaba en edición → desaparece de la lista', async () => {
+    // Arrange
     vi.mocked(workoutService.delete).mockResolvedValue(undefined);
     const user = userEvent.setup();
     renderPage();
-
     await user.click(await screen.findByTitle('Eliminar'));
+
+    // Act
     await user.click(screen.getByRole('button', { name: 'Aceptar' }));
 
+    // Assert
     await waitFor(() =>
       expect(addNotification).toHaveBeenCalledWith('Entrenamiento eliminado correctamente', 'success'),
     );
@@ -122,16 +137,18 @@ describe('WorkoutsPage.confirmDelete (RF-09)', () => {
 
   // Camino: INICIO,1,2,3,5,6,7,8,FIN
   it('Camino: se elimina bien y SÍ estaba en edición → además limpia el formulario', async () => {
+    // Arrange
     vi.mocked(workoutService.delete).mockResolvedValue(undefined);
     const user = userEvent.setup();
     renderPage();
-
     await user.click(await screen.findByTitle('Editar'));
     expect(screen.getByText('Modo Edición')).toBeInTheDocument();
 
+    // Act
     await user.click(screen.getByTitle('Eliminar'));
     await user.click(screen.getByRole('button', { name: 'Aceptar' }));
 
+    // Assert
     await waitFor(() => expect(screen.queryByText('Modo Edición')).not.toBeInTheDocument());
   });
 });
