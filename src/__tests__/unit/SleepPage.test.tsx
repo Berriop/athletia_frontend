@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SleepPage } from '../../pages/SleepPage';
 import { sleepService } from '../../services/sleep.service';
@@ -174,5 +174,114 @@ describe('SleepPage.confirmDelete (RF-17)', () => {
 
     // Assert
     await waitFor(() => expect(screen.queryByText('Modo Edición')).not.toBeInTheDocument());
+  });
+});
+
+describe('SleepPage casos extra (carga, campos, pesadillas, cancelar diálogo)', () => {
+  beforeEach(() => {
+    addNotification.mockClear();
+    vi.mocked(sleepService.create).mockClear();
+    vi.mocked(sleepService.delete).mockClear();
+  });
+
+  // fetchSleeps en error (catch)
+  it('la carga inicial falla → muestra "Error al cargar registros de sueño"', async () => {
+    // Arrange
+    vi.mocked(sleepService.getAll).mockRejectedValue(new Error('network error'));
+
+    // Act
+    renderPage();
+
+    // Assert
+    expect(await screen.findByText('Error al cargar registros de sueño')).toBeInTheDocument();
+  });
+
+  // handleUpdate en error (catch: líneas 83-85)
+  it('al actualizar, el backend falla → "Error al actualizar el registro"', async () => {
+    // Arrange
+    vi.mocked(sleepService.getAll).mockResolvedValue({ data: [existingSleep], meta: {} } as any);
+    vi.mocked(sleepService.update).mockRejectedValue(new Error('network error'));
+    const user = userEvent.setup();
+    renderPage();
+    await user.click(await screen.findByTitle('Editar'));
+
+    // Act
+    await user.click(screen.getByRole('button', { name: 'Actualizar Registro' }));
+
+    // Assert
+    expect(await screen.findByText('Error al actualizar el registro')).toBeInTheDocument();
+    expect(addNotification).toHaveBeenCalledWith('Error al actualizar el registro', 'error');
+  });
+
+  // Inputs onChange (horas, calidad, estrés, fecha, pesadillas, notas)
+  it('modifica todos los campos → el DTO refleja los nuevos valores y la fecha local', async () => {
+    // Arrange
+    vi.mocked(sleepService.create).mockResolvedValue({} as SleepLog);
+    const user = userEvent.setup();
+    renderPage();
+
+    // Act
+    const hours = await screen.findByLabelText('Horas de sueño');
+    await user.clear(hours);
+    await user.type(hours, '7.5');
+    const quality = screen.getByLabelText('Calidad del sueño (1-10)');
+    await user.clear(quality);
+    await user.type(quality, '6');
+    const stress = screen.getByLabelText('Nivel de estrés (1-10)');
+    await user.clear(stress);
+    await user.type(stress, '8');
+    fireEvent.change(screen.getByLabelText('Fecha'), { target: { value: '2026-08-02' } });
+    await user.click(screen.getByLabelText('¿Tuviste pesadillas?'));
+    const notes = screen.getByLabelText('Notas adicionales');
+    await user.type(notes, 'Me desperté a las 3am');
+    await user.click(screen.getByRole('button', { name: 'Guardar Registro' }));
+
+    // Assert
+    await waitFor(() =>
+      expect(sleepService.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          hoursSlept: 7.5,
+          sleepQuality: 6,
+          stressLevel: 8,
+          hadNightmares: true,
+          notes: 'Me desperté a las 3am',
+          date: new Date('2026-08-02T00:00:00').toISOString(),
+        }),
+      ),
+    );
+  });
+
+  // Rama del ternario hadNightmares (s.hadNightmares truthy)
+  it('un registro con pesadillas → muestra "Pesadillas ⚠️"', async () => {
+    // Arrange
+    const nightmareSleep: SleepLog = {
+      ...existingSleep,
+      hadNightmares: true,
+    } as unknown as SleepLog;
+    vi.mocked(sleepService.getAll).mockResolvedValue({ data: [nightmareSleep], meta: {} } as any);
+
+    // Act
+    renderPage();
+
+    // Assert
+    expect(await screen.findByText('Pesadillas ⚠️')).toBeInTheDocument();
+  });
+
+  // Botón Cancelar del ConfirmDialog (onCancel)
+  it('al confirmar la eliminación, "Cancelar" cierra el diálogo sin eliminar', async () => {
+    // Arrange
+    vi.mocked(sleepService.getAll).mockResolvedValue({ data: [existingSleep], meta: {} } as any);
+    const user = userEvent.setup();
+    renderPage();
+    await user.click(await screen.findByTitle('Eliminar'));
+    expect(screen.getByText('Eliminar Registro de Sueño')).toBeInTheDocument();
+
+    // Act
+    await user.click(screen.getByRole('button', { name: 'Cancelar' }));
+
+    // Assert
+    await waitFor(() => expect(screen.queryByText('Eliminar Registro de Sueño')).not.toBeInTheDocument());
+    expect(sleepService.delete).not.toHaveBeenCalled();
+    expect(screen.getByText('8 horas')).toBeInTheDocument();
   });
 });

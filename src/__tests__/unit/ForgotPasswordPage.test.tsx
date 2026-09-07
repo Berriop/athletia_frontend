@@ -1,5 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, beforeEach, expect, vi } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { ForgotPasswordPage } from '../../pages/ForgotPasswordPage';
@@ -14,6 +14,11 @@ import { authService } from '../../services/auth.service';
 // navegador bloquea el envío nativo antes de que React vea el evento. Se
 // prueba ese comportamiento observable (no se llama al servicio) en vez de
 // forzar el camino interno.
+//
+// Aparte: para cubrir la guarda interna `if (!email) return` (cobertura de
+// rama) se usa `fireEvent.submit(form)`, que dispara el onSubmit de React
+// SIN pasar por la validación de constraint validation del navegador — es el
+// único mecanismo (además de un submit directo) que ejecuta esa rama.
 vi.mock('../../services/auth.service', () => ({
   authService: { register: vi.fn(), login: vi.fn(), updateProfile: vi.fn(), forgotPassword: vi.fn(), resetPassword: vi.fn(), verifyEmail: vi.fn() },
 }));
@@ -27,6 +32,10 @@ function renderPage() {
 }
 
 describe('ForgotPasswordPage.handleSubmit', () => {
+  beforeEach(() => {
+    vi.mocked(authService.forgotPassword).mockClear();
+  });
+
   // Camino 1: campo vacío, bloqueado por el navegador (required)
   it('Camino 1: correo vacío → el navegador bloquea el envío, no se llama al servicio', async () => {
     // Arrange
@@ -56,6 +65,37 @@ describe('ForgotPasswordPage.handleSubmit', () => {
 
     // Assert
     expect(await screen.findByText('Error al procesar la solicitud')).toBeInTheDocument();
+  });
+
+  // Camino 2 variante (fallback de error): sin response → se usa el mensaje
+  // genérico tras recorrer err.response?.data?.error?.message y
+  // err.response?.data?.message (líneas del catch)
+  it('el backend falla sin un mensaje → se muestra el mensaje de error genérico', async () => {
+    // Arrange
+    vi.mocked(authService.forgotPassword).mockRejectedValue(new Error('network error'));
+    const user = userEvent.setup();
+    renderPage();
+    await user.type(screen.getByLabelText('Correo electrónico'), 'test@example.com');
+
+    // Act
+    await user.click(screen.getByRole('button', { name: /Enviar Enlace de Recuperación/i }));
+
+    // Assert
+    expect(await screen.findByText('Hubo un error al procesar tu solicitud')).toBeInTheDocument();
+  });
+
+  // Guarda interna `if (!email) return` — solo alcanzable por el onSubmit de
+  // React directo (fireEvent.submit), no por clic (el campo es required).
+  it('la guarda interna del correo vacío corta el envío (no se llama al servicio)', () => {
+    // Arrange
+    const { container } = renderPage();
+    const form = container.querySelector('form') as HTMLFormElement;
+
+    // Act
+    fireEvent.submit(form);
+
+    // Assert
+    expect(authService.forgotPassword).not.toHaveBeenCalled();
   });
 
   // Camino 3: INICIO,1,3,4,6,FIN
