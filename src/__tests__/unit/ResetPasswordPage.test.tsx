@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { ResetPasswordPage } from '../../pages/ResetPasswordPage';
@@ -9,10 +9,11 @@ import { authService } from '../../services/auth.service';
 // Front Parte 2 (ResetPasswordPage.handleSubmit)" (V(G)=5, 5 caminos
 // básicos).
 //
-// Hallazgo: igual que en RegisterPage, el botón "Guardar Nueva Contraseña"
-// está deshabilitado mientras `!isStrong || !passwordsMatch`, así que los
-// Caminos 2 y 3 (las guardas internas de fuerza/coincidencia) son
-// inalcanzables por clic real — se comprueban como botón deshabilitado.
+// Nota sobre los caminos: por clic real, el botón "Guardar Nueva Contraseña"
+// está deshabilitado mientras `!isStrong || !passwordsMatch`, y sin token la
+// pantalla ni renderiza el formulario. Por eso las guardas internas se
+// disparan con `fireEvent.submit(form)`, que ejecuta el onSubmit de React
+// saltándose la constraint validation del navegador.
 vi.mock('../../services/auth.service', () => ({
   authService: { register: vi.fn(), login: vi.fn(), updateProfile: vi.fn(), forgotPassword: vi.fn(), resetPassword: vi.fn(), verifyEmail: vi.fn() },
 }));
@@ -32,9 +33,18 @@ function renderWithToken(token: string | null) {
   );
 }
 
+// Guardas internas de handleSubmit — igual que las de Register/Forgot, no
+// son alcanzables por clic (botón deshabilitado o pantalla sin formulario),
+// así que se ejecutan disparando el onSubmit de React directo con
+// `fireEvent.submit(form)`, que omite la constraint validation del navegador.
+function formOf(container: HTMLElement): HTMLFormElement {
+  return container.querySelector('form') as HTMLFormElement;
+}
+
 describe('ResetPasswordPage.handleSubmit', () => {
   beforeEach(() => {
     navigate.mockClear();
+    vi.mocked(authService.resetPassword).mockClear();
   });
 
   // Camino 1: INICIO,1,2,FIN
@@ -45,6 +55,54 @@ describe('ResetPasswordPage.handleSubmit', () => {
     // Assert
     expect(screen.getByText('Enlace Inválido')).toBeInTheDocument();
     expect(screen.queryByLabelText('Nueva Contraseña')).not.toBeInTheDocument();
+  });
+
+  // Guarda interna 1: con token presente pero contraseña débil.
+  it('Guarda 1: contraseña débil, el onSubmit corta con el mensaje de requisitos', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    const { container } = renderWithToken('valid-token');
+    await user.type(screen.getByLabelText('Nueva Contraseña'), 'weak');
+
+    // Act
+    fireEvent.submit(formOf(container));
+
+    // Assert
+    expect(screen.getByText('La nueva contraseña debe cumplir con los requisitos de seguridad')).toBeInTheDocument();
+    expect(authService.resetPassword).not.toHaveBeenCalled();
+  });
+
+  it('Guarda 2: contraseñas que no coinciden, el onSubmit corta con el mensaje de coincidencia', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    const { container } = renderWithToken('valid-token');
+    await user.type(screen.getByLabelText('Nueva Contraseña'), 'StrongP@ss1234');
+    await user.type(screen.getByLabelText('Confirmar Nueva Contraseña'), 'OtraCosa@1234');
+
+    // Act
+    fireEvent.submit(formOf(container));
+
+    // Assert
+    expect(screen.getByText('Las contraseñas no coinciden')).toBeInTheDocument();
+    expect(authService.resetPassword).not.toHaveBeenCalled();
+  });
+
+  // Fallback del catch: el backend falla sin response → mensaje genérico
+  // tras recorrer err.response?.data?.error?.message y err.response?.data?.message
+  it('el backend falla sin un mensaje → muestra el mensaje de enlace inválido/expirado', async () => {
+    // Arrange
+    vi.mocked(authService.resetPassword).mockRejectedValue(new Error('network error'));
+    const user = userEvent.setup();
+    renderWithToken('valid-token');
+    await user.type(screen.getByLabelText('Nueva Contraseña'), 'StrongP@ss1234');
+    await user.type(screen.getByLabelText('Confirmar Nueva Contraseña'), 'StrongP@ss1234');
+
+    // Act
+    await user.click(screen.getByRole('button', { name: /Guardar Nueva Contraseña/i }));
+
+    // Assert
+    expect(await screen.findByText('El enlace de recuperación es inválido o ha expirado.')).toBeInTheDocument();
+    expect(navigate).not.toHaveBeenCalled();
   });
 
   // Caminos 2 y 3 (guardas internas): observables como botón deshabilitado

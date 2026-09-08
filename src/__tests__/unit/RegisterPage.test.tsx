@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { RegisterPage } from '../../pages/RegisterPage';
@@ -8,16 +8,14 @@ import { authService } from '../../services/auth.service';
 // RF-01 — Registrar cuenta. Basado en el diagrama "RF-01 Front
 // (RegisterPage.handleSubmit)" (Patrón H1, V(G)=4, 4 caminos básicos).
 //
-// Hallazgo real al escribir esta prueba: el botón "Crear Cuenta" está
-// deshabilitado mientras `!isStrong || !passwordsMatch`
-// (`disabled={isLoading || !isStrong || !passwordsMatch}`). Eso significa
-// que los caminos 1 y 2 de la tabla (los `if (!isStrong) return` / `if
-// (!passwordsMatch) return` DENTRO de handleSubmit) son, en la práctica,
-// inalcanzables por interacción real de un usuario: el botón nunca llega a
-// activarse en esos casos. Por eso aquí se prueba el comportamiento
-// realmente observable (el botón permanece deshabilitado) en vez de forzar
-// un clic que un usuario real no podría dar — y se documenta como hallazgo,
-// no como hueco de la prueba.
+// Nota sobre las guardas internas: el botón "Crear Cuenta" está deshabilitado
+// mientras `!isStrong || !passwordsMatch`
+// (`disabled={isLoading || !isStrong || !passwordsMatch}`), así que las
+// guardas 1 y 2 de la tabla (los `if (!isStrong) return` / `if
+// (!passwordsMatch) return` DENTRO de handleSubmit) son inalcanzables por
+// clic real. Lo observable se prueba como botón deshabilitado, y las ramas
+// internas se ejecutan con `fireEvent.submit(form)` (el onSubmit de React
+// ignora la constraint validation y el disabled del botón).
 vi.mock('../../services/auth.service', () => ({
   authService: { register: vi.fn(), login: vi.fn(), updateProfile: vi.fn(), forgotPassword: vi.fn(), resetPassword: vi.fn(), verifyEmail: vi.fn() },
 }));
@@ -52,6 +50,7 @@ describe('RegisterPage.handleSubmit', () => {
   beforeEach(() => {
     login.mockClear();
     navigate.mockClear();
+    vi.mocked(authService.register).mockClear();
   });
 
   // Caminos 1 y 2 (guardas internas): observables como botón deshabilitado
@@ -115,5 +114,52 @@ describe('RegisterPage.handleSubmit', () => {
     // Assert
     await waitFor(() => expect(login).toHaveBeenCalledWith('jwt-token', expect.objectContaining({ id: 'user-1' })));
     expect(navigate).toHaveBeenCalledWith('/dashboard', { replace: true });
+  });
+
+  // Guarda interna 1 (contraseña débil): solo alcanzable con submit directo
+  it('Guarda 1: contraseña débil, el onSubmit corta con el mensaje de seguridad', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    const { container } = renderPage();
+    await user.type(screen.getByLabelText('Contraseña segura'), 'weak');
+
+    // Act
+    fireEvent.submit(container.querySelector('form') as HTMLFormElement);
+
+    // Assert
+    expect(screen.getByText('La contraseña debe cumplir con todos los requisitos de seguridad')).toBeInTheDocument();
+    expect(authService.register).not.toHaveBeenCalled();
+  });
+
+  // Guarda interna 2 (contraseñas que no coinciden): ver nota arriba
+  it('Guarda 2: contraseñas que no coinciden, el onSubmit corta con el mensaje de coincidencia', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    const { container } = renderPage();
+    await user.type(screen.getByLabelText('Contraseña segura'), 'StrongP@ss1234');
+    await user.type(screen.getByLabelText('Confirmar contraseña'), 'OtraCosa@1234');
+
+    // Act
+    fireEvent.submit(container.querySelector('form') as HTMLFormElement);
+
+    // Assert
+    expect(screen.getByText('Las contraseñas no coinciden')).toBeInTheDocument();
+    expect(authService.register).not.toHaveBeenCalled();
+  });
+
+  // Fallback del catch: el backend falla sin message en error → mensaje genérico
+  it('el backend falla sin un mensaje → muestra el mensaje de error por defecto', async () => {
+    // Arrange
+    vi.mocked(authService.register).mockRejectedValue(new Error('network error'));
+    const user = userEvent.setup();
+    renderPage();
+    await fillStrongMatchingPassword(user);
+
+    // Act
+    await user.click(screen.getByRole('button', { name: /Crear Cuenta/i }));
+
+    // Assert
+    expect(await screen.findByText('Error al registrarse')).toBeInTheDocument();
+    expect(login).not.toHaveBeenCalled();
   });
 });
