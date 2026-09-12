@@ -1,6 +1,56 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Activity, Apple, Moon, HeartPulse, ChevronRight, CheckCircle2 } from 'lucide-react';
+import { Activity, Apple, Moon, HeartPulse, ChevronRight } from 'lucide-react';
+import { FeatureCard } from '../components/FeatureCard';
+import { BenefitItem } from '../components/BenefitItem';
+
+const FEATURES = [
+  {
+    icon: Activity,
+    title: 'Seguimiento de Entrenamientos',
+    description: 'Registra tus ejercicios, series, repeticiones y observa tu progreso a lo largo del tiempo.',
+  },
+  {
+    icon: Apple,
+    iconBg: 'var(--secondary)',
+    title: 'Control Nutricional',
+    description: 'Mantén un registro de tus comidas, macronutrientes e hidratación para nutrir tu cuerpo correctamente.',
+  },
+  {
+    icon: Moon,
+    iconBg: '#3b82f6',
+    title: 'Análisis de Sueño',
+    description: 'Monitorea tus patrones de sueño para asegurar una recuperación óptima y estar siempre listo.',
+  },
+  {
+    icon: HeartPulse,
+    iconBg: 'var(--danger)',
+    title: 'Gestión de Lesiones',
+    description: 'Registra molestias, sigue protocolos de recuperación y maneja lesiones de forma efectiva.',
+  },
+];
+
+const BENEFITS_COLUMN_1 = [
+  {
+    title: 'Mejores perspectivas de rendimiento',
+    description: 'Comprende cómo tus hábitos diarios afectan tu desempeño físico y ajusta en consecuencia.',
+  },
+  {
+    title: 'Control de la recuperación',
+    description: 'Equilibra el estrés y la recuperación para evitar el sobreentrenamiento y maximizar tus ganancias.',
+  },
+];
+
+const BENEFITS_COLUMN_2 = [
+  {
+    title: 'Seguimiento del progreso',
+    description: 'Visualiza tu mejora a lo largo de semanas, meses y años con gráficos detallados.',
+  },
+  {
+    title: 'Datos atléticos centralizados',
+    description: 'Se acabaron los días de usar 5 aplicaciones diferentes. Todo lo que necesitas está justo aquí.',
+  },
+];
 
 export const LandingPage: React.FC = () => {
   return (
@@ -67,26 +117,9 @@ export const LandingPage: React.FC = () => {
       <section className="section-padding">
         <h2 className="section-title">Todo lo que necesitas para destacar</h2>
         <div className="grid-4" style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div className="feature-card card">
-            <div className="feature-icon-wrapper"><Activity size={32} /></div>
-            <h3 className="feature-title">Seguimiento de Entrenamientos</h3>
-            <p className="feature-desc">Registra tus ejercicios, series, repeticiones y observa tu progreso a lo largo del tiempo.</p>
-          </div>
-          <div className="feature-card card">
-            <div className="feature-icon-wrapper" style={{ background: 'var(--secondary)' }}><Apple size={32} /></div>
-            <h3 className="feature-title">Control Nutricional</h3>
-            <p className="feature-desc">Mantén un registro de tus comidas, macronutrientes e hidratación para nutrir tu cuerpo correctamente.</p>
-          </div>
-          <div className="feature-card card">
-            <div className="feature-icon-wrapper" style={{ background: '#3b82f6' }}><Moon size={32} /></div>
-            <h3 className="feature-title">Análisis de Sueño</h3>
-            <p className="feature-desc">Monitorea tus patrones de sueño para asegurar una recuperación óptima y estar siempre listo.</p>
-          </div>
-          <div className="feature-card card">
-            <div className="feature-icon-wrapper" style={{ background: 'var(--danger)' }}><HeartPulse size={32} /></div>
-            <h3 className="feature-title">Gestión de Lesiones</h3>
-            <p className="feature-desc">Registra molestias, sigue protocolos de recuperación y maneja lesiones de forma efectiva.</p>
-          </div>
+          {FEATURES.map((feature) => (
+            <FeatureCard key={feature.title} {...feature} />
+          ))}
         </div>
       </section>
 
@@ -97,38 +130,16 @@ export const LandingPage: React.FC = () => {
           <div className="grid-2">
             <div>
               <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                <li style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-                  <CheckCircle2 color="var(--secondary)" size={24} style={{ flexShrink: 0 }} />
-                  <div>
-                    <h4 style={{ fontSize: '1.2rem', fontWeight: 600, marginBottom: '0.25rem' }}>Mejores perspectivas de rendimiento</h4>
-                    <p style={{ color: 'var(--text-secondary)' }}>Comprende cómo tus hábitos diarios afectan tu desempeño físico y ajusta en consecuencia.</p>
-                  </div>
-                </li>
-                <li style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-                  <CheckCircle2 color="var(--secondary)" size={24} style={{ flexShrink: 0 }} />
-                  <div>
-                    <h4 style={{ fontSize: '1.2rem', fontWeight: 600, marginBottom: '0.25rem' }}>Control de la recuperación</h4>
-                    <p style={{ color: 'var(--text-secondary)' }}>Equilibra el estrés y la recuperación para evitar el sobreentrenamiento y maximizar tus ganancias.</p>
-                  </div>
-                </li>
+                {BENEFITS_COLUMN_1.map((benefit) => (
+                  <BenefitItem key={benefit.title} {...benefit} />
+                ))}
               </ul>
             </div>
             <div>
               <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                <li style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-                  <CheckCircle2 color="var(--secondary)" size={24} style={{ flexShrink: 0 }} />
-                  <div>
-                    <h4 style={{ fontSize: '1.2rem', fontWeight: 600, marginBottom: '0.25rem' }}>Seguimiento del progreso</h4>
-                    <p style={{ color: 'var(--text-secondary)' }}>Visualiza tu mejora a lo largo de semanas, meses y años con gráficos detallados.</p>
-                  </div>
-                </li>
-                <li style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-                  <CheckCircle2 color="var(--secondary)" size={24} style={{ flexShrink: 0 }} />
-                  <div>
-                    <h4 style={{ fontSize: '1.2rem', fontWeight: 600, marginBottom: '0.25rem' }}>Datos atléticos centralizados</h4>
-                    <p style={{ color: 'var(--text-secondary)' }}>Se acabaron los días de usar 5 aplicaciones diferentes. Todo lo que necesitas está justo aquí.</p>
-                  </div>
-                </li>
+                {BENEFITS_COLUMN_2.map((benefit) => (
+                  <BenefitItem key={benefit.title} {...benefit} />
+                ))}
               </ul>
             </div>
           </div>

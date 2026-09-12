@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { GymFinderPage } from '../../pages/GymFinderPage';
@@ -314,5 +314,54 @@ describe('GymFinderPage interacciones (marcador, tarjeta, mi ubicación)', () =>
     // Assert
     await waitFor(() => expect(nearbySearchMock).toHaveBeenCalledTimes(1));
     expect((screen.getByPlaceholderText('Buscar ciudad o zona...') as HTMLInputElement).value).toBe('');
+  });
+});
+
+// Estos dos casos dependen de la carga real del script de Google Maps
+// (loadGoogleMapsScript), así que a diferencia del resto del archivo NO se
+// deja `window.google` pre-stubeado: se limpia justo antes de renderizar
+// para que el componente sí intente insertar el <script> real.
+describe('GymFinderPage.loadGoogleMapsScript', () => {
+  afterEach(() => {
+    document.getElementById('google-maps-script')?.remove();
+    vi.unstubAllEnvs();
+  });
+
+  it('sin VITE_GOOGLE_MAPS_API_KEY configurada → muestra el error de configuración sin intentar cargar el script', async () => {
+    // Arrange: MAPS_API_KEY se calcula a nivel de módulo, así que se necesita
+    // un import fresco después de stubear la env para que tome el nuevo valor.
+    vi.unstubAllGlobals();
+    vi.stubEnv('VITE_GOOGLE_MAPS_API_KEY', '');
+    vi.resetModules();
+    const { GymFinderPage: FreshGymFinderPage } = await import('../../pages/GymFinderPage');
+
+    // Act
+    render(<FreshGymFinderPage />);
+
+    // Assert
+    expect(
+      await screen.findByText('⚠️ Falta configurar VITE_GOOGLE_MAPS_API_KEY en el archivo .env'),
+    ).toBeInTheDocument();
+    expect(document.getElementById('google-maps-script')).not.toBeInTheDocument();
+  });
+
+  it('el script de Google Maps falla al cargar → muestra el error de carga', async () => {
+    // Arrange: sin window.google, el componente debe insertar el <script> real
+    vi.unstubAllGlobals();
+
+    // Act
+    render(<GymFinderPage />);
+    const script = await waitFor(() => {
+      const el = document.getElementById('google-maps-script');
+      expect(el).not.toBeNull();
+      return el as HTMLScriptElement;
+    });
+    // Simula que la red/API Key falla al cargar el script
+    script.onerror?.(new Event('error'));
+
+    // Assert (el mensaje se muestra tanto en el panel de error como en el overlay del mapa)
+    await waitFor(() =>
+      expect(screen.getAllByText('No se pudo cargar Google Maps. Verifica tu API Key.').length).toBeGreaterThan(0),
+    );
   });
 });

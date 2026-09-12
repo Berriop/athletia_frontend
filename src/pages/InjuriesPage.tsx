@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Edit2, Trash2 } from 'lucide-react';
 import type { Injury } from '../types';
 import { injuryService } from '../services/injury.service';
 import type { CreateInjuryDTO } from '../services/injury.service';
 import { useNotification } from '../contexts/NotificationContext';
 import { ConfirmDialog } from '../components/ConfirmDialog';
+import { EditModeBadge } from '../components/EditModeBadge';
+import { RowActionButtons } from '../components/RowActionButtons';
+import { ListStatus } from '../components/ListStatus';
+import { FormSubmitActions } from '../components/FormSubmitActions';
 
 export const InjuriesPage: React.FC = () => {
   const [injuries, setInjuries] = useState<Injury[]>([]);
@@ -131,11 +134,7 @@ export const InjuriesPage: React.FC = () => {
       {error && <div style={{ color: 'red', marginBottom: '1rem' }}>{error}</div>}
 
       <div className="card glass-panel" style={{ marginBottom: '2rem', position: 'relative' }}>
-        {editingId && (
-          <div style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'var(--accent)', color: 'white', padding: '0.25rem 0.75rem', borderRadius: '1rem', fontSize: '0.8rem', fontWeight: 'bold' }}>
-            Modo Edición
-          </div>
-        )}
+        {editingId && <EditModeBadge />}
         <h3>{editingId ? 'Editar Lesión' : 'Reportar Lesión'}</h3>
         <form onSubmit={editingId ? handleUpdate : handleCreate} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
@@ -160,22 +159,18 @@ export const InjuriesPage: React.FC = () => {
             <label htmlFor="notes" style={{ fontSize: '0.9rem' }}>Notas sobre la lesión</label>
             <textarea id="notes" placeholder="Notas sobre el tratamiento o dolor..." value={notes} onChange={e => setNotes(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', minHeight: '80px', backgroundColor: 'var(--bg-card)', color: 'inherit', border: '1px solid var(--border)' }} />
           </div>
-          <div style={{ gridColumn: 'span 2', display: 'flex', gap: '1rem' }}>
-            <button type="submit" disabled={isLoading} className="btn-primary" style={{ flex: 1 }}>
-              {isLoading ? 'Guardando...' : (editingId ? 'Actualizar Lesión' : 'Registrar Lesión')}
-            </button>
-            {editingId && (
-              <button type="button" onClick={resetForm} disabled={isLoading} className="btn-secondary" style={{ flex: 1, backgroundColor: 'transparent', border: '1px solid var(--border)', color: 'var(--text-primary)' }}>
-                Cancelar Edición
-              </button>
-            )}
-          </div>
+          <FormSubmitActions
+            isLoading={isLoading}
+            isEditing={!!editingId}
+            createLabel="Registrar Lesión"
+            updateLabel="Actualizar Lesión"
+            onCancel={resetForm}
+          />
         </form>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        {isLoading && injuries.length === 0 ? <p>Cargando...</p> : null}
-        {!isLoading && injuries.length === 0 ? <p>No hay lesiones reportadas.</p> : null}
+        <ListStatus isLoading={isLoading} isEmpty={injuries.length === 0} emptyText="No hay lesiones reportadas." />
         {injuries.map(i => (
           <div key={i.id} className="card glass-panel" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderLeft: i.isActive ? '4px solid red' : '4px solid green' }}>
             <div>
@@ -185,14 +180,7 @@ export const InjuriesPage: React.FC = () => {
             <div style={{ textAlign: 'right', fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.5rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                 <p style={{ margin: 0, color: i.isActive ? 'red' : 'green', fontWeight: 'bold' }}>{i.isActive ? 'ACTIVA' : 'RECUPERADA'}</p>
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                  <button onClick={() => handleEdit(i)} title="Editar" style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', padding: '0.25rem' }}>
-                    <Edit2 size={16} />
-                  </button>
-                  <button onClick={() => setDeleteId(i.id)} title="Eliminar" style={{ background: 'none', border: 'none', color: 'red', cursor: 'pointer', padding: '0.25rem' }}>
-                    <Trash2 size={16} />
-                  </button>
-                </div>
+                <RowActionButtons onEdit={() => handleEdit(i)} onDelete={() => setDeleteId(i.id)} />
               </div>
               <p style={{ margin: 0 }}>{new Date(i.createdAt).toLocaleDateString()}</p>
             </div>

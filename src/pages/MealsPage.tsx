@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Edit2, Trash2 } from 'lucide-react';
 import type { Meal } from '../types';
 import type { MealType } from '../types/Meal';
 import { mealService } from '../services/meal.service';
@@ -7,6 +6,10 @@ import type { CreateMealDTO } from '../services/meal.service';
 import { useNotification } from '../contexts/NotificationContext';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { toLocalDateInput } from '../utils/date';
+import { EditModeBadge } from '../components/EditModeBadge';
+import { RowActionButtons } from '../components/RowActionButtons';
+import { ListStatus } from '../components/ListStatus';
+import { FormSubmitActions } from '../components/FormSubmitActions';
 
 const MEAL_TYPE_LABELS: Record<MealType, string> = {
   BREAKFAST: 'Desayuno',
@@ -154,11 +157,7 @@ export const MealsPage: React.FC = () => {
       {error && <div style={{ color: 'red', marginBottom: '1rem' }}>{error}</div>}
 
       <div className="card glass-panel" style={{ marginBottom: '2rem', position: 'relative' }}>
-        {editingId && (
-          <div style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'var(--accent)', color: 'white', padding: '0.25rem 0.75rem', borderRadius: '1rem', fontSize: '0.8rem', fontWeight: 'bold' }}>
-            Modo Edición
-          </div>
-        )}
+        {editingId && <EditModeBadge />}
         <h3>{editingId ? 'Editar Comida' : 'Registrar Comida'}</h3>
         <form onSubmit={editingId ? handleUpdate : handleCreate} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
@@ -198,22 +197,18 @@ export const MealsPage: React.FC = () => {
             <label htmlFor="date" style={{ fontSize: '0.9rem' }}>Fecha</label>
             <input id="date" required type="date" value={date} onChange={(e) => setDate(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', backgroundColor: 'var(--bg-card)', color: 'inherit', border: '1px solid var(--border)' }} />
           </div>
-          <div style={{ gridColumn: 'span 2', display: 'flex', gap: '1rem' }}>
-            <button type="submit" disabled={isLoading} className="btn-primary" style={{ flex: 1 }}>
-              {isLoading ? 'Guardando...' : editingId ? 'Actualizar Comida' : 'Guardar Comida'}
-            </button>
-            {editingId && (
-              <button type="button" onClick={resetForm} disabled={isLoading} className="btn-secondary" style={{ flex: 1, backgroundColor: 'transparent', border: '1px solid var(--border)', color: 'var(--text-primary)' }}>
-                Cancelar Edición
-              </button>
-            )}
-          </div>
+          <FormSubmitActions
+            isLoading={isLoading}
+            isEditing={!!editingId}
+            createLabel="Guardar Comida"
+            updateLabel="Actualizar Comida"
+            onCancel={resetForm}
+          />
         </form>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        {isLoading && meals.length === 0 ? <p>Cargando...</p> : null}
-        {!isLoading && meals.length === 0 ? <p>No hay comidas registradas.</p> : null}
+        <ListStatus isLoading={isLoading} isEmpty={meals.length === 0} emptyText="No hay comidas registradas." />
         {meals.map((m) => (
           <div key={m.id} className="card glass-panel" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
@@ -225,14 +220,7 @@ export const MealsPage: React.FC = () => {
             <div style={{ textAlign: 'right', fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.5rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                 <p style={{ margin: 0 }}>P: {m.proteinG}g / C: {m.carbsG}g / G: {m.fatG}g</p>
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                  <button onClick={() => handleEdit(m)} title="Editar" style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', padding: '0.25rem' }}>
-                    <Edit2 size={16} />
-                  </button>
-                  <button onClick={() => setDeleteId(m.id)} title="Eliminar" style={{ background: 'none', border: 'none', color: 'red', cursor: 'pointer', padding: '0.25rem' }}>
-                    <Trash2 size={16} />
-                  </button>
-                </div>
+                <RowActionButtons onEdit={() => handleEdit(m)} onDelete={() => setDeleteId(m.id)} />
               </div>
               <p style={{ margin: 0 }}>{new Date(m.date).toLocaleDateString()}</p>
             </div>
