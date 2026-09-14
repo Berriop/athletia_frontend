@@ -44,7 +44,7 @@ export const FAQPage: React.FC = () => {
 
       <div className="card" style={{ padding: '0' }}>
         {faqs.map((faq, index) => (
-          <div key={index} className="faq-item">
+          <div key={faq.question} className="faq-item">
             <button 
               className="faq-question" 
               onClick={() => toggleFaq(index)}

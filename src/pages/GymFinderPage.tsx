@@ -164,12 +164,17 @@ export const GymFinderPage: React.FC = () => {
       setSelectedGym(gym);
       mapInstanceRef.current?.panTo({ lat: gym.lat, lng: gym.lng });
       if (infoWindowRef.current) {
+        const openColor = gym.isOpen ? '#38a169' : '#e53e3e';
+        const openLabel = gym.isOpen ? '🟢 Abierto' : '🔴 Cerrado';
+        const openStatusHtml = gym.isOpen !== undefined
+          ? `<p style="margin:2px 0;font-size:12px;color:${openColor}">${openLabel}</p>`
+          : '';
         infoWindowRef.current.setContent(`
           <div style="color:#1a1a2e;padding:8px;max-width:200px;">
             <strong style="font-size:14px;">${gym.name}</strong>
             <p style="margin:4px 0;font-size:12px;color:#4a5568;">${gym.vicinity}</p>
             ${gym.rating ? `<p style="margin:2px 0;font-size:12px;">⭐ ${gym.rating} (${gym.user_ratings_total ?? 0} reseñas)</p>` : ''}
-            ${gym.isOpen !== undefined ? `<p style="margin:2px 0;font-size:12px;color:${gym.isOpen ? '#38a169' : '#e53e3e'}">${gym.isOpen ? '🟢 Abierto' : '🔴 Cerrado'}</p>` : ''}
+            ${openStatusHtml}
           </div>
         `);
         infoWindowRef.current.open(mapInstanceRef.current!, marker);
@@ -220,7 +225,7 @@ export const GymFinderPage: React.FC = () => {
     );
   }, [addGymMarker]);
 
-  const handleTextSearch = (e: React.FormEvent) => {
+  const handleTextSearch = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!searchQuery.trim() || !mapInstanceRef.current) return;
 

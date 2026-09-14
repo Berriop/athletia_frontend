@@ -18,10 +18,18 @@ export const FormSubmitActions: React.FC<FormSubmitActionsProps> = ({
   savingLabel = 'Guardando...',
   cancelLabel = 'Cancelar Edición',
   onCancel,
-}) => (
+}) => {
+  let submitLabel = createLabel;
+  if (isLoading) {
+    submitLabel = savingLabel;
+  } else if (isEditing) {
+    submitLabel = updateLabel;
+  }
+
+  return (
   <div style={{ gridColumn: 'span 2', display: 'flex', gap: '1rem' }}>
     <button type="submit" disabled={isLoading} className="btn-primary" style={{ flex: 1 }}>
-      {isLoading ? savingLabel : isEditing ? updateLabel : createLabel}
+      {submitLabel}
     </button>
     {isEditing && (
       <button
@@ -35,4 +43,5 @@ export const FormSubmitActions: React.FC<FormSubmitActionsProps> = ({
       </button>
     )}
   </div>
-);
+  );
+};

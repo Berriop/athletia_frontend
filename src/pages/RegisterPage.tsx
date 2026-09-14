@@ -16,8 +16,12 @@ export const RegisterPage: React.FC = () => {
 
   const { isStrong } = checkPasswordStrength(password);
   const passwordsMatch = password.length > 0 && password === confirmPassword;
+  let confirmBorder = '1px solid var(--border)';
+  if (confirmPassword.length > 0) {
+    confirmBorder = passwordsMatch ? '1px solid #10b981' : '1px solid #ef4444';
+  }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
 
@@ -152,11 +156,7 @@ export const RegisterPage: React.FC = () => {
               style={{
                 padding: '0.75rem',
                 borderRadius: '0.5rem',
-                border: confirmPassword.length > 0
-                  ? passwordsMatch
-                    ? '1px solid #10b981'
-                    : '1px solid #ef4444'
-                  : '1px solid var(--border)',
+                border: confirmBorder,
               }}
             />
 

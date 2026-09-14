@@ -45,7 +45,7 @@ export const WorkoutsPage: React.FC = () => {
     try {
       const response = await workoutService.getAll(1, 50);
       setWorkouts(response.data);
-    } catch (err) {
+    } catch {
       setError('Error al cargar entrenamientos');
     } finally {
       setIsLoading(false);
@@ -66,7 +66,7 @@ export const WorkoutsPage: React.FC = () => {
     setEditingId(null);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
@@ -123,7 +123,7 @@ export const WorkoutsPage: React.FC = () => {
       }
 
       setWorkouts((prev) => prev.filter((w) => w.id !== deleteId));
-    } catch (err) {
+    } catch {
       addNotification('Error al eliminar el entrenamiento', 'error');
     } finally {
       setDeleteId(null);

@@ -30,7 +30,7 @@ export const SleepPage: React.FC = () => {
     try {
       const response = await sleepService.getAll(1, 50);
       setSleeps(response.data);
-    } catch (err) {
+    } catch {
       setError('Error al cargar registros de sueño');
     } finally {
       setIsLoading(false);
@@ -54,7 +54,7 @@ export const SleepPage: React.FC = () => {
   // RF-14 (crear) y RF-16 (modificar) quedan como funciones independientes,
   // cada una con su propio try/catch, en vez de una sola función con un
   // if/else por dentro.
-  const handleCreate = async (e: React.FormEvent) => {
+  const handleCreate = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
@@ -64,14 +64,14 @@ export const SleepPage: React.FC = () => {
       addNotification('Registro de sueño creado', 'success');
       resetForm();
       await fetchSleeps();
-    } catch (err) {
+    } catch {
       setError('Error al guardar el registro');
       addNotification('Error al guardar el registro', 'error');
       setIsLoading(false);
     }
   };
 
-  const handleUpdate = async (e: React.FormEvent) => {
+  const handleUpdate = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!editingId) return;
     setIsLoading(true);
@@ -82,7 +82,7 @@ export const SleepPage: React.FC = () => {
       addNotification('Registro de sueño actualizado', 'success');
       resetForm();
       await fetchSleeps();
-    } catch (err) {
+    } catch {
       setError('Error al actualizar el registro');
       addNotification('Error al actualizar el registro', 'error');
       setIsLoading(false);
@@ -111,7 +111,7 @@ export const SleepPage: React.FC = () => {
       }
       
       setSleeps(prev => prev.filter(s => s.id !== deleteId));
-    } catch (err) {
+    } catch {
       addNotification('Error al eliminar el registro', 'error');
     } finally {
       setDeleteId(null);
@@ -147,7 +147,7 @@ export const SleepPage: React.FC = () => {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', justifyContent: 'center' }}>
             <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', cursor: 'pointer' }}>
-              <input type="checkbox" checked={hadNightmares} onChange={e => setHadNightmares(e.target.checked)} />
+              <input type="checkbox" checked={hadNightmares} onChange={e => setHadNightmares(e.target.checked)} />{' '}
               ¿Tuviste pesadillas?
             </label>
           </div>

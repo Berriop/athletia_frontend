@@ -1,16 +1,18 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
+
+export type NotificationType = 'success' | 'error' | 'info';
 
 export interface Notification {
   id: string;
   message: string;
-  type: 'success' | 'error' | 'info';
+  type: NotificationType;
   timestamp: Date;
 }
 
 interface NotificationContextData {
   notifications: Notification[];
-  addNotification: (message: string, type: 'success' | 'error' | 'info') => void;
+  addNotification: (message: string, type: NotificationType) => void;
   clearNotifications: () => void;
   removeNotification: (id: string) => void;
 }
@@ -20,7 +22,7 @@ const NotificationContext = createContext<NotificationContextData | undefined>(u
 export const NotificationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  const addNotification = (message: string, type: 'success' | 'error' | 'info') => {
+  const addNotification = (message: string, type: NotificationType) => {
     // crypto.randomUUID() en vez de Math.random(): este id solo se usa como
     // key de React/identificador visual, pero Math.random() es un generador
     // pseudoaleatorio no apto para nada relacionado con seguridad, y Sonar lo
@@ -38,11 +40,12 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({ childr
     setNotifications((prev) => prev.filter((n) => n.id !== id));
   };
 
-  return (
-    <NotificationContext.Provider value={{ notifications, addNotification, clearNotifications, removeNotification }}>
-      {children}
-    </NotificationContext.Provider>
+  const value = useMemo(
+    () => ({ notifications, addNotification, clearNotifications, removeNotification }),
+    [notifications],
   );
+
+  return <NotificationContext.Provider value={value}>{children}</NotificationContext.Provider>;
 };
 
 export const useNotification = () => {

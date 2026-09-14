@@ -41,7 +41,7 @@ export const MealsPage: React.FC = () => {
     try {
       const response = await mealService.getAll(1, 50);
       setMeals(response.data);
-    } catch (err) {
+    } catch {
       setError('Error al cargar comidas');
     } finally {
       setIsLoading(false);
@@ -66,7 +66,7 @@ export const MealsPage: React.FC = () => {
   // RF-10 (crear) y RF-12 (modificar) quedan como funciones independientes,
   // cada una con su propio try/catch, en vez de una sola función con un
   // if/else por dentro (mismo patrón que SleepPage).
-  const handleCreate = async (e: React.FormEvent) => {
+  const handleCreate = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
@@ -92,7 +92,7 @@ export const MealsPage: React.FC = () => {
     }
   };
 
-  const handleUpdate = async (e: React.FormEvent) => {
+  const handleUpdate = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!editingId) return;
     setIsLoading(true);
@@ -142,7 +142,7 @@ export const MealsPage: React.FC = () => {
       }
 
       setMeals((prev) => prev.filter((m) => m.id !== deleteId));
-    } catch (err) {
+    } catch {
       addNotification('Error al eliminar la comida', 'error');
     } finally {
       setDeleteId(null);

@@ -28,7 +28,7 @@ export const InjuriesPage: React.FC = () => {
     try {
       const response = await injuryService.getAll(1, 50);
       setInjuries(response.data);
-    } catch (err) {
+    } catch {
       setError('Error al cargar lesiones');
     } finally {
       setIsLoading(false);
@@ -61,7 +61,7 @@ export const InjuriesPage: React.FC = () => {
     return null;
   };
 
-  const handleCreate = async (e: React.FormEvent) => {
+  const handleCreate = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
@@ -79,7 +79,7 @@ export const InjuriesPage: React.FC = () => {
     }
   };
 
-  const handleUpdate = async (e: React.FormEvent) => {
+  const handleUpdate = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!editingId) return;
     setIsLoading(true);
@@ -119,7 +119,7 @@ export const InjuriesPage: React.FC = () => {
       }
       
       setInjuries(prev => prev.filter(i => i.id !== deleteId));
-    } catch (err) {
+    } catch {
       addNotification('Error al eliminar la lesión', 'error');
     } finally {
       setDeleteId(null);
@@ -151,7 +151,7 @@ export const InjuriesPage: React.FC = () => {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', justifyContent: 'center' }}>
             <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', cursor: 'pointer' }}>
-              <input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} />
+              <input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} />{' '}
               ¿Está activa actualmente?
             </label>
           </div>

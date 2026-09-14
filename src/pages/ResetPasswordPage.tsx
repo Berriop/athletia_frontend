@@ -10,11 +10,8 @@ import { AuthSubmitButton } from '../components/AuthSubmitButton';
 import { AuthSuccessPanel } from '../components/AuthSuccessPanel';
 import { AuthBackLink } from '../components/AuthBackLink';
 
-export const ResetPasswordPage: React.FC = () => {
-  const [searchParams] = useSearchParams();
-  const token = searchParams.get('token');
+function useResetPasswordForm(token: string | null) {
   const navigate = useNavigate();
-
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -23,33 +20,33 @@ export const ResetPasswordPage: React.FC = () => {
 
   const { isStrong } = checkPasswordStrength(password);
   const passwordsMatch = password.length > 0 && password === confirmPassword;
+  let confirmBorderColor: string | undefined;
+  if (confirmPassword.length > 0) {
+    confirmBorderColor = passwordsMatch ? '#10b981' : '#ef4444';
+  }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const validationError = (): string | null => {
+    if (!token) return 'Enlace inválido o sin token de seguridad';
+    if (!isStrong) return 'La nueva contraseña debe cumplir con los requisitos de seguridad';
+    if (!passwordsMatch) return 'Las contraseñas no coinciden';
+    return null;
+  };
+
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
 
-    if (!token) {
-      setError('Enlace inválido o sin token de seguridad');
-      return;
-    }
-
-    if (!isStrong) {
-      setError('La nueva contraseña debe cumplir con los requisitos de seguridad');
-      return;
-    }
-
-    if (!passwordsMatch) {
-      setError('Las contraseñas no coinciden');
+    const validation = validationError();
+    if (validation) {
+      setError(validation);
       return;
     }
 
     setIsLoading(true);
     try {
-      await authService.resetPassword(token, password);
+      await authService.resetPassword(token as string, password);
       setIsSuccess(true);
-      setTimeout(() => {
-        navigate('/login');
-      }, 2500);
+      setTimeout(() => navigate('/login'), 2500);
     } catch (err: any) {
       setError(
         err.response?.data?.error?.message ||
@@ -61,25 +58,41 @@ export const ResetPasswordPage: React.FC = () => {
     }
   };
 
+  return {
+    password, setPassword, confirmPassword, setConfirmPassword,
+    error, isLoading, isSuccess, isStrong, passwordsMatch, confirmBorderColor,
+    handleSubmit,
+  };
+}
+
+function InvalidLinkScreen() {
+  return (
+    <AuthPageShell>
+      <div style={{ textAlign: 'center' }}>
+        <AlertCircle size={48} style={{ color: '#ef4444', margin: '0 auto 1rem auto', display: 'block' }} />
+        <h2 style={{ marginBottom: '0.5rem', color: '#ef4444' }}>Enlace Inválido</h2>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
+          No se detectó un token de seguridad válido. Por favor, solicita un nuevo enlace de recuperación.
+        </p>
+        <Link
+          to="/forgot-password"
+          className="btn-primary"
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}
+        >
+          Solicitar Nuevo Enlace
+        </Link>
+      </div>
+    </AuthPageShell>
+  );
+}
+
+export const ResetPasswordPage: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get('token');
+  const form = useResetPasswordForm(token);
+
   if (!token) {
-    return (
-      <AuthPageShell>
-        <div style={{ textAlign: 'center' }}>
-          <AlertCircle size={48} style={{ color: '#ef4444', margin: '0 auto 1rem auto', display: 'block' }} />
-          <h2 style={{ marginBottom: '0.5rem', color: '#ef4444' }}>Enlace Inválido</h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
-            No se detectó un token de seguridad válido. Por favor, solicita un nuevo enlace de recuperación.
-          </p>
-          <Link
-            to="/forgot-password"
-            className="btn-primary"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}
-          >
-            Solicitar Nuevo Enlace
-          </Link>
-        </div>
-      </AuthPageShell>
-    );
+    return <InvalidLinkScreen />;
   }
 
   return (
@@ -96,14 +109,14 @@ export const ResetPasswordPage: React.FC = () => {
         Crea una nueva contraseña segura para volver a ingresar a tu cuenta.
       </p>
 
-      {error && <AuthErrorBanner message={error} />}
+      {form.error && <AuthErrorBanner message={form.error} />}
 
-      {isSuccess ? (
+      {form.isSuccess ? (
         <AuthSuccessPanel title="¡Contraseña Restablecida!">
           Tu contraseña ha sido actualizada con éxito. Serás redirigido al inicio de sesión en unos segundos...
         </AuthSuccessPanel>
       ) : (
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
+        <form onSubmit={form.handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
           <div>
             <AuthIconInput
               id="password"
@@ -111,11 +124,11 @@ export const ResetPasswordPage: React.FC = () => {
               icon={Lock}
               type="password"
               placeholder="••••••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={form.password}
+              onChange={(e) => form.setPassword(e.target.value)}
               required
             />
-            <PasswordStrengthMeter password={password} />
+            <PasswordStrengthMeter password={form.password} />
           </div>
 
           <div style={{ marginTop: '0.25rem' }}>
@@ -125,36 +138,34 @@ export const ResetPasswordPage: React.FC = () => {
               icon={Lock}
               type="password"
               placeholder="••••••••••••"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              value={form.confirmPassword}
+              onChange={(e) => form.setConfirmPassword(e.target.value)}
               required
-              borderColor={
-                confirmPassword.length > 0 ? (passwordsMatch ? '#10b981' : '#ef4444') : undefined
-              }
+              borderColor={form.confirmBorderColor}
             />
 
-            {confirmPassword.length > 0 && (
+            {form.confirmPassword.length > 0 && (
               <div
                 style={{
                   fontSize: '0.8rem',
                   marginTop: '0.2rem',
-                  color: passwordsMatch ? '#10b981' : '#ef4444',
+                  color: form.passwordsMatch ? '#10b981' : '#ef4444',
                   fontWeight: 500,
                 }}
               >
-                {passwordsMatch ? '✓ Las contraseñas coinciden' : '✗ Las contraseñas no coinciden'}
+                {form.passwordsMatch ? '✓ Las contraseñas coinciden' : '✗ Las contraseñas no coinciden'}
               </div>
             )}
           </div>
 
           <AuthSubmitButton
-            isLoading={isLoading}
+            isLoading={form.isLoading}
             loadingText="Guardando..."
-            disabled={!isStrong || !passwordsMatch}
+            disabled={!form.isStrong || !form.passwordsMatch}
             style={{
               marginTop: '0.75rem',
-              opacity: isLoading || !isStrong || !passwordsMatch ? 0.6 : 1,
-              cursor: isLoading || !isStrong || !passwordsMatch ? 'not-allowed' : 'pointer',
+              opacity: form.isLoading || !form.isStrong || !form.passwordsMatch ? 0.6 : 1,
+              cursor: form.isLoading || !form.isStrong || !form.passwordsMatch ? 'not-allowed' : 'pointer',
             }}
           >
             Guardar Nueva Contraseña

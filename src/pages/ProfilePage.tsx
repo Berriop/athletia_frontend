@@ -67,7 +67,7 @@ export const ProfilePage: React.FC = () => {
     setIsEditing(false);
   };
 
-  const handleSave = async (e: React.FormEvent) => {
+  const handleSave = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSaving(true);
     try {
@@ -83,7 +83,7 @@ export const ProfilePage: React.FC = () => {
       updateUser(updatedUser);
       addNotification('Perfil actualizado correctamente', 'success');
       setIsEditing(false);
-    } catch (err) {
+    } catch {
       addNotification('Error al actualizar el perfil', 'error');
     } finally {
       setIsSaving(false);

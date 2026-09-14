@@ -9,8 +9,8 @@ export const checkPasswordStrength = (password: string) => {
     { label: 'Al menos 12 caracteres', pass: password.length >= 12 },
     { label: 'Una letra mayúscula (A-Z)', pass: /[A-Z]/.test(password) },
     { label: 'Una letra minúscula (a-z)', pass: /[a-z]/.test(password) },
-    { label: 'Un número (0-9)', pass: /[0-9]/.test(password) },
-    { label: 'Un carácter especial (!@#$%...)', pass: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password) },
+    { label: 'Un número (0-9)', pass: /\d/.test(password) },
+    { label: 'Un carácter especial (!@#$%...)', pass: /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password) },
   ];
 
   const passedCount = rules.filter((r) => r.pass).length;
@@ -78,9 +78,9 @@ export const PasswordStrengthMeter: React.FC<PasswordStrengthMeterProps> = ({ pa
 
       {/* Rules checklist */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.25rem', marginTop: '0.25rem' }}>
-        {rules.map((rule, idx) => (
+        {rules.map((rule) => (
           <div
-            key={idx}
+            key={rule.label}
             style={{
               display: 'flex',
               alignItems: 'center',

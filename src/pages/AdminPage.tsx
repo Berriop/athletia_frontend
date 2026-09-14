@@ -14,6 +14,101 @@ interface AdminUser {
   createdAt: string;
 }
 
+function RoleBadge({ role }: { readonly role: string }) {
+  const isAdmin = role === 'ADMIN';
+  return (
+    <span style={{
+      padding: '0.2rem 0.6rem', borderRadius: '99px', fontSize: '0.78rem', fontWeight: 600,
+      backgroundColor: isAdmin ? 'rgba(139,92,246,0.2)' : 'rgba(99,102,241,0.15)',
+      color: isAdmin ? '#a78bfa' : '#818cf8',
+    }}>{role}</span>
+  );
+}
+
+function VerifiedBadge({ isVerified }: { readonly isVerified: boolean }) {
+  return (
+    <span style={{ color: isVerified ? 'var(--success)' : 'var(--warning)', fontWeight: 600 }}>
+      {isVerified ? '✓ Verificado' : '✗ Pendiente'}
+    </span>
+  );
+}
+
+function BlockedStatusBadge({ isBlocked }: { readonly isBlocked: boolean }) {
+  return (
+    <span style={{
+      padding: '0.2rem 0.6rem', borderRadius: '99px', fontSize: '0.78rem', fontWeight: 600,
+      backgroundColor: isBlocked ? 'rgba(239,68,68,0.2)' : 'rgba(34,197,94,0.2)',
+      color: isBlocked ? '#f87171' : '#4ade80',
+    }}>
+      {isBlocked ? 'Bloqueado' : 'Activo'}
+    </span>
+  );
+}
+
+interface ToggleBlockButtonProps {
+  isBlocked: boolean;
+  isSelf: boolean;
+  isToggling: boolean;
+  onClick: () => void;
+}
+
+function ToggleBlockButton({ isBlocked, isSelf, isToggling, onClick }: Readonly<ToggleBlockButtonProps>) {
+  let title = isBlocked ? 'Desbloquear' : 'Bloquear';
+  if (isSelf) title = 'No puedes bloquearte a ti mismo';
+
+  let content = isBlocked
+    ? <><ShieldCheck size={14} /> Desbloquear</>
+    : <><ShieldOff size={14} /> Bloquear</>;
+  if (isToggling) content = <Loader2 size={14} className="spinner" />;
+
+  return (
+    <button
+      onClick={onClick}
+      disabled={isSelf || isToggling}
+      title={title}
+      style={{
+        display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+        padding: '0.4rem 0.8rem', borderRadius: '6px', cursor: isSelf ? 'not-allowed' : 'pointer',
+        border: 'none', fontWeight: 600, fontSize: '0.85rem', transition: 'all 0.2s',
+        opacity: isSelf ? 0.4 : 1,
+        backgroundColor: isBlocked ? 'rgba(34,197,94,0.15)' : 'rgba(239,68,68,0.15)',
+        color: isBlocked ? '#4ade80' : '#f87171',
+      }}
+    >
+      {content}
+    </button>
+  );
+}
+
+interface AdminUserRowProps {
+  user: AdminUser;
+  isSelf: boolean;
+  isToggling: boolean;
+  onToggle: (userId: string) => void;
+}
+
+const AdminUserRow: React.FC<Readonly<AdminUserRowProps>> = ({ user: u, isSelf, isToggling, onToggle }) => {
+  return (
+    <tr style={{ borderBottom: '1px solid var(--border)', opacity: u.isBlocked ? 0.6 : 1, transition: 'opacity 0.2s' }}>
+      <td style={tdStyle}>
+        {u.name || '—'} {isSelf && <span style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: 600 }}>(Tú)</span>}
+      </td>
+      <td style={tdStyle}>{u.email}</td>
+      <td style={tdStyle}><RoleBadge role={u.role} /></td>
+      <td style={tdStyle}><VerifiedBadge isVerified={u.isEmailVerified} /></td>
+      <td style={tdStyle}><BlockedStatusBadge isBlocked={u.isBlocked} /></td>
+      <td style={tdStyle}>
+        <ToggleBlockButton
+          isBlocked={u.isBlocked}
+          isSelf={isSelf}
+          isToggling={isToggling}
+          onClick={() => onToggle(u.id)}
+        />
+      </td>
+    </tr>
+  );
+};
+
 export const AdminPage: React.FC = () => {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
@@ -81,60 +176,15 @@ export const AdminPage: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {users.map((u) => {
-                const isSelf = u.id === currentUser?.id;
-                return (
-                  <tr key={u.id} style={{ borderBottom: '1px solid var(--border)', opacity: u.isBlocked ? 0.6 : 1, transition: 'opacity 0.2s' }}>
-                    <td style={tdStyle}>
-                      {u.name || '—'} {isSelf && <span style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: 600 }}>(Tú)</span>}
-                    </td>
-                    <td style={tdStyle}>{u.email}</td>
-                    <td style={tdStyle}>
-                      <span style={{
-                        padding: '0.2rem 0.6rem', borderRadius: '99px', fontSize: '0.78rem', fontWeight: 600,
-                        backgroundColor: u.role === 'ADMIN' ? 'rgba(139,92,246,0.2)' : 'rgba(99,102,241,0.15)',
-                        color: u.role === 'ADMIN' ? '#a78bfa' : '#818cf8',
-                      }}>{u.role}</span>
-                    </td>
-                    <td style={tdStyle}>
-                      <span style={{ color: u.isEmailVerified ? 'var(--success)' : 'var(--warning)', fontWeight: 600 }}>
-                        {u.isEmailVerified ? '✓ Verificado' : '✗ Pendiente'}
-                      </span>
-                    </td>
-                    <td style={tdStyle}>
-                      <span style={{
-                        padding: '0.2rem 0.6rem', borderRadius: '99px', fontSize: '0.78rem', fontWeight: 600,
-                        backgroundColor: u.isBlocked ? 'rgba(239,68,68,0.2)' : 'rgba(34,197,94,0.2)',
-                        color: u.isBlocked ? '#f87171' : '#4ade80',
-                      }}>
-                        {u.isBlocked ? 'Bloqueado' : 'Activo'}
-                      </span>
-                    </td>
-                    <td style={tdStyle}>
-                      <button
-                        onClick={() => handleToggleBlock(u.id)}
-                        disabled={isSelf || togglingId === u.id}
-                        title={isSelf ? 'No puedes bloquearte a ti mismo' : (u.isBlocked ? 'Desbloquear' : 'Bloquear')}
-                        style={{
-                          display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                          padding: '0.4rem 0.8rem', borderRadius: '6px', cursor: isSelf ? 'not-allowed' : 'pointer',
-                          border: 'none', fontWeight: 600, fontSize: '0.85rem', transition: 'all 0.2s',
-                          opacity: isSelf ? 0.4 : 1,
-                          backgroundColor: u.isBlocked ? 'rgba(34,197,94,0.15)' : 'rgba(239,68,68,0.15)',
-                          color: u.isBlocked ? '#4ade80' : '#f87171',
-                        }}
-                      >
-                        {togglingId === u.id
-                          ? <Loader2 size={14} className="spinner" />
-                          : u.isBlocked
-                            ? <><ShieldCheck size={14} /> Desbloquear</>
-                            : <><ShieldOff size={14} /> Bloquear</>
-                        }
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
+              {users.map((u) => (
+                <AdminUserRow
+                  key={u.id}
+                  user={u}
+                  isSelf={u.id === currentUser?.id}
+                  isToggling={togglingId === u.id}
+                  onToggle={handleToggleBlock}
+                />
+              ))}
             </tbody>
           </table>
           {users.length === 0 && (
