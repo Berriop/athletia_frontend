@@ -9,6 +9,7 @@ interface RowActionButtonsProps {
 export const RowActionButtons: React.FC<RowActionButtonsProps> = ({ onEdit, onDelete }) => (
   <div style={{ display: 'flex', gap: '0.5rem' }}>
     <button
+      type="button"
       onClick={onEdit}
       title="Editar"
       style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', padding: '0.25rem' }}
@@ -16,6 +17,7 @@ export const RowActionButtons: React.FC<RowActionButtonsProps> = ({ onEdit, onDe
       <Edit2 size={16} />
     </button>
     <button
+      type="button"
       onClick={onDelete}
       title="Eliminar"
       style={{ background: 'none', border: 'none', color: 'red', cursor: 'pointer', padding: '0.25rem' }}
