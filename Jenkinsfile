@@ -63,7 +63,7 @@ pipeline {
 
         stage('Verify Deployment') {
             steps {
-                sh "sleep 3 && wget -qO- http://localhost:${APP_PORT}/ > /dev/null"
+                sh "curl -fsS --retry 10 --retry-delay 3 --retry-connrefused -o /dev/null http://host.docker.internal:${APP_PORT}/"
             }
         }
     }
