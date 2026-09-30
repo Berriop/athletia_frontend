@@ -48,7 +48,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t ${IMAGE_NAME} ."
+                sh "docker build --build-arg VITE_API_URL=http://localhost:4000/api/v1 -t ${IMAGE_NAME} ."
             }
         }
 
