@@ -16,6 +16,17 @@ interface Gym {
 
 const MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string;
 
+// InfoWindow.setContent interpreta el texto como HTML: los datos que vienen de
+// Google Places se escapan antes de insertarlos para evitar XSS.
+function escapeHtml(text: string): string {
+  return text
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
 function loadGoogleMapsScript(): Promise<void> {
   return new Promise((resolve, reject) => {
     if ((window as unknown as Record<string, unknown>).google) {
@@ -171,8 +182,8 @@ export const GymFinderPage: React.FC = () => {
           : '';
         infoWindowRef.current.setContent(`
           <div style="color:#1a1a2e;padding:8px;max-width:200px;">
-            <strong style="font-size:14px;">${gym.name}</strong>
-            <p style="margin:4px 0;font-size:12px;color:#4a5568;">${gym.vicinity}</p>
+            <strong style="font-size:14px;">${escapeHtml(gym.name)}</strong>
+            <p style="margin:4px 0;font-size:12px;color:#4a5568;">${escapeHtml(gym.vicinity)}</p>
             ${gym.rating ? `<p style="margin:2px 0;font-size:12px;">⭐ ${gym.rating} (${gym.user_ratings_total ?? 0} reseñas)</p>` : ''}
             ${openStatusHtml}
           </div>
