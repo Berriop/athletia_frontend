@@ -3,6 +3,7 @@ import { AlertCircle } from 'lucide-react';
 
 export const AuthErrorBanner: React.FC<{ message: string }> = ({ message }) => (
   <div
+    role="alert"
     style={{
       display: 'flex',
       alignItems: 'center',

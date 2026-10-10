@@ -31,3 +31,7 @@ coverage
 *.njsproj
 *.sln
 *.sw?
+
+# Salidas generadas por las pruebas E2E (capturas, trazas, reportes)
+e2e/screenplay/reports/
+e2e/screenplay/test-results/

@@ -74,6 +74,7 @@ export const RegisterPage: React.FC = () => {
 
         {error && (
           <div
+            role="alert"
             style={{
               color: '#ef4444',
               backgroundColor: 'rgba(239, 68, 68, 0.1)',

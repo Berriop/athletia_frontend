@@ -1,0 +1,24 @@
+{
+  "name": "athletia-e2e-screenplay",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pruebas E2E de Athletia con el patrón Screenplay (Serenity/JS + Playwright)",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "reporte": "playwright show-report reports/html"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1",
+    "@serenity-js/assertions": "3.44.2",
+    "@serenity-js/console-reporter": "3.44.2",
+    "@serenity-js/core": "3.44.2",
+    "@serenity-js/playwright": "3.44.2",
+    "@serenity-js/playwright-test": "3.44.2",
+    "@serenity-js/web": "3.44.2",
+    "@types/node": "22.20.5",
+    "@types/pg": "8.23.1",
+    "pg": "8.23.1",
+    "typescript": "5.9.3"
+  }
+}
