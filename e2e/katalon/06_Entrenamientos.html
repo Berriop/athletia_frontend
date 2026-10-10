@@ -29,7 +29,7 @@
 <tr><td>waitForElementPresent</td><td>xpath=//h1[contains(normalize-space(),'Entrenamientos')]<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementNotPresent</td><td>xpath=//p[normalize-space()='Cargando...']<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementPresent</td><td>xpath=//h3[normalize-space()='Nuevo Entrenamiento']<datalist></datalist></td><td></td></tr>
-<tr><td>type</td><td>id=title<datalist></datalist></td><td>Katalon Dia de Pierna</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#title"); s.call(e,'Katalon Dia de Pierna'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>select</td><td>id=bodyPart<datalist></datalist></td><td>label=Piernas</td></tr>
 <tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#duration"); s.call(e,'45'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#energy"); s.call(e,'8'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
@@ -57,7 +57,7 @@
 <thead>
 <tr><td rowspan="1" colspan="3" data-tags="">Crear entrenamiento fallido - titulo vacio</td></tr>
 </thead><tbody>
-<tr><td>type</td><td>id=title<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#title"); s.call(e,''); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#duration"); s.call(e,'99'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Guardar Entrenamiento']<datalist></datalist></td><td></td></tr>
 <tr><td>pause</td><td>1500<datalist></datalist></td><td></td></tr>
@@ -69,14 +69,14 @@
 <thead>
 <tr><td rowspan="1" colspan="3" data-tags="">Crear entrenamiento fallido - energia fuera de rango</td></tr>
 </thead><tbody>
-<tr><td>type</td><td>id=title<datalist></datalist></td><td>Katalon Energia Invalida</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#title"); s.call(e,'Katalon Energia Invalida'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#energy"); s.call(e,'15'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Guardar Entrenamiento']<datalist></datalist></td><td></td></tr>
 <tr><td>pause</td><td>1500<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementNotPresent</td><td>xpath=//h4[normalize-space()='Katalon Energia Invalida']<datalist></datalist></td><td></td></tr>
 <tr><td>verifyValue</td><td>id=energy<datalist></datalist></td><td>15</td></tr>
 <tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>entrenamiento_fallido_energia_15</td></tr>
-<tr><td>type</td><td>id=title<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#title"); s.call(e,''); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#energy"); s.call(e,'5'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#duration"); s.call(e,'30'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 </tbody></table>
@@ -88,7 +88,7 @@
 <tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Editar Entrenamiento']<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementPresent</td><td>xpath=//div[normalize-space()='Modo Edición']<datalist></datalist></td><td></td></tr>
 <tr><td>verifyValue</td><td>id=title<datalist></datalist></td><td>Katalon Dia de Pierna</td></tr>
-<tr><td>type</td><td>id=title<datalist></datalist></td><td>Katalon Dia de Pierna Editado</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#title"); s.call(e,'Katalon Dia de Pierna Editado'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#duration"); s.call(e,'60'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Actualizar Entrenamiento']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//h4[normalize-space()='Katalon Dia de Pierna Editado']<datalist></datalist></td><td></td></tr>
@@ -102,7 +102,7 @@
 </thead><tbody>
 <tr><td>click</td><td>xpath=(//h4[normalize-space()='Katalon Dia de Pierna Editado'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Editar']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Editar Entrenamiento']<datalist></datalist></td><td></td></tr>
-<tr><td>type</td><td>id=title<datalist></datalist></td><td>Cambio que no se guarda</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#title"); s.call(e,'Cambio que no se guarda'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Cancelar Edición']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Nuevo Entrenamiento']<datalist></datalist></td><td></td></tr>
 <tr><td>verifyValue</td><td>id=title<datalist></datalist></td><td></td></tr>

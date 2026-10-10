@@ -34,7 +34,7 @@
 <tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#stress"); s.call(e,'3'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>xpath=//label[contains(normalize-space(),'¿Tuviste pesadillas?')]/input<datalist></datalist></td><td></td></tr>
 <tr><td>verifyChecked</td><td>xpath=//label[contains(normalize-space(),'¿Tuviste pesadillas?')]/input<datalist></datalist></td><td></td></tr>
-<tr><td>type</td><td>id=notes<datalist></datalist></td><td>Registro creado por Katalon</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set; var e=document.querySelector("#notes"); s.call(e,'Registro creado por Katalon'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Guardar Registro']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//h4[normalize-space()='11.5 horas']<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementPresent</td><td>xpath=(//h4[normalize-space()='11.5 horas'])[1]/ancestor::div[contains(@class,'card')][1]//p[normalize-space()='Calidad: 8/10 - Estrés: 3/10']<datalist></datalist></td><td></td></tr>

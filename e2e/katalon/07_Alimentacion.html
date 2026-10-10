@@ -29,7 +29,7 @@
 <tr><td>waitForElementPresent</td><td>xpath=//h1[contains(normalize-space(),'Alimentación')]<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementNotPresent</td><td>xpath=//p[normalize-space()='Cargando...']<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementPresent</td><td>xpath=//h3[normalize-space()='Registrar Comida']<datalist></datalist></td><td></td></tr>
-<tr><td>type</td><td>id=name<datalist></datalist></td><td>Katalon Pollo con Arroz</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#name"); s.call(e,'Katalon Pollo con Arroz'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>select</td><td>id=mealType<datalist></datalist></td><td>label=Cena</td></tr>
 <tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#calories"); s.call(e,'650'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#protein"); s.call(e,'45'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
@@ -56,7 +56,7 @@
 <thead>
 <tr><td rowspan="1" colspan="3" data-tags="">Registrar comida fallido - nombre vacio</td></tr>
 </thead><tbody>
-<tr><td>type</td><td>id=name<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#name"); s.call(e,''); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#calories"); s.call(e,'999'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Guardar Comida']<datalist></datalist></td><td></td></tr>
 <tr><td>pause</td><td>1500<datalist></datalist></td><td></td></tr>
@@ -67,14 +67,14 @@
 <thead>
 <tr><td rowspan="1" colspan="3" data-tags="">Registrar comida fallido - calorias con decimales</td></tr>
 </thead><tbody>
-<tr><td>type</td><td>id=name<datalist></datalist></td><td>Katalon Calorias Invalidas</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#name"); s.call(e,'Katalon Calorias Invalidas'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#calories"); s.call(e,'650.5'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Guardar Comida']<datalist></datalist></td><td></td></tr>
 <tr><td>pause</td><td>1500<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementNotPresent</td><td>xpath=//h4[normalize-space()='Katalon Calorias Invalidas']<datalist></datalist></td><td></td></tr>
 <tr><td>verifyValue</td><td>id=calories<datalist></datalist></td><td>650.5</td></tr>
 <tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>comida_fallido_calorias_decimales</td></tr>
-<tr><td>type</td><td>id=name<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#name"); s.call(e,''); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#calories"); s.call(e,'500'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
@@ -84,7 +84,7 @@
 <tr><td>click</td><td>xpath=(//h4[normalize-space()='Katalon Pollo con Arroz'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Editar']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Editar Comida']<datalist></datalist></td><td></td></tr>
 <tr><td>verifyValue</td><td>id=name<datalist></datalist></td><td>Katalon Pollo con Arroz</td></tr>
-<tr><td>type</td><td>id=name<datalist></datalist></td><td>Katalon Pollo con Arroz Editado</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#name"); s.call(e,'Katalon Pollo con Arroz Editado'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>select</td><td>id=mealType<datalist></datalist></td><td>label=Almuerzo</td></tr>
 <tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#calories"); s.call(e,'700'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Actualizar Comida']<datalist></datalist></td><td></td></tr>

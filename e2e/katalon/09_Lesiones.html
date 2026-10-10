@@ -29,11 +29,11 @@
 <tr><td>waitForElementPresent</td><td>xpath=//h1[contains(normalize-space(),'Lesiones')]<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementNotPresent</td><td>xpath=//p[normalize-space()='Cargando...']<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementPresent</td><td>xpath=//h3[normalize-space()='Reportar Lesión']<datalist></datalist></td><td></td></tr>
-<tr><td>type</td><td>id=bodyArea<datalist></datalist></td><td>Tobillo Izquierdo</td></tr>
-<tr><td>type</td><td>id=injuryName<datalist></datalist></td><td>Katalon Esguince</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#bodyArea"); s.call(e,'Tobillo Izquierdo'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#injuryName"); s.call(e,'Katalon Esguince'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#severity"); s.call(e,'6'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>verifyChecked</td><td>xpath=//label[contains(normalize-space(),'¿Está activa actualmente?')]/input<datalist></datalist></td><td></td></tr>
-<tr><td>type</td><td>id=notes<datalist></datalist></td><td>Lesion creada por Katalon</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set; var e=document.querySelector("#notes"); s.call(e,'Lesion creada por Katalon'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Registrar Lesión']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//h4[normalize-space()='Katalon Esguince']<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementPresent</td><td>xpath=(//h4[normalize-space()='Katalon Esguince'])[1]/ancestor::div[contains(@class,'card')][1]//p[normalize-space()='Tobillo Izquierdo - Severidad: 6/10']<datalist></datalist></td><td></td></tr>
@@ -55,8 +55,8 @@
 <thead>
 <tr><td rowspan="1" colspan="3" data-tags="">Reportar lesion fallido - nombre con numeros</td></tr>
 </thead><tbody>
-<tr><td>type</td><td>id=bodyArea<datalist></datalist></td><td>Rodilla</td></tr>
-<tr><td>type</td><td>id=injuryName<datalist></datalist></td><td>Esguince 123</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#bodyArea"); s.call(e,'Rodilla'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#injuryName"); s.call(e,'Esguince 123'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Registrar Lesión']<datalist></datalist></td><td></td></tr>
 <tr><td>pause</td><td>1500<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementNotPresent</td><td>xpath=//h4[normalize-space()='Esguince 123']<datalist></datalist></td><td></td></tr>
@@ -67,15 +67,15 @@
 <thead>
 <tr><td rowspan="1" colspan="3" data-tags="">Reportar lesion fallido - severidad cero</td></tr>
 </thead><tbody>
-<tr><td>type</td><td>id=injuryName<datalist></datalist></td><td>Katalon Severidad Invalida</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#injuryName"); s.call(e,'Katalon Severidad Invalida'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#severity"); s.call(e,'0'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Registrar Lesión']<datalist></datalist></td><td></td></tr>
 <tr><td>pause</td><td>1500<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementNotPresent</td><td>xpath=//h4[normalize-space()='Katalon Severidad Invalida']<datalist></datalist></td><td></td></tr>
 <tr><td>verifyValue</td><td>id=severity<datalist></datalist></td><td>0</td></tr>
 <tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>lesion_fallido_severidad_0</td></tr>
-<tr><td>type</td><td>id=bodyArea<datalist></datalist></td><td></td></tr>
-<tr><td>type</td><td>id=injuryName<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#bodyArea"); s.call(e,''); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#injuryName"); s.call(e,''); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#severity"); s.call(e,'5'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">

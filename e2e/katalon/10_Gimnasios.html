@@ -44,7 +44,7 @@
 <thead>
 <tr><td rowspan="1" colspan="3" data-tags="">Limpiar texto de busqueda</td></tr>
 </thead><tbody>
-<tr><td>type</td><td>css=.gym-search-input<datalist></datalist></td><td>Texto a borrar</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector(".gym-search-input"); s.call(e,'Texto a borrar'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>css=.gym-search-clear<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>css=.gym-search-clear<datalist></datalist></td><td></td></tr>
 <tr><td>verifyValue</td><td>css=.gym-search-input<datalist></datalist></td><td></td></tr>
@@ -55,7 +55,7 @@
 <thead>
 <tr><td rowspan="1" colspan="3" data-tags="">Buscar gimnasios por ciudad</td></tr>
 </thead><tbody>
-<tr><td>type</td><td>css=.gym-search-input<datalist></datalist></td><td>Medellin</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector(".gym-search-input"); s.call(e,'Medellin'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>css=.gym-search-btn<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>css=.gym-results-count<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementPresent</td><td>css=.gym-card<datalist></datalist></td><td></td></tr>
