@@ -8,44 +8,44 @@
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Abrir recuperar contrasena desde el login</td></tr>
+<tr><td rowspan="1" colspan="3" data-tags="">Abrir recuperar contrasena desde el login</td></tr>
 </thead><tbody>
-<tr><td>open</td><td>https://athletia-frontend.vercel.app/</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
-<tr><td>click</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
-<tr><td>click</td><td>xpath=//a[normalize-space()='¿Olvidaste tu contraseña?']</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>xpath=//h2[normalize-space()='Recuperar Contraseña']</td><td></td></tr>
-<tr><td>captureEntirePageScreenshot</td><td></td><td>recuperar_abrir</td></tr>
+<tr><td>open</td><td>https://athletia-frontend.vercel.app/<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/login']<datalist></datalist></td><td></td></tr>
+<tr><td>click</td><td>css=nav.public-navbar a[href='/login']<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email<datalist></datalist></td><td></td></tr>
+<tr><td>click</td><td>xpath=//a[normalize-space()='¿Olvidaste tu contraseña?']<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h2[normalize-space()='Recuperar Contraseña']<datalist></datalist></td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>recuperar_abrir</td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Recuperar contrasena fallido - correo invalido</td></tr>
+<tr><td rowspan="1" colspan="3" data-tags="">Recuperar contrasena fallido - correo invalido</td></tr>
 </thead><tbody>
-<tr><td>type</td><td>id=email</td><td>correo-sin-arroba</td></tr>
-<tr><td>click</td><td>css=button[type='submit']</td><td></td></tr>
-<tr><td>pause</td><td>1500</td><td></td></tr>
-<tr><td>verifyElementNotPresent</td><td>xpath=//h3[normalize-space()='¡Correo Enviado!']</td><td></td></tr>
-<tr><td>verifyElementPresent</td><td>id=email</td><td></td></tr>
-<tr><td>captureEntirePageScreenshot</td><td></td><td>recuperar_fallido_correo_invalido</td></tr>
+<tr><td>type</td><td>id=email<datalist></datalist></td><td>correo-sin-arroba</td></tr>
+<tr><td>click</td><td>css=button[type='submit']<datalist></datalist></td><td></td></tr>
+<tr><td>pause</td><td>1500<datalist></datalist></td><td></td></tr>
+<tr><td>verifyElementNotPresent</td><td>xpath=//h3[normalize-space()='¡Correo Enviado!']<datalist></datalist></td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>id=email<datalist></datalist></td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>recuperar_fallido_correo_invalido</td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Recuperar contrasena exitoso</td></tr>
+<tr><td rowspan="1" colspan="3" data-tags="">Recuperar contrasena exitoso</td></tr>
 </thead><tbody>
-<tr><td>type</td><td>id=email</td><td>luchisfem@gmail.com</td></tr>
-<tr><td>click</td><td>css=button[type='submit']</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='¡Correo Enviado!']</td><td></td></tr>
-<tr><td>verifyElementPresent</td><td>xpath=//strong[normalize-space()='luchisfem@gmail.com']</td><td></td></tr>
-<tr><td>captureEntirePageScreenshot</td><td></td><td>recuperar_exitoso</td></tr>
+<tr><td>type</td><td>id=email<datalist></datalist></td><td>luchisfem@gmail.com</td></tr>
+<tr><td>click</td><td>css=button[type='submit']<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='¡Correo Enviado!']<datalist></datalist></td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//strong[normalize-space()='luchisfem@gmail.com']<datalist></datalist></td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>recuperar_exitoso</td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Volver al inicio de sesion</td></tr>
+<tr><td rowspan="1" colspan="3" data-tags="">Volver al inicio de sesion</td></tr>
 </thead><tbody>
-<tr><td>click</td><td>xpath=//a[contains(normalize-space(),'Volver al Inicio de Sesión')]</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>xpath=//h2[normalize-space()='Iniciar Sesión']</td><td></td></tr>
-<tr><td>captureEntirePageScreenshot</td><td></td><td>recuperar_volver_login</td></tr>
+<tr><td>click</td><td>xpath=//a[contains(normalize-space(),'Volver al Inicio de Sesión')]<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h2[normalize-space()='Iniciar Sesión']<datalist></datalist></td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>recuperar_volver_login</td></tr>
 </tbody></table>
 </body>
 </html>

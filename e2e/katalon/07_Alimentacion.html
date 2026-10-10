@@ -8,133 +8,133 @@
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Iniciar sesion</td></tr>
+<tr><td rowspan="1" colspan="3" data-tags="">Iniciar sesion</td></tr>
 </thead><tbody>
-<tr><td>store</td><td>luchisfem@gmail.com</td><td>correo</td></tr>
-<tr><td>store</td><td>KittyIris18*</td><td>clave</td></tr>
-<tr><td>open</td><td>https://athletia-frontend.vercel.app/</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
-<tr><td>click</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
-<tr><td>type</td><td>id=email</td><td>${correo}</td></tr>
-<tr><td>type</td><td>id=password</td><td>${clave}</td></tr>
-<tr><td>click</td><td>css=button[type='submit']</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>xpath=//h1[starts-with(normalize-space(),'Hola')]</td><td></td></tr>
-<tr><td>verifyElementPresent</td><td>css=aside.sidebar</td><td></td></tr>
+<tr><td>store</td><td>luchisfem@gmail.com<datalist></datalist></td><td>correo</td></tr>
+<tr><td>store</td><td>KittyIris18*<datalist></datalist></td><td>clave</td></tr>
+<tr><td>open</td><td>https://athletia-frontend.vercel.app/<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/login']<datalist></datalist></td><td></td></tr>
+<tr><td>click</td><td>css=nav.public-navbar a[href='/login']<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email<datalist></datalist></td><td></td></tr>
+<tr><td>type</td><td>id=email<datalist></datalist></td><td>${correo}</td></tr>
+<tr><td>type</td><td>id=password<datalist></datalist></td><td>${clave}</td></tr>
+<tr><td>click</td><td>css=button[type='submit']<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h1[starts-with(normalize-space(),'Hola')]<datalist></datalist></td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>css=aside.sidebar<datalist></datalist></td><td></td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Registrar comida</td></tr>
+<tr><td rowspan="1" colspan="3" data-tags="">Registrar comida</td></tr>
 </thead><tbody>
-<tr><td>waitForElementPresent</td><td>css=aside a[href='/meals']</td><td></td></tr>
-<tr><td>click</td><td>css=aside a[href='/meals']</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>xpath=//h1[contains(normalize-space(),'Alimentación')]</td><td></td></tr>
-<tr><td>waitForElementNotPresent</td><td>xpath=//p[normalize-space()='Cargando...']</td><td></td></tr>
-<tr><td>verifyElementPresent</td><td>xpath=//h3[normalize-space()='Registrar Comida']</td><td></td></tr>
-<tr><td>type</td><td>id=name</td><td>Katalon Pollo con Arroz</td></tr>
-<tr><td>select</td><td>id=mealType</td><td>label=Cena</td></tr>
-<tr><td>type</td><td>id=calories</td><td>650</td></tr>
-<tr><td>type</td><td>id=protein</td><td>45</td></tr>
-<tr><td>type</td><td>id=carbs</td><td>70</td></tr>
-<tr><td>type</td><td>id=fat</td><td>18</td></tr>
-<tr><td>click</td><td>xpath=//button[normalize-space()='Guardar Comida']</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>xpath=//h4[normalize-space()='Katalon Pollo con Arroz']</td><td></td></tr>
-<tr><td>verifyElementPresent</td><td>xpath=(//h4[normalize-space()='Katalon Pollo con Arroz'])[1]/ancestor::div[contains(@class,'card')][1]//p[contains(normalize-space(),'Cena · 650 kcal')]</td><td></td></tr>
-<tr><td>verifyElementPresent</td><td>xpath=(//h4[normalize-space()='Katalon Pollo con Arroz'])[1]/ancestor::div[contains(@class,'card')][1]//p[normalize-space()='P: 45g / C: 70g / G: 18g']</td><td></td></tr>
-<tr><td>captureEntirePageScreenshot</td><td></td><td>comida_registrada</td></tr>
+<tr><td>waitForElementPresent</td><td>css=aside a[href='/meals']<datalist></datalist></td><td></td></tr>
+<tr><td>click</td><td>css=aside a[href='/meals']<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h1[contains(normalize-space(),'Alimentación')]<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementNotPresent</td><td>xpath=//p[normalize-space()='Cargando...']<datalist></datalist></td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//h3[normalize-space()='Registrar Comida']<datalist></datalist></td><td></td></tr>
+<tr><td>type</td><td>id=name<datalist></datalist></td><td>Katalon Pollo con Arroz</td></tr>
+<tr><td>select</td><td>id=mealType<datalist></datalist></td><td>label=Cena</td></tr>
+<tr><td>type</td><td>id=calories<datalist></datalist></td><td>650</td></tr>
+<tr><td>type</td><td>id=protein<datalist></datalist></td><td>45</td></tr>
+<tr><td>type</td><td>id=carbs<datalist></datalist></td><td>70</td></tr>
+<tr><td>type</td><td>id=fat<datalist></datalist></td><td>18</td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Guardar Comida']<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h4[normalize-space()='Katalon Pollo con Arroz']<datalist></datalist></td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=(//h4[normalize-space()='Katalon Pollo con Arroz'])[1]/ancestor::div[contains(@class,'card')][1]//p[contains(normalize-space(),'Cena · 650 kcal')]<datalist></datalist></td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=(//h4[normalize-space()='Katalon Pollo con Arroz'])[1]/ancestor::div[contains(@class,'card')][1]//p[normalize-space()='P: 45g / C: 70g / G: 18g']<datalist></datalist></td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>comida_registrada</td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Notificacion de comida registrada</td></tr>
+<tr><td rowspan="1" colspan="3" data-tags="">Notificacion de comida registrada</td></tr>
 </thead><tbody>
-<tr><td>click</td><td>css=button[title='Notificaciones']</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>xpath=//div[contains(@class,'notification-item')]//p[normalize-space()='Comida registrada correctamente']</td><td></td></tr>
-<tr><td>captureEntirePageScreenshot</td><td></td><td>comida_notificacion</td></tr>
-<tr><td>click</td><td>css=.notification-header .clear-btn</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>css=.notification-empty</td><td></td></tr>
-<tr><td>click</td><td>css=button[title='Notificaciones']</td><td></td></tr>
+<tr><td>click</td><td>css=button[title='Notificaciones']<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//div[contains(@class,'notification-item')]//p[normalize-space()='Comida registrada correctamente']<datalist></datalist></td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>comida_notificacion</td></tr>
+<tr><td>click</td><td>css=.notification-header .clear-btn<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=.notification-empty<datalist></datalist></td><td></td></tr>
+<tr><td>click</td><td>css=button[title='Notificaciones']<datalist></datalist></td><td></td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Registrar comida fallido - nombre vacio</td></tr>
+<tr><td rowspan="1" colspan="3" data-tags="">Registrar comida fallido - nombre vacio</td></tr>
 </thead><tbody>
-<tr><td>type</td><td>id=name</td><td></td></tr>
-<tr><td>type</td><td>id=calories</td><td>999</td></tr>
-<tr><td>click</td><td>xpath=//button[normalize-space()='Guardar Comida']</td><td></td></tr>
-<tr><td>pause</td><td>1500</td><td></td></tr>
-<tr><td>verifyValue</td><td>id=calories</td><td>999</td></tr>
-<tr><td>captureEntirePageScreenshot</td><td></td><td>comida_fallido_nombre_vacio</td></tr>
+<tr><td>type</td><td>id=name<datalist></datalist></td><td></td></tr>
+<tr><td>type</td><td>id=calories<datalist></datalist></td><td>999</td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Guardar Comida']<datalist></datalist></td><td></td></tr>
+<tr><td>pause</td><td>1500<datalist></datalist></td><td></td></tr>
+<tr><td>verifyValue</td><td>id=calories<datalist></datalist></td><td>999</td></tr>
+<tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>comida_fallido_nombre_vacio</td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Registrar comida fallido - calorias con decimales</td></tr>
+<tr><td rowspan="1" colspan="3" data-tags="">Registrar comida fallido - calorias con decimales</td></tr>
 </thead><tbody>
-<tr><td>type</td><td>id=name</td><td>Katalon Calorias Invalidas</td></tr>
-<tr><td>type</td><td>id=calories</td><td>650.5</td></tr>
-<tr><td>click</td><td>xpath=//button[normalize-space()='Guardar Comida']</td><td></td></tr>
-<tr><td>pause</td><td>1500</td><td></td></tr>
-<tr><td>verifyElementNotPresent</td><td>xpath=//h4[normalize-space()='Katalon Calorias Invalidas']</td><td></td></tr>
-<tr><td>verifyValue</td><td>id=calories</td><td>650.5</td></tr>
-<tr><td>captureEntirePageScreenshot</td><td></td><td>comida_fallido_calorias_decimales</td></tr>
-<tr><td>type</td><td>id=name</td><td></td></tr>
-<tr><td>type</td><td>id=calories</td><td>500</td></tr>
+<tr><td>type</td><td>id=name<datalist></datalist></td><td>Katalon Calorias Invalidas</td></tr>
+<tr><td>type</td><td>id=calories<datalist></datalist></td><td>650.5</td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Guardar Comida']<datalist></datalist></td><td></td></tr>
+<tr><td>pause</td><td>1500<datalist></datalist></td><td></td></tr>
+<tr><td>verifyElementNotPresent</td><td>xpath=//h4[normalize-space()='Katalon Calorias Invalidas']<datalist></datalist></td><td></td></tr>
+<tr><td>verifyValue</td><td>id=calories<datalist></datalist></td><td>650.5</td></tr>
+<tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>comida_fallido_calorias_decimales</td></tr>
+<tr><td>type</td><td>id=name<datalist></datalist></td><td></td></tr>
+<tr><td>type</td><td>id=calories<datalist></datalist></td><td>500</td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Editar comida</td></tr>
+<tr><td rowspan="1" colspan="3" data-tags="">Editar comida</td></tr>
 </thead><tbody>
-<tr><td>click</td><td>xpath=(//h4[normalize-space()='Katalon Pollo con Arroz'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Editar']</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Editar Comida']</td><td></td></tr>
-<tr><td>verifyValue</td><td>id=name</td><td>Katalon Pollo con Arroz</td></tr>
-<tr><td>type</td><td>id=name</td><td>Katalon Pollo con Arroz Editado</td></tr>
-<tr><td>select</td><td>id=mealType</td><td>label=Almuerzo</td></tr>
-<tr><td>type</td><td>id=calories</td><td>700</td></tr>
-<tr><td>click</td><td>xpath=//button[normalize-space()='Actualizar Comida']</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>xpath=//h4[normalize-space()='Katalon Pollo con Arroz Editado']</td><td></td></tr>
-<tr><td>verifyElementPresent</td><td>xpath=(//h4[normalize-space()='Katalon Pollo con Arroz Editado'])[1]/ancestor::div[contains(@class,'card')][1]//p[contains(normalize-space(),'Almuerzo · 700 kcal')]</td><td></td></tr>
-<tr><td>captureEntirePageScreenshot</td><td></td><td>comida_editada</td></tr>
+<tr><td>click</td><td>xpath=(//h4[normalize-space()='Katalon Pollo con Arroz'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Editar']<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Editar Comida']<datalist></datalist></td><td></td></tr>
+<tr><td>verifyValue</td><td>id=name<datalist></datalist></td><td>Katalon Pollo con Arroz</td></tr>
+<tr><td>type</td><td>id=name<datalist></datalist></td><td>Katalon Pollo con Arroz Editado</td></tr>
+<tr><td>select</td><td>id=mealType<datalist></datalist></td><td>label=Almuerzo</td></tr>
+<tr><td>type</td><td>id=calories<datalist></datalist></td><td>700</td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Actualizar Comida']<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h4[normalize-space()='Katalon Pollo con Arroz Editado']<datalist></datalist></td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=(//h4[normalize-space()='Katalon Pollo con Arroz Editado'])[1]/ancestor::div[contains(@class,'card')][1]//p[contains(normalize-space(),'Almuerzo · 700 kcal')]<datalist></datalist></td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>comida_editada</td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Cancelar edicion de comida</td></tr>
+<tr><td rowspan="1" colspan="3" data-tags="">Cancelar edicion de comida</td></tr>
 </thead><tbody>
-<tr><td>click</td><td>xpath=(//h4[normalize-space()='Katalon Pollo con Arroz Editado'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Editar']</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Editar Comida']</td><td></td></tr>
-<tr><td>click</td><td>xpath=//button[normalize-space()='Cancelar Edición']</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Registrar Comida']</td><td></td></tr>
-<tr><td>verifyValue</td><td>id=name</td><td></td></tr>
-<tr><td>captureEntirePageScreenshot</td><td></td><td>comida_edicion_cancelada</td></tr>
+<tr><td>click</td><td>xpath=(//h4[normalize-space()='Katalon Pollo con Arroz Editado'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Editar']<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Editar Comida']<datalist></datalist></td><td></td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Cancelar Edición']<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Registrar Comida']<datalist></datalist></td><td></td></tr>
+<tr><td>verifyValue</td><td>id=name<datalist></datalist></td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>comida_edicion_cancelada</td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Eliminar comida - cancelar</td></tr>
+<tr><td rowspan="1" colspan="3" data-tags="">Eliminar comida - cancelar</td></tr>
 </thead><tbody>
-<tr><td>click</td><td>xpath=(//h4[normalize-space()='Katalon Pollo con Arroz Editado'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Eliminar']</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Eliminar Comida']</td><td></td></tr>
-<tr><td>captureEntirePageScreenshot</td><td></td><td>comida_eliminar_cancelado_dialogo</td></tr>
-<tr><td>click</td><td>css=.confirm-modal .btn-secondary</td><td></td></tr>
-<tr><td>waitForElementNotPresent</td><td>css=.confirm-modal</td><td></td></tr>
-<tr><td>verifyElementPresent</td><td>xpath=//h4[normalize-space()='Katalon Pollo con Arroz Editado']</td><td></td></tr>
-<tr><td>captureEntirePageScreenshot</td><td></td><td>comida_eliminar_cancelado</td></tr>
+<tr><td>click</td><td>xpath=(//h4[normalize-space()='Katalon Pollo con Arroz Editado'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Eliminar']<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Eliminar Comida']<datalist></datalist></td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>comida_eliminar_cancelado_dialogo</td></tr>
+<tr><td>click</td><td>css=.confirm-modal .btn-secondary<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementNotPresent</td><td>css=.confirm-modal<datalist></datalist></td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//h4[normalize-space()='Katalon Pollo con Arroz Editado']<datalist></datalist></td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>comida_eliminar_cancelado</td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Eliminar comida</td></tr>
+<tr><td rowspan="1" colspan="3" data-tags="">Eliminar comida</td></tr>
 </thead><tbody>
-<tr><td>click</td><td>xpath=(//h4[normalize-space()='Katalon Pollo con Arroz Editado'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Eliminar']</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Eliminar Comida']</td><td></td></tr>
-<tr><td>click</td><td>css=.confirm-modal .btn-danger</td><td></td></tr>
-<tr><td>waitForElementNotPresent</td><td>css=.confirm-modal</td><td></td></tr>
-<tr><td>waitForElementNotPresent</td><td>xpath=//h4[normalize-space()='Katalon Pollo con Arroz Editado']</td><td></td></tr>
-<tr><td>captureEntirePageScreenshot</td><td></td><td>comida_eliminada</td></tr>
+<tr><td>click</td><td>xpath=(//h4[normalize-space()='Katalon Pollo con Arroz Editado'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Eliminar']<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Eliminar Comida']<datalist></datalist></td><td></td></tr>
+<tr><td>click</td><td>css=.confirm-modal .btn-danger<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementNotPresent</td><td>css=.confirm-modal<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementNotPresent</td><td>xpath=//h4[normalize-space()='Katalon Pollo con Arroz Editado']<datalist></datalist></td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>comida_eliminada</td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Cerrar sesion</td></tr>
+<tr><td rowspan="1" colspan="3" data-tags="">Cerrar sesion</td></tr>
 </thead><tbody>
-<tr><td>click</td><td>css=aside button.logout-btn</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
-<tr><td>verifyElementNotPresent</td><td>css=aside.sidebar</td><td></td></tr>
+<tr><td>click</td><td>css=aside button.logout-btn<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email<datalist></datalist></td><td></td></tr>
+<tr><td>verifyElementNotPresent</td><td>css=aside.sidebar<datalist></datalist></td><td></td></tr>
 </tbody></table>
 </body>
 </html>

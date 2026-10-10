@@ -8,134 +8,134 @@
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Iniciar sesion</td></tr>
+<tr><td rowspan="1" colspan="3" data-tags="">Iniciar sesion</td></tr>
 </thead><tbody>
-<tr><td>store</td><td>luchisfem@gmail.com</td><td>correo</td></tr>
-<tr><td>store</td><td>KittyIris18*</td><td>clave</td></tr>
-<tr><td>open</td><td>https://athletia-frontend.vercel.app/</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
-<tr><td>click</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
-<tr><td>type</td><td>id=email</td><td>${correo}</td></tr>
-<tr><td>type</td><td>id=password</td><td>${clave}</td></tr>
-<tr><td>click</td><td>css=button[type='submit']</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>xpath=//h1[starts-with(normalize-space(),'Hola')]</td><td></td></tr>
-<tr><td>verifyElementPresent</td><td>css=aside.sidebar</td><td></td></tr>
+<tr><td>store</td><td>luchisfem@gmail.com<datalist></datalist></td><td>correo</td></tr>
+<tr><td>store</td><td>KittyIris18*<datalist></datalist></td><td>clave</td></tr>
+<tr><td>open</td><td>https://athletia-frontend.vercel.app/<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/login']<datalist></datalist></td><td></td></tr>
+<tr><td>click</td><td>css=nav.public-navbar a[href='/login']<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email<datalist></datalist></td><td></td></tr>
+<tr><td>type</td><td>id=email<datalist></datalist></td><td>${correo}</td></tr>
+<tr><td>type</td><td>id=password<datalist></datalist></td><td>${clave}</td></tr>
+<tr><td>click</td><td>css=button[type='submit']<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h1[starts-with(normalize-space(),'Hola')]<datalist></datalist></td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>css=aside.sidebar<datalist></datalist></td><td></td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Reportar lesion</td></tr>
+<tr><td rowspan="1" colspan="3" data-tags="">Reportar lesion</td></tr>
 </thead><tbody>
-<tr><td>waitForElementPresent</td><td>css=aside a[href='/injuries']</td><td></td></tr>
-<tr><td>click</td><td>css=aside a[href='/injuries']</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>xpath=//h1[contains(normalize-space(),'Lesiones')]</td><td></td></tr>
-<tr><td>waitForElementNotPresent</td><td>xpath=//p[normalize-space()='Cargando...']</td><td></td></tr>
-<tr><td>verifyElementPresent</td><td>xpath=//h3[normalize-space()='Reportar Lesión']</td><td></td></tr>
-<tr><td>type</td><td>id=bodyArea</td><td>Tobillo Izquierdo</td></tr>
-<tr><td>type</td><td>id=injuryName</td><td>Katalon Esguince</td></tr>
-<tr><td>type</td><td>id=severity</td><td>6</td></tr>
-<tr><td>verifyChecked</td><td>xpath=//label[contains(normalize-space(),'¿Está activa actualmente?')]/input</td><td></td></tr>
-<tr><td>type</td><td>id=notes</td><td>Lesion creada por Katalon</td></tr>
-<tr><td>click</td><td>xpath=//button[normalize-space()='Registrar Lesión']</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>xpath=//h4[normalize-space()='Katalon Esguince']</td><td></td></tr>
-<tr><td>verifyElementPresent</td><td>xpath=(//h4[normalize-space()='Katalon Esguince'])[1]/ancestor::div[contains(@class,'card')][1]//p[normalize-space()='Tobillo Izquierdo - Severidad: 6/10']</td><td></td></tr>
-<tr><td>verifyElementPresent</td><td>xpath=(//h4[normalize-space()='Katalon Esguince'])[1]/ancestor::div[contains(@class,'card')][1]//p[normalize-space()='ACTIVA']</td><td></td></tr>
-<tr><td>captureEntirePageScreenshot</td><td></td><td>lesion_reportada</td></tr>
+<tr><td>waitForElementPresent</td><td>css=aside a[href='/injuries']<datalist></datalist></td><td></td></tr>
+<tr><td>click</td><td>css=aside a[href='/injuries']<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h1[contains(normalize-space(),'Lesiones')]<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementNotPresent</td><td>xpath=//p[normalize-space()='Cargando...']<datalist></datalist></td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//h3[normalize-space()='Reportar Lesión']<datalist></datalist></td><td></td></tr>
+<tr><td>type</td><td>id=bodyArea<datalist></datalist></td><td>Tobillo Izquierdo</td></tr>
+<tr><td>type</td><td>id=injuryName<datalist></datalist></td><td>Katalon Esguince</td></tr>
+<tr><td>type</td><td>id=severity<datalist></datalist></td><td>6</td></tr>
+<tr><td>verifyChecked</td><td>xpath=//label[contains(normalize-space(),'¿Está activa actualmente?')]/input<datalist></datalist></td><td></td></tr>
+<tr><td>type</td><td>id=notes<datalist></datalist></td><td>Lesion creada por Katalon</td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Registrar Lesión']<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h4[normalize-space()='Katalon Esguince']<datalist></datalist></td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=(//h4[normalize-space()='Katalon Esguince'])[1]/ancestor::div[contains(@class,'card')][1]//p[normalize-space()='Tobillo Izquierdo - Severidad: 6/10']<datalist></datalist></td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=(//h4[normalize-space()='Katalon Esguince'])[1]/ancestor::div[contains(@class,'card')][1]//p[normalize-space()='ACTIVA']<datalist></datalist></td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>lesion_reportada</td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Notificacion de lesion registrada</td></tr>
+<tr><td rowspan="1" colspan="3" data-tags="">Notificacion de lesion registrada</td></tr>
 </thead><tbody>
-<tr><td>click</td><td>css=button[title='Notificaciones']</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>xpath=//div[contains(@class,'notification-item')]//p[normalize-space()='Lesión registrada correctamente']</td><td></td></tr>
-<tr><td>captureEntirePageScreenshot</td><td></td><td>lesion_notificacion</td></tr>
-<tr><td>click</td><td>css=.notification-header .clear-btn</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>css=.notification-empty</td><td></td></tr>
-<tr><td>click</td><td>css=button[title='Notificaciones']</td><td></td></tr>
+<tr><td>click</td><td>css=button[title='Notificaciones']<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//div[contains(@class,'notification-item')]//p[normalize-space()='Lesión registrada correctamente']<datalist></datalist></td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>lesion_notificacion</td></tr>
+<tr><td>click</td><td>css=.notification-header .clear-btn<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=.notification-empty<datalist></datalist></td><td></td></tr>
+<tr><td>click</td><td>css=button[title='Notificaciones']<datalist></datalist></td><td></td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Reportar lesion fallido - nombre con numeros</td></tr>
+<tr><td rowspan="1" colspan="3" data-tags="">Reportar lesion fallido - nombre con numeros</td></tr>
 </thead><tbody>
-<tr><td>type</td><td>id=bodyArea</td><td>Rodilla</td></tr>
-<tr><td>type</td><td>id=injuryName</td><td>Esguince 123</td></tr>
-<tr><td>click</td><td>xpath=//button[normalize-space()='Registrar Lesión']</td><td></td></tr>
-<tr><td>pause</td><td>1500</td><td></td></tr>
-<tr><td>verifyElementNotPresent</td><td>xpath=//h4[normalize-space()='Esguince 123']</td><td></td></tr>
-<tr><td>verifyValue</td><td>id=injuryName</td><td>Esguince 123</td></tr>
-<tr><td>captureEntirePageScreenshot</td><td></td><td>lesion_fallido_nombre_con_numeros</td></tr>
+<tr><td>type</td><td>id=bodyArea<datalist></datalist></td><td>Rodilla</td></tr>
+<tr><td>type</td><td>id=injuryName<datalist></datalist></td><td>Esguince 123</td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Registrar Lesión']<datalist></datalist></td><td></td></tr>
+<tr><td>pause</td><td>1500<datalist></datalist></td><td></td></tr>
+<tr><td>verifyElementNotPresent</td><td>xpath=//h4[normalize-space()='Esguince 123']<datalist></datalist></td><td></td></tr>
+<tr><td>verifyValue</td><td>id=injuryName<datalist></datalist></td><td>Esguince 123</td></tr>
+<tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>lesion_fallido_nombre_con_numeros</td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Reportar lesion fallido - severidad cero</td></tr>
+<tr><td rowspan="1" colspan="3" data-tags="">Reportar lesion fallido - severidad cero</td></tr>
 </thead><tbody>
-<tr><td>type</td><td>id=injuryName</td><td>Katalon Severidad Invalida</td></tr>
-<tr><td>type</td><td>id=severity</td><td>0</td></tr>
-<tr><td>click</td><td>xpath=//button[normalize-space()='Registrar Lesión']</td><td></td></tr>
-<tr><td>pause</td><td>1500</td><td></td></tr>
-<tr><td>verifyElementNotPresent</td><td>xpath=//h4[normalize-space()='Katalon Severidad Invalida']</td><td></td></tr>
-<tr><td>verifyValue</td><td>id=severity</td><td>0</td></tr>
-<tr><td>captureEntirePageScreenshot</td><td></td><td>lesion_fallido_severidad_0</td></tr>
-<tr><td>type</td><td>id=bodyArea</td><td></td></tr>
-<tr><td>type</td><td>id=injuryName</td><td></td></tr>
-<tr><td>type</td><td>id=severity</td><td>5</td></tr>
+<tr><td>type</td><td>id=injuryName<datalist></datalist></td><td>Katalon Severidad Invalida</td></tr>
+<tr><td>type</td><td>id=severity<datalist></datalist></td><td>0</td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Registrar Lesión']<datalist></datalist></td><td></td></tr>
+<tr><td>pause</td><td>1500<datalist></datalist></td><td></td></tr>
+<tr><td>verifyElementNotPresent</td><td>xpath=//h4[normalize-space()='Katalon Severidad Invalida']<datalist></datalist></td><td></td></tr>
+<tr><td>verifyValue</td><td>id=severity<datalist></datalist></td><td>0</td></tr>
+<tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>lesion_fallido_severidad_0</td></tr>
+<tr><td>type</td><td>id=bodyArea<datalist></datalist></td><td></td></tr>
+<tr><td>type</td><td>id=injuryName<datalist></datalist></td><td></td></tr>
+<tr><td>type</td><td>id=severity<datalist></datalist></td><td>5</td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Editar lesion - marcar como recuperada</td></tr>
+<tr><td rowspan="1" colspan="3" data-tags="">Editar lesion - marcar como recuperada</td></tr>
 </thead><tbody>
-<tr><td>click</td><td>xpath=(//h4[normalize-space()='Katalon Esguince'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Editar']</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Editar Lesión']</td><td></td></tr>
-<tr><td>verifyValue</td><td>id=injuryName</td><td>Katalon Esguince</td></tr>
-<tr><td>type</td><td>id=severity</td><td>3</td></tr>
-<tr><td>click</td><td>xpath=//label[contains(normalize-space(),'¿Está activa actualmente?')]/input</td><td></td></tr>
-<tr><td>verifyNotChecked</td><td>xpath=//label[contains(normalize-space(),'¿Está activa actualmente?')]/input</td><td></td></tr>
-<tr><td>click</td><td>xpath=//button[normalize-space()='Actualizar Lesión']</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>xpath=(//h4[normalize-space()='Katalon Esguince'])[1]/ancestor::div[contains(@class,'card')][1]//p[normalize-space()='RECUPERADA']</td><td></td></tr>
-<tr><td>verifyElementPresent</td><td>xpath=(//h4[normalize-space()='Katalon Esguince'])[1]/ancestor::div[contains(@class,'card')][1]//p[normalize-space()='Tobillo Izquierdo - Severidad: 3/10']</td><td></td></tr>
-<tr><td>captureEntirePageScreenshot</td><td></td><td>lesion_editada_recuperada</td></tr>
+<tr><td>click</td><td>xpath=(//h4[normalize-space()='Katalon Esguince'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Editar']<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Editar Lesión']<datalist></datalist></td><td></td></tr>
+<tr><td>verifyValue</td><td>id=injuryName<datalist></datalist></td><td>Katalon Esguince</td></tr>
+<tr><td>type</td><td>id=severity<datalist></datalist></td><td>3</td></tr>
+<tr><td>click</td><td>xpath=//label[contains(normalize-space(),'¿Está activa actualmente?')]/input<datalist></datalist></td><td></td></tr>
+<tr><td>verifyNotChecked</td><td>xpath=//label[contains(normalize-space(),'¿Está activa actualmente?')]/input<datalist></datalist></td><td></td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Actualizar Lesión']<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=(//h4[normalize-space()='Katalon Esguince'])[1]/ancestor::div[contains(@class,'card')][1]//p[normalize-space()='RECUPERADA']<datalist></datalist></td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=(//h4[normalize-space()='Katalon Esguince'])[1]/ancestor::div[contains(@class,'card')][1]//p[normalize-space()='Tobillo Izquierdo - Severidad: 3/10']<datalist></datalist></td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>lesion_editada_recuperada</td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Cancelar edicion de lesion</td></tr>
+<tr><td rowspan="1" colspan="3" data-tags="">Cancelar edicion de lesion</td></tr>
 </thead><tbody>
-<tr><td>click</td><td>xpath=(//h4[normalize-space()='Katalon Esguince'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Editar']</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Editar Lesión']</td><td></td></tr>
-<tr><td>click</td><td>xpath=//button[normalize-space()='Cancelar Edición']</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Reportar Lesión']</td><td></td></tr>
-<tr><td>verifyValue</td><td>id=injuryName</td><td></td></tr>
-<tr><td>captureEntirePageScreenshot</td><td></td><td>lesion_edicion_cancelada</td></tr>
+<tr><td>click</td><td>xpath=(//h4[normalize-space()='Katalon Esguince'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Editar']<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Editar Lesión']<datalist></datalist></td><td></td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Cancelar Edición']<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Reportar Lesión']<datalist></datalist></td><td></td></tr>
+<tr><td>verifyValue</td><td>id=injuryName<datalist></datalist></td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>lesion_edicion_cancelada</td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Eliminar lesion - cancelar</td></tr>
+<tr><td rowspan="1" colspan="3" data-tags="">Eliminar lesion - cancelar</td></tr>
 </thead><tbody>
-<tr><td>click</td><td>xpath=(//h4[normalize-space()='Katalon Esguince'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Eliminar']</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Eliminar Lesión']</td><td></td></tr>
-<tr><td>captureEntirePageScreenshot</td><td></td><td>lesion_eliminar_cancelado_dialogo</td></tr>
-<tr><td>click</td><td>css=.confirm-modal .btn-secondary</td><td></td></tr>
-<tr><td>waitForElementNotPresent</td><td>css=.confirm-modal</td><td></td></tr>
-<tr><td>verifyElementPresent</td><td>xpath=//h4[normalize-space()='Katalon Esguince']</td><td></td></tr>
-<tr><td>captureEntirePageScreenshot</td><td></td><td>lesion_eliminar_cancelado</td></tr>
+<tr><td>click</td><td>xpath=(//h4[normalize-space()='Katalon Esguince'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Eliminar']<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Eliminar Lesión']<datalist></datalist></td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>lesion_eliminar_cancelado_dialogo</td></tr>
+<tr><td>click</td><td>css=.confirm-modal .btn-secondary<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementNotPresent</td><td>css=.confirm-modal<datalist></datalist></td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//h4[normalize-space()='Katalon Esguince']<datalist></datalist></td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>lesion_eliminar_cancelado</td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Eliminar lesion</td></tr>
+<tr><td rowspan="1" colspan="3" data-tags="">Eliminar lesion</td></tr>
 </thead><tbody>
-<tr><td>click</td><td>xpath=(//h4[normalize-space()='Katalon Esguince'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Eliminar']</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Eliminar Lesión']</td><td></td></tr>
-<tr><td>click</td><td>css=.confirm-modal .btn-danger</td><td></td></tr>
-<tr><td>waitForElementNotPresent</td><td>css=.confirm-modal</td><td></td></tr>
-<tr><td>waitForElementNotPresent</td><td>xpath=//h4[normalize-space()='Katalon Esguince']</td><td></td></tr>
-<tr><td>captureEntirePageScreenshot</td><td></td><td>lesion_eliminada</td></tr>
+<tr><td>click</td><td>xpath=(//h4[normalize-space()='Katalon Esguince'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Eliminar']<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Eliminar Lesión']<datalist></datalist></td><td></td></tr>
+<tr><td>click</td><td>css=.confirm-modal .btn-danger<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementNotPresent</td><td>css=.confirm-modal<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementNotPresent</td><td>xpath=//h4[normalize-space()='Katalon Esguince']<datalist></datalist></td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>lesion_eliminada</td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Cerrar sesion</td></tr>
+<tr><td rowspan="1" colspan="3" data-tags="">Cerrar sesion</td></tr>
 </thead><tbody>
-<tr><td>click</td><td>css=aside button.logout-btn</td><td></td></tr>
-<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
-<tr><td>verifyElementNotPresent</td><td>css=aside.sidebar</td><td></td></tr>
+<tr><td>click</td><td>css=aside button.logout-btn<datalist></datalist></td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email<datalist></datalist></td><td></td></tr>
+<tr><td>verifyElementNotPresent</td><td>css=aside.sidebar<datalist></datalist></td><td></td></tr>
 </tbody></table>
 </body>
 </html>
