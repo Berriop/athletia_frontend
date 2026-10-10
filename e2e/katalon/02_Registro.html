@@ -15,9 +15,9 @@
 <tr><td>click</td><td>css=nav.public-navbar a[href='/register']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>id=confirmPassword<datalist></datalist></td><td></td></tr>
 <tr><td>type</td><td>id=name<datalist></datalist></td><td>Katalon Debil</td></tr>
-<tr><td>type</td><td>id=email<datalist></datalist></td><td>katalon.debil@test.com</td></tr>
-<tr><td>type</td><td>id=password<datalist></datalist></td><td>abc</td></tr>
-<tr><td>type</td><td>id=confirmPassword<datalist></datalist></td><td>abc</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#email"); s.call(e,'katalon.debil@test.com'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#password"); s.call(e,'abc'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#confirmPassword"); s.call(e,'abc'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//span[normalize-space()='Muy Débil']<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementPresent</td><td>css=button[type='submit'][disabled]<datalist></datalist></td><td></td></tr>
 <tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>registro_fallido_clave_debil</td></tr>
@@ -31,9 +31,9 @@
 <tr><td>click</td><td>css=nav.public-navbar a[href='/register']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>id=confirmPassword<datalist></datalist></td><td></td></tr>
 <tr><td>type</td><td>id=name<datalist></datalist></td><td>Katalon Distintas</td></tr>
-<tr><td>type</td><td>id=email<datalist></datalist></td><td>katalon.distintas@test.com</td></tr>
-<tr><td>type</td><td>id=password<datalist></datalist></td><td>ClaveSegura2026!</td></tr>
-<tr><td>type</td><td>id=confirmPassword<datalist></datalist></td><td>OtraClave2026!</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#email"); s.call(e,'katalon.distintas@test.com'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#password"); s.call(e,'ClaveSegura2026!'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#confirmPassword"); s.call(e,'OtraClave2026!'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//div[contains(normalize-space(),'Las contraseñas no coinciden')]<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementPresent</td><td>css=button[type='submit'][disabled]<datalist></datalist></td><td></td></tr>
 <tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>registro_fallido_claves_distintas</td></tr>
@@ -47,9 +47,9 @@
 <tr><td>click</td><td>css=nav.public-navbar a[href='/register']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>id=confirmPassword<datalist></datalist></td><td></td></tr>
 <tr><td>type</td><td>id=name<datalist></datalist></td><td>Katalon Duplicado</td></tr>
-<tr><td>type</td><td>id=email<datalist></datalist></td><td>luchisfem@gmail.com</td></tr>
-<tr><td>type</td><td>id=password<datalist></datalist></td><td>ClaveSegura2026!</td></tr>
-<tr><td>type</td><td>id=confirmPassword<datalist></datalist></td><td>ClaveSegura2026!</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#email"); s.call(e,'luchisfem@gmail.com'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#password"); s.call(e,'ClaveSegura2026!'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#confirmPassword"); s.call(e,'ClaveSegura2026!'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//span[normalize-space()='Fuerte y Segura ✨']<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>css=button[type='submit']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//div[@role='alert']<datalist></datalist></td><td></td></tr>
@@ -61,16 +61,14 @@
 <thead>
 <tr><td rowspan="1" colspan="3" data-tags="">Registro exitoso con correo nuevo</td></tr>
 </thead><tbody>
-<tr><td>executeScript</td><td>return 'katalon.' + Date.now() + '@test.com'<datalist></datalist></td><td>correoNuevo</td></tr>
-<tr><td>echo</td><td>${correoNuevo}<datalist></datalist></td><td></td></tr>
 <tr><td>open</td><td>https://athletia-frontend.vercel.app/<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/register']<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>css=nav.public-navbar a[href='/register']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>id=confirmPassword<datalist></datalist></td><td></td></tr>
 <tr><td>type</td><td>id=name<datalist></datalist></td><td>Katalon Nuevo</td></tr>
-<tr><td>type</td><td>id=email<datalist></datalist></td><td>${correoNuevo}</td></tr>
-<tr><td>type</td><td>id=password<datalist></datalist></td><td>ClaveSegura2026!</td></tr>
-<tr><td>type</td><td>id=confirmPassword<datalist></datalist></td><td>ClaveSegura2026!</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#email"); s.call(e,'katalon.'+Date.now()+'@test.com'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#password"); s.call(e,'ClaveSegura2026!'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#confirmPassword"); s.call(e,'ClaveSegura2026!'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//div[contains(normalize-space(),'Las contraseñas coinciden')]<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>css=button[type='submit']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//h1[starts-with(normalize-space(),'Hola')]<datalist></datalist></td><td></td></tr>

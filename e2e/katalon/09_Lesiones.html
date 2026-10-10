@@ -10,14 +10,12 @@
 <thead>
 <tr><td rowspan="1" colspan="3" data-tags="">Iniciar sesion</td></tr>
 </thead><tbody>
-<tr><td>store</td><td>luchisfem@gmail.com<datalist></datalist></td><td>correo</td></tr>
-<tr><td>store</td><td>KittyIris18*<datalist></datalist></td><td>clave</td></tr>
 <tr><td>open</td><td>https://athletia-frontend.vercel.app/<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/login']<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>css=nav.public-navbar a[href='/login']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>id=email<datalist></datalist></td><td></td></tr>
-<tr><td>type</td><td>id=email<datalist></datalist></td><td>${correo}</td></tr>
-<tr><td>type</td><td>id=password<datalist></datalist></td><td>${clave}</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#email"); s.call(e,'luchisfem@gmail.com'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#password"); s.call(e,'KittyIris18*'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>css=button[type='submit']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//h1[starts-with(normalize-space(),'Hola')]<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementPresent</td><td>css=aside.sidebar<datalist></datalist></td><td></td></tr>
@@ -33,7 +31,7 @@
 <tr><td>verifyElementPresent</td><td>xpath=//h3[normalize-space()='Reportar Lesión']<datalist></datalist></td><td></td></tr>
 <tr><td>type</td><td>id=bodyArea<datalist></datalist></td><td>Tobillo Izquierdo</td></tr>
 <tr><td>type</td><td>id=injuryName<datalist></datalist></td><td>Katalon Esguince</td></tr>
-<tr><td>type</td><td>id=severity<datalist></datalist></td><td>6</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#severity"); s.call(e,'6'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>verifyChecked</td><td>xpath=//label[contains(normalize-space(),'¿Está activa actualmente?')]/input<datalist></datalist></td><td></td></tr>
 <tr><td>type</td><td>id=notes<datalist></datalist></td><td>Lesion creada por Katalon</td></tr>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Registrar Lesión']<datalist></datalist></td><td></td></tr>
@@ -70,7 +68,7 @@
 <tr><td rowspan="1" colspan="3" data-tags="">Reportar lesion fallido - severidad cero</td></tr>
 </thead><tbody>
 <tr><td>type</td><td>id=injuryName<datalist></datalist></td><td>Katalon Severidad Invalida</td></tr>
-<tr><td>type</td><td>id=severity<datalist></datalist></td><td>0</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#severity"); s.call(e,'0'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Registrar Lesión']<datalist></datalist></td><td></td></tr>
 <tr><td>pause</td><td>1500<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementNotPresent</td><td>xpath=//h4[normalize-space()='Katalon Severidad Invalida']<datalist></datalist></td><td></td></tr>
@@ -78,7 +76,7 @@
 <tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>lesion_fallido_severidad_0</td></tr>
 <tr><td>type</td><td>id=bodyArea<datalist></datalist></td><td></td></tr>
 <tr><td>type</td><td>id=injuryName<datalist></datalist></td><td></td></tr>
-<tr><td>type</td><td>id=severity<datalist></datalist></td><td>5</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#severity"); s.call(e,'5'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
@@ -87,7 +85,7 @@
 <tr><td>click</td><td>xpath=(//h4[normalize-space()='Katalon Esguince'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Editar']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Editar Lesión']<datalist></datalist></td><td></td></tr>
 <tr><td>verifyValue</td><td>id=injuryName<datalist></datalist></td><td>Katalon Esguince</td></tr>
-<tr><td>type</td><td>id=severity<datalist></datalist></td><td>3</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#severity"); s.call(e,'3'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>xpath=//label[contains(normalize-space(),'¿Está activa actualmente?')]/input<datalist></datalist></td><td></td></tr>
 <tr><td>verifyNotChecked</td><td>xpath=//label[contains(normalize-space(),'¿Está activa actualmente?')]/input<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Actualizar Lesión']<datalist></datalist></td><td></td></tr>

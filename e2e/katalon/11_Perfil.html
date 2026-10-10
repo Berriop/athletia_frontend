@@ -10,14 +10,12 @@
 <thead>
 <tr><td rowspan="1" colspan="3" data-tags="">Iniciar sesion</td></tr>
 </thead><tbody>
-<tr><td>store</td><td>luchisfem@gmail.com<datalist></datalist></td><td>correo</td></tr>
-<tr><td>store</td><td>KittyIris18*<datalist></datalist></td><td>clave</td></tr>
 <tr><td>open</td><td>https://athletia-frontend.vercel.app/<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/login']<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>css=nav.public-navbar a[href='/login']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>id=email<datalist></datalist></td><td></td></tr>
-<tr><td>type</td><td>id=email<datalist></datalist></td><td>${correo}</td></tr>
-<tr><td>type</td><td>id=password<datalist></datalist></td><td>${clave}</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#email"); s.call(e,'luchisfem@gmail.com'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#password"); s.call(e,'KittyIris18*'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>css=button[type='submit']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//h1[starts-with(normalize-space(),'Hola')]<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementPresent</td><td>css=aside.sidebar<datalist></datalist></td><td></td></tr>
@@ -41,8 +39,8 @@
 <tr><td>click</td><td>xpath=//button[normalize-space()='Editar perfil']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//button[normalize-space()='Guardar cambios']<datalist></datalist></td><td></td></tr>
 <tr><td>select</td><td>xpath=//select[option[@value='female']]<datalist></datalist></td><td>label=Femenino</td></tr>
-<tr><td>type</td><td>css=input[placeholder='Ej. 175']<datalist></datalist></td><td>165</td></tr>
-<tr><td>type</td><td>css=input[placeholder='Ej. 70']<datalist></datalist></td><td>58.5</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("input[placeholder='Ej. 175']"); s.call(e,'165'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("input[placeholder='Ej. 70']"); s.call(e,'58.5'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>select</td><td>xpath=//select[option[@value='intermediate']]<datalist></datalist></td><td>label=Intermedio</td></tr>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Guardar cambios']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementNotPresent</td><td>xpath=//button[normalize-space()='Guardar cambios']<datalist></datalist></td><td></td></tr>
@@ -68,7 +66,7 @@
 </thead><tbody>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Editar perfil']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//button[normalize-space()='Guardar cambios']<datalist></datalist></td><td></td></tr>
-<tr><td>type</td><td>css=input[placeholder='Ej. 175']<datalist></datalist></td><td>400</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("input[placeholder='Ej. 175']"); s.call(e,'400'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Guardar cambios']<datalist></datalist></td><td></td></tr>
 <tr><td>pause</td><td>1500<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementPresent</td><td>xpath=//button[normalize-space()='Guardar cambios']<datalist></datalist></td><td></td></tr>
@@ -83,7 +81,7 @@
 </thead><tbody>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Editar perfil']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//button[normalize-space()='Guardar cambios']<datalist></datalist></td><td></td></tr>
-<tr><td>type</td><td>css=input[placeholder='Ej. 175']<datalist></datalist></td><td>199</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("input[placeholder='Ej. 175']"); s.call(e,'199'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Cancelar']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//button[normalize-space()='Editar perfil']<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementPresent</td><td>xpath=//span[normalize-space()='165 cm']<datalist></datalist></td><td></td></tr>

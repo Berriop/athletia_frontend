@@ -63,7 +63,7 @@
 <tr><td>click</td><td>css=nav.public-navbar a[href='/contact']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>id=subject<datalist></datalist></td><td></td></tr>
 <tr><td>type</td><td>id=name<datalist></datalist></td><td>Katalon Tester</td></tr>
-<tr><td>type</td><td>id=email<datalist></datalist></td><td>correo-sin-arroba</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#email"); s.call(e,'correo-sin-arroba'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>type</td><td>id=subject<datalist></datalist></td><td>Prueba E2E</td></tr>
 <tr><td>type</td><td>id=message<datalist></datalist></td><td>Mensaje enviado por Katalon Recorder.</td></tr>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Enviar Mensaje']<datalist></datalist></td><td></td></tr>
@@ -80,7 +80,7 @@
 <tr><td>click</td><td>css=nav.public-navbar a[href='/contact']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>id=subject<datalist></datalist></td><td></td></tr>
 <tr><td>type</td><td>id=name<datalist></datalist></td><td>Katalon Tester</td></tr>
-<tr><td>type</td><td>id=email<datalist></datalist></td><td>katalon.tester@test.com</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#email"); s.call(e,'katalon.tester@test.com'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>type</td><td>id=subject<datalist></datalist></td><td>Prueba E2E</td></tr>
 <tr><td>type</td><td>id=message<datalist></datalist></td><td>Mensaje enviado por Katalon Recorder.</td></tr>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Enviar Mensaje']<datalist></datalist></td><td></td></tr>

@@ -14,8 +14,8 @@
 <tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/login']<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>css=nav.public-navbar a[href='/login']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>id=email<datalist></datalist></td><td></td></tr>
-<tr><td>type</td><td>id=email<datalist></datalist></td><td>luchisfem@gmail.com</td></tr>
-<tr><td>type</td><td>id=password<datalist></datalist></td><td>ClaveIncorrecta123!</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#email"); s.call(e,'luchisfem@gmail.com'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#password"); s.call(e,'ClaveIncorrecta123!'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>css=button[type='submit']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//div[@role='alert']<datalist></datalist></td><td></td></tr>
 <tr><td>verifyText</td><td>xpath=//div[@role='alert']/span<datalist></datalist></td><td>Correo o contraseña incorrectos. Por favor, verifica tus datos.</td></tr>
@@ -30,8 +30,8 @@
 <tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/login']<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>css=nav.public-navbar a[href='/login']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>id=email<datalist></datalist></td><td></td></tr>
-<tr><td>type</td><td>id=email<datalist></datalist></td><td>usuario.inexistente.katalon@test.com</td></tr>
-<tr><td>type</td><td>id=password<datalist></datalist></td><td>ClaveCualquiera123!</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#email"); s.call(e,'usuario.inexistente.katalon@test.com'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#password"); s.call(e,'ClaveCualquiera123!'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>css=button[type='submit']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//div[@role='alert']<datalist></datalist></td><td></td></tr>
 <tr><td>verifyText</td><td>xpath=//div[@role='alert']/span<datalist></datalist></td><td>Correo o contraseña incorrectos. Por favor, verifica tus datos.</td></tr>
@@ -60,8 +60,8 @@
 <tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/login']<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>css=nav.public-navbar a[href='/login']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>id=email<datalist></datalist></td><td></td></tr>
-<tr><td>type</td><td>id=email<datalist></datalist></td><td>correo-sin-arroba</td></tr>
-<tr><td>type</td><td>id=password<datalist></datalist></td><td>KittyIris18*</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#email"); s.call(e,'correo-sin-arroba'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#password"); s.call(e,'KittyIris18*'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>css=button[type='submit']<datalist></datalist></td><td></td></tr>
 <tr><td>pause</td><td>1500<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementPresent</td><td>id=email<datalist></datalist></td><td></td></tr>
@@ -72,14 +72,12 @@
 <thead>
 <tr><td rowspan="1" colspan="3" data-tags="">Login exitoso</td></tr>
 </thead><tbody>
-<tr><td>store</td><td>luchisfem@gmail.com<datalist></datalist></td><td>correo</td></tr>
-<tr><td>store</td><td>KittyIris18*<datalist></datalist></td><td>clave</td></tr>
 <tr><td>open</td><td>https://athletia-frontend.vercel.app/<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/login']<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>css=nav.public-navbar a[href='/login']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>id=email<datalist></datalist></td><td></td></tr>
-<tr><td>type</td><td>id=email<datalist></datalist></td><td>${correo}</td></tr>
-<tr><td>type</td><td>id=password<datalist></datalist></td><td>${clave}</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#email"); s.call(e,'luchisfem@gmail.com'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#password"); s.call(e,'KittyIris18*'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>css=button[type='submit']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//h1[starts-with(normalize-space(),'Hola')]<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementPresent</td><td>css=aside.sidebar<datalist></datalist></td><td></td></tr>
@@ -99,14 +97,12 @@
 <thead>
 <tr><td rowspan="1" colspan="3" data-tags="">Cerrar sesion desde el encabezado</td></tr>
 </thead><tbody>
-<tr><td>store</td><td>luchisfem@gmail.com<datalist></datalist></td><td>correo</td></tr>
-<tr><td>store</td><td>KittyIris18*<datalist></datalist></td><td>clave</td></tr>
 <tr><td>open</td><td>https://athletia-frontend.vercel.app/<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/login']<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>css=nav.public-navbar a[href='/login']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>id=email<datalist></datalist></td><td></td></tr>
-<tr><td>type</td><td>id=email<datalist></datalist></td><td>${correo}</td></tr>
-<tr><td>type</td><td>id=password<datalist></datalist></td><td>${clave}</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#email"); s.call(e,'luchisfem@gmail.com'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#password"); s.call(e,'KittyIris18*'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>css=button[type='submit']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//h1[starts-with(normalize-space(),'Hola')]<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementPresent</td><td>css=aside.sidebar<datalist></datalist></td><td></td></tr>

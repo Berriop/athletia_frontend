@@ -10,14 +10,12 @@
 <thead>
 <tr><td rowspan="1" colspan="3" data-tags="">Iniciar sesion</td></tr>
 </thead><tbody>
-<tr><td>store</td><td>luchisfem@gmail.com<datalist></datalist></td><td>correo</td></tr>
-<tr><td>store</td><td>KittyIris18*<datalist></datalist></td><td>clave</td></tr>
 <tr><td>open</td><td>https://athletia-frontend.vercel.app/<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/login']<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>css=nav.public-navbar a[href='/login']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>id=email<datalist></datalist></td><td></td></tr>
-<tr><td>type</td><td>id=email<datalist></datalist></td><td>${correo}</td></tr>
-<tr><td>type</td><td>id=password<datalist></datalist></td><td>${clave}</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#email"); s.call(e,'luchisfem@gmail.com'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#password"); s.call(e,'KittyIris18*'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>css=button[type='submit']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//h1[starts-with(normalize-space(),'Hola')]<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementPresent</td><td>css=aside.sidebar<datalist></datalist></td><td></td></tr>
@@ -31,9 +29,9 @@
 <tr><td>waitForElementPresent</td><td>xpath=//h1[contains(normalize-space(),'Sueño y Descanso')]<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementNotPresent</td><td>xpath=//p[normalize-space()='Cargando...']<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementPresent</td><td>xpath=//h3[normalize-space()='Registrar Noche']<datalist></datalist></td><td></td></tr>
-<tr><td>type</td><td>id=hours<datalist></datalist></td><td>11.5</td></tr>
-<tr><td>type</td><td>id=quality<datalist></datalist></td><td>8</td></tr>
-<tr><td>type</td><td>id=stress<datalist></datalist></td><td>3</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#hours"); s.call(e,'11.5'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#quality"); s.call(e,'8'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#stress"); s.call(e,'3'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>xpath=//label[contains(normalize-space(),'¿Tuviste pesadillas?')]/input<datalist></datalist></td><td></td></tr>
 <tr><td>verifyChecked</td><td>xpath=//label[contains(normalize-space(),'¿Tuviste pesadillas?')]/input<datalist></datalist></td><td></td></tr>
 <tr><td>type</td><td>id=notes<datalist></datalist></td><td>Registro creado por Katalon</td></tr>
@@ -58,8 +56,8 @@
 <thead>
 <tr><td rowspan="1" colspan="3" data-tags="">Registrar sueno fallido - calidad fuera de rango</td></tr>
 </thead><tbody>
-<tr><td>type</td><td>id=hours<datalist></datalist></td><td>6</td></tr>
-<tr><td>type</td><td>id=quality<datalist></datalist></td><td>15</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#hours"); s.call(e,'6'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#quality"); s.call(e,'15'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Guardar Registro']<datalist></datalist></td><td></td></tr>
 <tr><td>pause</td><td>1500<datalist></datalist></td><td></td></tr>
 <tr><td>verifyValue</td><td>id=quality<datalist></datalist></td><td>15</td></tr>
@@ -69,14 +67,14 @@
 <thead>
 <tr><td rowspan="1" colspan="3" data-tags="">Registrar sueno fallido - mas de 24 horas</td></tr>
 </thead><tbody>
-<tr><td>type</td><td>id=quality<datalist></datalist></td><td>7</td></tr>
-<tr><td>type</td><td>id=hours<datalist></datalist></td><td>30</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#quality"); s.call(e,'7'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#hours"); s.call(e,'30'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Guardar Registro']<datalist></datalist></td><td></td></tr>
 <tr><td>pause</td><td>1500<datalist></datalist></td><td></td></tr>
 <tr><td>verifyValue</td><td>id=hours<datalist></datalist></td><td>30</td></tr>
 <tr><td>verifyElementNotPresent</td><td>xpath=//h4[normalize-space()='30 horas']<datalist></datalist></td><td></td></tr>
 <tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>sueno_fallido_30_horas</td></tr>
-<tr><td>type</td><td>id=hours<datalist></datalist></td><td>8</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#hours"); s.call(e,'8'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
@@ -85,7 +83,7 @@
 <tr><td>click</td><td>xpath=(//h4[normalize-space()='11.5 horas'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Editar']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Editar Registro']<datalist></datalist></td><td></td></tr>
 <tr><td>verifyValue</td><td>id=hours<datalist></datalist></td><td>11.5</td></tr>
-<tr><td>type</td><td>id=hours<datalist></datalist></td><td>10.5</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#hours"); s.call(e,'10.5'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>xpath=//label[contains(normalize-space(),'¿Tuviste pesadillas?')]/input<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Actualizar Registro']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//h4[normalize-space()='10.5 horas']<datalist></datalist></td><td></td></tr>

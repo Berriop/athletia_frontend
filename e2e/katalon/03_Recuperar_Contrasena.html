@@ -22,7 +22,7 @@
 <thead>
 <tr><td rowspan="1" colspan="3" data-tags="">Recuperar contrasena fallido - correo invalido</td></tr>
 </thead><tbody>
-<tr><td>type</td><td>id=email<datalist></datalist></td><td>correo-sin-arroba</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#email"); s.call(e,'correo-sin-arroba'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>css=button[type='submit']<datalist></datalist></td><td></td></tr>
 <tr><td>pause</td><td>1500<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementNotPresent</td><td>xpath=//h3[normalize-space()='¡Correo Enviado!']<datalist></datalist></td><td></td></tr>
@@ -33,7 +33,7 @@
 <thead>
 <tr><td rowspan="1" colspan="3" data-tags="">Recuperar contrasena exitoso</td></tr>
 </thead><tbody>
-<tr><td>type</td><td>id=email<datalist></datalist></td><td>luchisfem@gmail.com</td></tr>
+<tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("#email"); s.call(e,'luchisfem@gmail.com'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>click</td><td>css=button[type='submit']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='¡Correo Enviado!']<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementPresent</td><td>xpath=//strong[normalize-space()='luchisfem@gmail.com']<datalist></datalist></td><td></td></tr>
