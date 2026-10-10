@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+<title>04_Paginas_Publicas</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Ver pagina de inicio</td></tr>
+</thead><tbody>
+<tr><td>open</td><td>https://athletia-frontend.vercel.app/</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Seguimiento de Entrenamientos']</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//h3[normalize-space()='Control Nutricional']</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//h3[normalize-space()='Análisis de Sueño']</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//h3[normalize-space()='Gestión de Lesiones']</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>pagina_inicio</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Ver pagina Nosotros</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>css=nav.public-navbar a[href='/about']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h1[contains(normalize-space(),'Sobre Nosotros')]</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>pagina_nosotros</td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//h2[normalize-space()='Nuestra Misión']</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//h2[normalize-space()='Equipo']</td><td></td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Ver FAQ y desplegar una pregunta</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>css=nav.public-navbar a[href='/faq']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h1[contains(normalize-space(),'Preguntas Frecuentes')]</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>pagina_faq</td></tr>
+<tr><td>verifyAttribute</td><td>xpath=//button[contains(@class,'faq-question')][span[normalize-space()='¿Cómo funciona el seguimiento de entrenamientos?']]@aria-expanded</td><td>false</td></tr>
+<tr><td>click</td><td>xpath=//button[contains(@class,'faq-question')][span[normalize-space()='¿Cómo funciona el seguimiento de entrenamientos?']]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//button[contains(@class,'faq-question')][span[normalize-space()='¿Cómo funciona el seguimiento de entrenamientos?']][@aria-expanded='true']</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//button[contains(@class,'faq-question')][span[normalize-space()='¿Cómo funciona el seguimiento de entrenamientos?']]/following-sibling::div[contains(@class,'faq-answer') and contains(@class,'open')]</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>faq_pregunta_abierta</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Contacto fallido - formulario vacio</td></tr>
+</thead><tbody>
+<tr><td>open</td><td>https://athletia-frontend.vercel.app/</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/contact']</td><td></td></tr>
+<tr><td>click</td><td>css=nav.public-navbar a[href='/contact']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=subject</td><td></td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Enviar Mensaje']</td><td></td></tr>
+<tr><td>pause</td><td>1500</td><td></td></tr>
+<tr><td>verifyElementNotPresent</td><td>xpath=//h2[normalize-space()='Gracias por contactar a Athletia.']</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>id=subject</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>contacto_fallido_vacio</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Contacto fallido - correo invalido</td></tr>
+</thead><tbody>
+<tr><td>open</td><td>https://athletia-frontend.vercel.app/</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/contact']</td><td></td></tr>
+<tr><td>click</td><td>css=nav.public-navbar a[href='/contact']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=subject</td><td></td></tr>
+<tr><td>type</td><td>id=name</td><td>Katalon Tester</td></tr>
+<tr><td>type</td><td>id=email</td><td>correo-sin-arroba</td></tr>
+<tr><td>type</td><td>id=subject</td><td>Prueba E2E</td></tr>
+<tr><td>type</td><td>id=message</td><td>Mensaje enviado por Katalon Recorder.</td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Enviar Mensaje']</td><td></td></tr>
+<tr><td>pause</td><td>1500</td><td></td></tr>
+<tr><td>verifyElementNotPresent</td><td>xpath=//h2[normalize-space()='Gracias por contactar a Athletia.']</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>contacto_fallido_correo_invalido</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Contacto exitoso</td></tr>
+</thead><tbody>
+<tr><td>open</td><td>https://athletia-frontend.vercel.app/</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/contact']</td><td></td></tr>
+<tr><td>click</td><td>css=nav.public-navbar a[href='/contact']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=subject</td><td></td></tr>
+<tr><td>type</td><td>id=name</td><td>Katalon Tester</td></tr>
+<tr><td>type</td><td>id=email</td><td>katalon.tester@test.com</td></tr>
+<tr><td>type</td><td>id=subject</td><td>Prueba E2E</td></tr>
+<tr><td>type</td><td>id=message</td><td>Mensaje enviado por Katalon Recorder.</td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Enviar Mensaje']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h2[normalize-space()='Gracias por contactar a Athletia.']</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>contacto_exitoso</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Contacto - enviar otro mensaje</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Enviar otro mensaje']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=subject</td><td></td></tr>
+<tr><td>verifyValue</td><td>id=name</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>contacto_enviar_otro</td></tr>
+</tbody></table>
+</body>
+</html>

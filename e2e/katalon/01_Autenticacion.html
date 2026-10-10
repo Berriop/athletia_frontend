@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+<title>01_Autenticacion</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Login fallido - clave incorrecta</td></tr>
+</thead><tbody>
+<tr><td>open</td><td>https://athletia-frontend.vercel.app/</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
+<tr><td>click</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>type</td><td>id=email</td><td>luchisfem@gmail.com</td></tr>
+<tr><td>type</td><td>id=password</td><td>ClaveIncorrecta123!</td></tr>
+<tr><td>click</td><td>css=button[type='submit']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//div[@role='alert']</td><td></td></tr>
+<tr><td>verifyText</td><td>xpath=//div[@role='alert']/span</td><td>Correo o contraseña incorrectos. Por favor, verifica tus datos.</td></tr>
+<tr><td>verifyElementNotPresent</td><td>css=aside.sidebar</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>login_fallido_clave_incorrecta</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Login fallido - usuario inexistente</td></tr>
+</thead><tbody>
+<tr><td>open</td><td>https://athletia-frontend.vercel.app/</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
+<tr><td>click</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>type</td><td>id=email</td><td>usuario.inexistente.katalon@test.com</td></tr>
+<tr><td>type</td><td>id=password</td><td>ClaveCualquiera123!</td></tr>
+<tr><td>click</td><td>css=button[type='submit']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//div[@role='alert']</td><td></td></tr>
+<tr><td>verifyText</td><td>xpath=//div[@role='alert']/span</td><td>Correo o contraseña incorrectos. Por favor, verifica tus datos.</td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>login_fallido_usuario_inexistente</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Login fallido - campos vacios</td></tr>
+</thead><tbody>
+<tr><td>open</td><td>https://athletia-frontend.vercel.app/</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
+<tr><td>click</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>click</td><td>css=button[type='submit']</td><td></td></tr>
+<tr><td>pause</td><td>1500</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>verifyElementNotPresent</td><td>xpath=//div[@role='alert']</td><td></td></tr>
+<tr><td>verifyElementNotPresent</td><td>css=aside.sidebar</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>login_fallido_campos_vacios</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Login fallido - formato de correo invalido</td></tr>
+</thead><tbody>
+<tr><td>open</td><td>https://athletia-frontend.vercel.app/</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
+<tr><td>click</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>type</td><td>id=email</td><td>correo-sin-arroba</td></tr>
+<tr><td>type</td><td>id=password</td><td>KittyIris18*</td></tr>
+<tr><td>click</td><td>css=button[type='submit']</td><td></td></tr>
+<tr><td>pause</td><td>1500</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>verifyElementNotPresent</td><td>css=aside.sidebar</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>login_fallido_correo_invalido</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Login exitoso</td></tr>
+</thead><tbody>
+<tr><td>store</td><td>luchisfem@gmail.com</td><td>correo</td></tr>
+<tr><td>store</td><td>KittyIris18*</td><td>clave</td></tr>
+<tr><td>open</td><td>https://athletia-frontend.vercel.app/</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
+<tr><td>click</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>type</td><td>id=email</td><td>${correo}</td></tr>
+<tr><td>type</td><td>id=password</td><td>${clave}</td></tr>
+<tr><td>click</td><td>css=button[type='submit']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h1[starts-with(normalize-space(),'Hola')]</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>css=aside.sidebar</td><td></td></tr>
+<tr><td>verifyText</td><td>css=.greeting-text</td><td>Bienvenido,</td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>login_exitoso</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Cerrar sesion desde el menu lateral</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>css=aside button.logout-btn</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>verifyElementNotPresent</td><td>css=aside.sidebar</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>cerrar_sesion_menu_lateral</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Cerrar sesion desde el encabezado</td></tr>
+</thead><tbody>
+<tr><td>store</td><td>luchisfem@gmail.com</td><td>correo</td></tr>
+<tr><td>store</td><td>KittyIris18*</td><td>clave</td></tr>
+<tr><td>open</td><td>https://athletia-frontend.vercel.app/</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
+<tr><td>click</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>type</td><td>id=email</td><td>${correo}</td></tr>
+<tr><td>type</td><td>id=password</td><td>${clave}</td></tr>
+<tr><td>click</td><td>css=button[type='submit']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h1[starts-with(normalize-space(),'Hola')]</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>css=aside.sidebar</td><td></td></tr>
+<tr><td>click</td><td>css=header button[title='Cerrar sesión']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>verifyElementNotPresent</td><td>css=aside.sidebar</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>cerrar_sesion_encabezado</td></tr>
+</tbody></table>
+</body>
+</html>

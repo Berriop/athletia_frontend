@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+<title>10_Gimnasios</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Iniciar sesion</td></tr>
+</thead><tbody>
+<tr><td>store</td><td>luchisfem@gmail.com</td><td>correo</td></tr>
+<tr><td>store</td><td>KittyIris18*</td><td>clave</td></tr>
+<tr><td>open</td><td>https://athletia-frontend.vercel.app/</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
+<tr><td>click</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>type</td><td>id=email</td><td>${correo}</td></tr>
+<tr><td>type</td><td>id=password</td><td>${clave}</td></tr>
+<tr><td>click</td><td>css=button[type='submit']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h1[starts-with(normalize-space(),'Hola')]</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>css=aside.sidebar</td><td></td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Abrir buscador de gimnasios</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>css=aside a[href='/gyms']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h1[contains(normalize-space(),'Gimnasios Cercanos')]</td><td></td></tr>
+<tr><td>waitForElementNotPresent</td><td>xpath=//p[normalize-space()='Cargando mapa...']</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>css=.gym-empty</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>gimnasios_inicio</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Buscar gimnasios fallido - busqueda vacia</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>css=.gym-search-btn</td><td></td></tr>
+<tr><td>pause</td><td>1500</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>css=.gym-empty</td><td></td></tr>
+<tr><td>verifyElementNotPresent</td><td>css=.gym-card</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>gimnasios_fallido_busqueda_vacia</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Limpiar texto de busqueda</td></tr>
+</thead><tbody>
+<tr><td>type</td><td>css=.gym-search-input</td><td>Texto a borrar</td></tr>
+<tr><td>waitForElementPresent</td><td>css=.gym-search-clear</td><td></td></tr>
+<tr><td>click</td><td>css=.gym-search-clear</td><td></td></tr>
+<tr><td>verifyValue</td><td>css=.gym-search-input</td><td></td></tr>
+<tr><td>verifyElementNotPresent</td><td>css=.gym-search-clear</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>gimnasios_limpiar_busqueda</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Buscar gimnasios por ciudad</td></tr>
+</thead><tbody>
+<tr><td>type</td><td>css=.gym-search-input</td><td>Medellin</td></tr>
+<tr><td>click</td><td>css=.gym-search-btn</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=.gym-results-count</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>css=.gym-card</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>gimnasios_resultados</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Seleccionar un gimnasio</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>xpath=(//div[contains(@class,'gym-card')])[1]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=.gym-card.selected</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>gimnasio_seleccionado</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Cerrar sesion</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>css=aside button.logout-btn</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>verifyElementNotPresent</td><td>css=aside.sidebar</td><td></td></tr>
+</tbody></table>
+</body>
+</html>

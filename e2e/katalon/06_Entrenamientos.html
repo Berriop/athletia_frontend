@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+<title>06_Entrenamientos</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Iniciar sesion</td></tr>
+</thead><tbody>
+<tr><td>store</td><td>luchisfem@gmail.com</td><td>correo</td></tr>
+<tr><td>store</td><td>KittyIris18*</td><td>clave</td></tr>
+<tr><td>open</td><td>https://athletia-frontend.vercel.app/</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
+<tr><td>click</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>type</td><td>id=email</td><td>${correo}</td></tr>
+<tr><td>type</td><td>id=password</td><td>${clave}</td></tr>
+<tr><td>click</td><td>css=button[type='submit']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h1[starts-with(normalize-space(),'Hola')]</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>css=aside.sidebar</td><td></td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Crear entrenamiento</td></tr>
+</thead><tbody>
+<tr><td>waitForElementPresent</td><td>css=aside a[href='/workouts']</td><td></td></tr>
+<tr><td>click</td><td>css=aside a[href='/workouts']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h1[contains(normalize-space(),'Entrenamientos')]</td><td></td></tr>
+<tr><td>waitForElementNotPresent</td><td>xpath=//p[normalize-space()='Cargando...']</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//h3[normalize-space()='Nuevo Entrenamiento']</td><td></td></tr>
+<tr><td>type</td><td>id=title</td><td>Katalon Dia de Pierna</td></tr>
+<tr><td>select</td><td>id=bodyPart</td><td>label=Piernas</td></tr>
+<tr><td>type</td><td>id=duration</td><td>45</td></tr>
+<tr><td>type</td><td>id=energy</td><td>8</td></tr>
+<tr><td>type</td><td>id=fatigue</td><td>6</td></tr>
+<tr><td>type</td><td>id=pain</td><td>2</td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Guardar Entrenamiento']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h4[normalize-space()='Katalon Dia de Pierna']</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=(//h4[normalize-space()='Katalon Dia de Pierna'])[1]/ancestor::div[contains(@class,'card')][1]//p[contains(normalize-space(),'Piernas · 45 min')]</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=(//h4[normalize-space()='Katalon Dia de Pierna'])[1]/ancestor::div[contains(@class,'card')][1]//p[normalize-space()='Energía: 8/10']</td><td></td></tr>
+<tr><td>verifyValue</td><td>id=title</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>entrenamiento_creado</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Notificacion de entrenamiento creado</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>css=button[title='Notificaciones']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//div[contains(@class,'notification-item')]//p[normalize-space()='Entrenamiento creado correctamente']</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>entrenamiento_notificacion</td></tr>
+<tr><td>click</td><td>css=.notification-header .clear-btn</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=.notification-empty</td><td></td></tr>
+<tr><td>click</td><td>css=button[title='Notificaciones']</td><td></td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Crear entrenamiento fallido - titulo vacio</td></tr>
+</thead><tbody>
+<tr><td>type</td><td>id=title</td><td></td></tr>
+<tr><td>type</td><td>id=duration</td><td>99</td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Guardar Entrenamiento']</td><td></td></tr>
+<tr><td>pause</td><td>1500</td><td></td></tr>
+<tr><td>verifyValue</td><td>id=duration</td><td>99</td></tr>
+<tr><td>verifyElementNotPresent</td><td>xpath=//h4[normalize-space()='']</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>entrenamiento_fallido_titulo_vacio</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Crear entrenamiento fallido - energia fuera de rango</td></tr>
+</thead><tbody>
+<tr><td>type</td><td>id=title</td><td>Katalon Energia Invalida</td></tr>
+<tr><td>type</td><td>id=energy</td><td>15</td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Guardar Entrenamiento']</td><td></td></tr>
+<tr><td>pause</td><td>1500</td><td></td></tr>
+<tr><td>verifyElementNotPresent</td><td>xpath=//h4[normalize-space()='Katalon Energia Invalida']</td><td></td></tr>
+<tr><td>verifyValue</td><td>id=energy</td><td>15</td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>entrenamiento_fallido_energia_15</td></tr>
+<tr><td>type</td><td>id=title</td><td></td></tr>
+<tr><td>type</td><td>id=energy</td><td>5</td></tr>
+<tr><td>type</td><td>id=duration</td><td>30</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Editar entrenamiento</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>xpath=(//h4[normalize-space()='Katalon Dia de Pierna'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Editar']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Editar Entrenamiento']</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//div[normalize-space()='Modo Edición']</td><td></td></tr>
+<tr><td>verifyValue</td><td>id=title</td><td>Katalon Dia de Pierna</td></tr>
+<tr><td>type</td><td>id=title</td><td>Katalon Dia de Pierna Editado</td></tr>
+<tr><td>type</td><td>id=duration</td><td>60</td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Actualizar Entrenamiento']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h4[normalize-space()='Katalon Dia de Pierna Editado']</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=(//h4[normalize-space()='Katalon Dia de Pierna Editado'])[1]/ancestor::div[contains(@class,'card')][1]//p[contains(normalize-space(),'60 min')]</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//h3[normalize-space()='Nuevo Entrenamiento']</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>entrenamiento_editado</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Cancelar edicion de entrenamiento</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>xpath=(//h4[normalize-space()='Katalon Dia de Pierna Editado'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Editar']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Editar Entrenamiento']</td><td></td></tr>
+<tr><td>type</td><td>id=title</td><td>Cambio que no se guarda</td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Cancelar Edición']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Nuevo Entrenamiento']</td><td></td></tr>
+<tr><td>verifyValue</td><td>id=title</td><td></td></tr>
+<tr><td>verifyElementNotPresent</td><td>xpath=//h4[normalize-space()='Cambio que no se guarda']</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>entrenamiento_edicion_cancelada</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Eliminar entrenamiento - cancelar</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>xpath=(//h4[normalize-space()='Katalon Dia de Pierna Editado'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Eliminar']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Eliminar Entrenamiento']</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>entrenamiento_eliminar_cancelado_dialogo</td></tr>
+<tr><td>click</td><td>css=.confirm-modal .btn-secondary</td><td></td></tr>
+<tr><td>waitForElementNotPresent</td><td>css=.confirm-modal</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//h4[normalize-space()='Katalon Dia de Pierna Editado']</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>entrenamiento_eliminar_cancelado</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Eliminar entrenamiento</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>xpath=(//h4[normalize-space()='Katalon Dia de Pierna Editado'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Eliminar']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Eliminar Entrenamiento']</td><td></td></tr>
+<tr><td>click</td><td>css=.confirm-modal .btn-danger</td><td></td></tr>
+<tr><td>waitForElementNotPresent</td><td>css=.confirm-modal</td><td></td></tr>
+<tr><td>waitForElementNotPresent</td><td>xpath=//h4[normalize-space()='Katalon Dia de Pierna Editado']</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>entrenamiento_eliminado</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Cerrar sesion</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>css=aside button.logout-btn</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>verifyElementNotPresent</td><td>css=aside.sidebar</td><td></td></tr>
+</tbody></table>
+</body>
+</html>

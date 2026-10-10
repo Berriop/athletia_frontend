@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+<title>08_Sueno</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Iniciar sesion</td></tr>
+</thead><tbody>
+<tr><td>store</td><td>luchisfem@gmail.com</td><td>correo</td></tr>
+<tr><td>store</td><td>KittyIris18*</td><td>clave</td></tr>
+<tr><td>open</td><td>https://athletia-frontend.vercel.app/</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
+<tr><td>click</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>type</td><td>id=email</td><td>${correo}</td></tr>
+<tr><td>type</td><td>id=password</td><td>${clave}</td></tr>
+<tr><td>click</td><td>css=button[type='submit']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h1[starts-with(normalize-space(),'Hola')]</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>css=aside.sidebar</td><td></td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Registrar noche de sueno</td></tr>
+</thead><tbody>
+<tr><td>waitForElementPresent</td><td>css=aside a[href='/sleep']</td><td></td></tr>
+<tr><td>click</td><td>css=aside a[href='/sleep']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h1[contains(normalize-space(),'Sueño y Descanso')]</td><td></td></tr>
+<tr><td>waitForElementNotPresent</td><td>xpath=//p[normalize-space()='Cargando...']</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//h3[normalize-space()='Registrar Noche']</td><td></td></tr>
+<tr><td>type</td><td>id=hours</td><td>11.5</td></tr>
+<tr><td>type</td><td>id=quality</td><td>8</td></tr>
+<tr><td>type</td><td>id=stress</td><td>3</td></tr>
+<tr><td>click</td><td>xpath=//label[contains(normalize-space(),'¿Tuviste pesadillas?')]/input</td><td></td></tr>
+<tr><td>verifyChecked</td><td>xpath=//label[contains(normalize-space(),'¿Tuviste pesadillas?')]/input</td><td></td></tr>
+<tr><td>type</td><td>id=notes</td><td>Registro creado por Katalon</td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Guardar Registro']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h4[normalize-space()='11.5 horas']</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=(//h4[normalize-space()='11.5 horas'])[1]/ancestor::div[contains(@class,'card')][1]//p[normalize-space()='Calidad: 8/10 - Estrés: 3/10']</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=(//h4[normalize-space()='11.5 horas'])[1]/ancestor::div[contains(@class,'card')][1]//p[normalize-space()='Pesadillas ⚠️']</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>sueno_registrado</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Notificacion de sueno registrado</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>css=button[title='Notificaciones']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//div[contains(@class,'notification-item')]//p[normalize-space()='Registro de sueño creado']</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>sueno_notificacion</td></tr>
+<tr><td>click</td><td>css=.notification-header .clear-btn</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=.notification-empty</td><td></td></tr>
+<tr><td>click</td><td>css=button[title='Notificaciones']</td><td></td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Registrar sueno fallido - calidad fuera de rango</td></tr>
+</thead><tbody>
+<tr><td>type</td><td>id=hours</td><td>6</td></tr>
+<tr><td>type</td><td>id=quality</td><td>15</td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Guardar Registro']</td><td></td></tr>
+<tr><td>pause</td><td>1500</td><td></td></tr>
+<tr><td>verifyValue</td><td>id=quality</td><td>15</td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>sueno_fallido_calidad_15</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Registrar sueno fallido - mas de 24 horas</td></tr>
+</thead><tbody>
+<tr><td>type</td><td>id=quality</td><td>7</td></tr>
+<tr><td>type</td><td>id=hours</td><td>30</td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Guardar Registro']</td><td></td></tr>
+<tr><td>pause</td><td>1500</td><td></td></tr>
+<tr><td>verifyValue</td><td>id=hours</td><td>30</td></tr>
+<tr><td>verifyElementNotPresent</td><td>xpath=//h4[normalize-space()='30 horas']</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>sueno_fallido_30_horas</td></tr>
+<tr><td>type</td><td>id=hours</td><td>8</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Editar registro de sueno</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>xpath=(//h4[normalize-space()='11.5 horas'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Editar']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Editar Registro']</td><td></td></tr>
+<tr><td>verifyValue</td><td>id=hours</td><td>11.5</td></tr>
+<tr><td>type</td><td>id=hours</td><td>10.5</td></tr>
+<tr><td>click</td><td>xpath=//label[contains(normalize-space(),'¿Tuviste pesadillas?')]/input</td><td></td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Actualizar Registro']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h4[normalize-space()='10.5 horas']</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=(//h4[normalize-space()='10.5 horas'])[1]/ancestor::div[contains(@class,'card')][1]//p[normalize-space()='Bien']</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>sueno_editado</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Cancelar edicion de sueno</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>xpath=(//h4[normalize-space()='10.5 horas'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Editar']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Editar Registro']</td><td></td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Cancelar Edición']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Registrar Noche']</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>sueno_edicion_cancelada</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Eliminar registro de sueno - cancelar</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>xpath=(//h4[normalize-space()='10.5 horas'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Eliminar']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Eliminar Registro de Sueño']</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>sueno_eliminar_cancelado_dialogo</td></tr>
+<tr><td>click</td><td>css=.confirm-modal .btn-secondary</td><td></td></tr>
+<tr><td>waitForElementNotPresent</td><td>css=.confirm-modal</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//h4[normalize-space()='10.5 horas']</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>sueno_eliminar_cancelado</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Eliminar registro de sueno</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>xpath=(//h4[normalize-space()='10.5 horas'])[1]/ancestor::div[contains(@class,'card')][1]//button[@title='Eliminar']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space()='Eliminar Registro de Sueño']</td><td></td></tr>
+<tr><td>click</td><td>css=.confirm-modal .btn-danger</td><td></td></tr>
+<tr><td>waitForElementNotPresent</td><td>css=.confirm-modal</td><td></td></tr>
+<tr><td>waitForElementNotPresent</td><td>xpath=//h4[normalize-space()='10.5 horas']</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>sueno_eliminado</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Cerrar sesion</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>css=aside button.logout-btn</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>verifyElementNotPresent</td><td>css=aside.sidebar</td><td></td></tr>
+</tbody></table>
+</body>
+</html>

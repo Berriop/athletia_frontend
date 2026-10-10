@@ -3,19 +3,6 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 
-/**
- * Suite de REGRESIÓN para las 6 funcionalidades asignadas a Luisa Espinal
- * (RF-01, RF-02, RF-03, RF-04, RF-22, RF-29).
- *
- * Fija el comportamiento correcto y ya validado como línea base. Ver
- * src/__tests__/regression/backend.regression.test.ts para la explicación
- * completa de cómo demostrar en vivo que esta suite detecta una regresión
- * (introducir un defecto controlado, ver fallar, revertir).
- *
- * Ejemplo de demo en frontend: en Sidebar.tsx, cambiar
- * `user?.role === 'ADMIN'` por `user?.role !== 'ADMIN'` invierte a quién se
- * le muestra el ítem "Admin" — la prueba de RF-22 de esta suite lo detecta.
- */
 
 import { LoginPage } from '../../pages/LoginPage';
 import { authService } from '../../services/auth.service';

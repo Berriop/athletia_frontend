@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+<title>12_Administracion</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Iniciar sesion</td></tr>
+</thead><tbody>
+<tr><td>store</td><td>luchisfem@gmail.com</td><td>correo</td></tr>
+<tr><td>store</td><td>KittyIris18*</td><td>clave</td></tr>
+<tr><td>open</td><td>https://athletia-frontend.vercel.app/</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
+<tr><td>click</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>type</td><td>id=email</td><td>${correo}</td></tr>
+<tr><td>type</td><td>id=password</td><td>${clave}</td></tr>
+<tr><td>click</td><td>css=button[type='submit']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h1[starts-with(normalize-space(),'Hola')]</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>css=aside.sidebar</td><td></td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Ver panel de administracion</td></tr>
+</thead><tbody>
+<tr><td>waitForElementPresent</td><td>css=aside a[href='/admin']</td><td></td></tr>
+<tr><td>click</td><td>css=aside a[href='/admin']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h1[contains(normalize-space(),'Panel de Administración')]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=table tbody tr</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//th[normalize-space()='Email verificado']</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//td[normalize-space()='luchisfem@gmail.com']</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>admin_panel</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Administrador no puede bloquearse a si mismo</td></tr>
+</thead><tbody>
+<tr><td>verifyElementPresent</td><td>xpath=//tr[.//span[normalize-space()='(Tú)']]//button[@disabled]</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>admin_no_bloquearse</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Cerrar sesion</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>css=aside button.logout-btn</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>verifyElementNotPresent</td><td>css=aside.sidebar</td><td></td></tr>
+</tbody></table>
+</body>
+</html>

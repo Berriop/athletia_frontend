@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+<title>11_Perfil</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Iniciar sesion</td></tr>
+</thead><tbody>
+<tr><td>store</td><td>luchisfem@gmail.com</td><td>correo</td></tr>
+<tr><td>store</td><td>KittyIris18*</td><td>clave</td></tr>
+<tr><td>open</td><td>https://athletia-frontend.vercel.app/</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
+<tr><td>click</td><td>css=nav.public-navbar a[href='/login']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>type</td><td>id=email</td><td>${correo}</td></tr>
+<tr><td>type</td><td>id=password</td><td>${clave}</td></tr>
+<tr><td>click</td><td>css=button[type='submit']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h1[starts-with(normalize-space(),'Hola')]</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>css=aside.sidebar</td><td></td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Ver perfil</td></tr>
+</thead><tbody>
+<tr><td>waitForElementPresent</td><td>css=aside a[href='/profile']</td><td></td></tr>
+<tr><td>click</td><td>css=aside a[href='/profile']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h1[contains(normalize-space(),'Mi Perfil')]</td><td></td></tr>
+<tr><td>waitForElementNotPresent</td><td>xpath=//p[normalize-space()='Cargando...']</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//p[normalize-space()='luchisfem@gmail.com']</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//button[normalize-space()='Editar perfil']</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>perfil_ver</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Editar perfil</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Editar perfil']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//button[normalize-space()='Guardar cambios']</td><td></td></tr>
+<tr><td>select</td><td>xpath=//select[option[@value='female']]</td><td>label=Femenino</td></tr>
+<tr><td>type</td><td>css=input[placeholder='Ej. 175']</td><td>165</td></tr>
+<tr><td>type</td><td>css=input[placeholder='Ej. 70']</td><td>58.5</td></tr>
+<tr><td>select</td><td>xpath=//select[option[@value='intermediate']]</td><td>label=Intermedio</td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Guardar cambios']</td><td></td></tr>
+<tr><td>waitForElementNotPresent</td><td>xpath=//button[normalize-space()='Guardar cambios']</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//span[normalize-space()='165 cm']</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//span[normalize-space()='58.5 kg']</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//span[normalize-space()='intermediate']</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>perfil_editado</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Notificacion de perfil actualizado</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>css=button[title='Notificaciones']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//div[contains(@class,'notification-item')]//p[normalize-space()='Perfil actualizado correctamente']</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>perfil_notificacion</td></tr>
+<tr><td>click</td><td>css=.notification-header .clear-btn</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=.notification-empty</td><td></td></tr>
+<tr><td>click</td><td>css=button[title='Notificaciones']</td><td></td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Editar perfil fallido - altura fuera de rango</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Editar perfil']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//button[normalize-space()='Guardar cambios']</td><td></td></tr>
+<tr><td>type</td><td>css=input[placeholder='Ej. 175']</td><td>400</td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Guardar cambios']</td><td></td></tr>
+<tr><td>pause</td><td>1500</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//button[normalize-space()='Guardar cambios']</td><td></td></tr>
+<tr><td>verifyValue</td><td>css=input[placeholder='Ej. 175']</td><td>400</td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>perfil_fallido_altura_400</td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Cancelar']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//button[normalize-space()='Editar perfil']</td><td></td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Cancelar edicion de perfil</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Editar perfil']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//button[normalize-space()='Guardar cambios']</td><td></td></tr>
+<tr><td>type</td><td>css=input[placeholder='Ej. 175']</td><td>199</td></tr>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Cancelar']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//button[normalize-space()='Editar perfil']</td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//span[normalize-space()='165 cm']</td><td></td></tr>
+<tr><td>verifyElementNotPresent</td><td>xpath=//span[normalize-space()='199 cm']</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>perfil_edicion_cancelada</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Exportar mis datos en CSV</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>xpath=//button[normalize-space()='Exportar mis datos (CSV)']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//button[normalize-space()='Exportar mis datos (CSV)']</td><td></td></tr>
+<tr><td>click</td><td>css=button[title='Notificaciones']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//div[contains(@class,'notification-item')]//p[normalize-space()='Datos exportados correctamente']</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>perfil_exportar_csv</td></tr>
+<tr><td>click</td><td>css=.notification-header .clear-btn</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=.notification-empty</td><td></td></tr>
+<tr><td>click</td><td>css=button[title='Notificaciones']</td><td></td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Cerrar sesion desde el perfil</td></tr>
+</thead><tbody>
+<tr><td>click</td><td>xpath=//div[contains(@class,'page-container')]//button[normalize-space()='Cerrar sesión']</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>verifyElementNotPresent</td><td>css=aside.sidebar</td><td></td></tr>
+<tr><td>captureEntirePageScreenshot</td><td></td><td>perfil_cerrar_sesion</td></tr>
+</tbody></table>
+</body>
+</html>

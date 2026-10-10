@@ -4,15 +4,6 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 
-/**
- * Pruebas con Fluent Assertions (chai) para las 6 funcionalidades asignadas
- * a Luisa Espinal: RF-01, RF-02, RF-03, RF-04, RF-22, RF-29.
- *
- * Usa la sintaxis encadenada de chai (expect(x).to.be...que...) en vez de
- * expect().toBe() — el mismo estilo que muestra el README del profesor para
- * JavaScript con Chai (equivalente a AssertJ en Java y PyHamcrest en Python).
- */
-
 // ---------------------------------------------------------------------------
 // RF-01 — Registrar cuenta
 // ---------------------------------------------------------------------------
