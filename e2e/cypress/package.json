@@ -1,0 +1,24 @@
+{
+  "name": "athletia-e2e-cypress",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pruebas de Athletia con Cypress: regresión E2E, API, seguridad, accesibilidad, UI y componentes",
+  "scripts": {
+    "test": "node scripts/run.cjs",
+    "test:e2e": "node scripts/run.cjs e2e",
+    "test:component": "cypress run --component",
+    "test:luisa": "node scripts/run.cjs e2e luisa",
+    "test:juanpablo": "node scripts/run.cjs e2e juanpablo",
+    "test:daniel": "node scripts/run.cjs e2e daniel",
+    "cypress:open": "node scripts/run.cjs open"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "5.2.0",
+    "axe-core": "4.11.1",
+    "cypress": "15.21.1",
+    "cypress-axe": "1.7.0",
+    "mochawesome": "7.1.4",
+    "pg": "8.23.1",
+    "vite": "7.3.7"
+  }
+}

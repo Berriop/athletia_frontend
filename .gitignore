@@ -35,3 +35,7 @@ coverage
 # Salidas generadas por las pruebas E2E (capturas, trazas, reportes)
 e2e/screenplay/reports/
 e2e/screenplay/test-results/
+
+e2e/cypress/reports/
+e2e/cypress/cypress/screenshots/
+e2e/cypress/cypress/downloads/
