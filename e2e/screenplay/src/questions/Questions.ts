@@ -1,7 +1,7 @@
 import { Question } from '@serenity-js/core';
 import type { Answerable } from '@serenity-js/core';
 import { Page, Text } from '@serenity-js/web';
-import type { Locator } from '@playwright/test';
+import type { Locator } from 'playwright';
 import type { PageElement } from '@serenity-js/web';
 import { AppShell, DashboardScreen, GymScreen, RecordList } from '../ui/Screens';
 import type { ExportedFile } from '../tasks/MoreTasks';

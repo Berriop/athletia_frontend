@@ -1,7 +1,7 @@
 import { Interaction, Question, Task } from '@serenity-js/core';
 import { BrowseTheWebWithPlaywright } from '@serenity-js/playwright';
 import type { PlaywrightPage } from '@serenity-js/playwright';
-import type { Route } from '@playwright/test';
+import type { Route } from 'playwright';
 import { Click, Enter, Navigate } from '@serenity-js/web';
 import fs from 'node:fs';
 import { promoteToAdmin, resetTokenOf } from '../support/database';
