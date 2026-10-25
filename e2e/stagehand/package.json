@@ -1,0 +1,27 @@
+{
+  "name": "athletia-e2e-stagehand",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Pruebas E2E de Athletia con Stagehand e inteligencia artificial (act, observe y extract)",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test:luisa": "node --import tsx tests/luisa.e2e.ts",
+    "test:juanpablo": "node --import tsx tests/juanpablo.e2e.ts",
+    "test:daniel": "node --import tsx tests/daniel.e2e.ts",
+    "test:all": "npm run test:luisa && npm run test:juanpablo && npm run test:daniel"
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "dependencies": {
+    "@browserbasehq/stagehand": "4.3.0",
+    "dotenv": "18.0.8",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3"
+  }
+}
