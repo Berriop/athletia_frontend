@@ -1,5 +1,6 @@
 const { defineConfig } = require('cypress');
 const react = require('@vitejs/plugin-react');
+const { registerArgosTask } = require('@argos-ci/cypress/task');
 const { promoteToAdmin, resetTokenOf } = require('./cypress/support/database.cjs');
 
 /**
@@ -34,6 +35,8 @@ module.exports = defineConfig({
         promoteToAdmin: (email) => promoteToAdmin(email).then(() => null),
         resetTokenOf: (email) => resetTokenOf(email),
       });
+      // Pruebas visuales (Argos): se suben a Argos solo si hay un ARGOS_TOKEN; si no, las capturas quedan en ./screenshots.
+      registerArgosTask(on, config, { uploadToArgos: Boolean(process.env.ARGOS_TOKEN) });
       config.expose = { ...config.expose, apiUrl: process.env.E2E_API_URL || 'http://localhost:4001/api/v1' };
       return config;
     },

@@ -10,9 +10,13 @@
     "test:luisa": "node scripts/run.cjs e2e luisa",
     "test:juanpablo": "node scripts/run.cjs e2e juanpablo",
     "test:daniel": "node scripts/run.cjs e2e daniel",
+    "test:visual": "node scripts/run.cjs visual",
+    "test:visual:luisa": "node scripts/run.cjs visual luisa",
     "cypress:open": "node scripts/run.cjs open"
   },
   "devDependencies": {
+    "@argos-ci/cli": "6.11.0",
+    "@argos-ci/cypress": "7.4.0",
     "@vitejs/plugin-react": "5.2.0",
     "axe-core": "4.11.1",
     "cypress": "15.21.1",

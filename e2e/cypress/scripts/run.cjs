@@ -7,6 +7,7 @@ const fs = require('node:fs');
  *
  *   node scripts/run.cjs                  → E2E/API y después componentes
  *   node scripts/run.cjs e2e [integrante] → solo E2E/API (luisa | juanpablo | daniel)
+ *   node scripts/run.cjs visual [integrante] → solo las pruebas visuales (las que se envían a Argos)
  *   node scripts/run.cjs open             → abre la interfaz de Cypress con la pila levantada
  *
  * Variables opcionales: E2E_BASE_URL (frontend ya desplegado, no se levanta nada),
@@ -109,6 +110,7 @@ async function main() {
   const memberSpecs = member ? ['--spec', `cypress/e2e/**/${member}.cy.js`] : [];
   let status = 0;
   if (mode === 'open') status = cypress(['open'], stackEnv);
+  if (mode === 'visual') status = cypress(['run', '--e2e', '--spec', `cypress/e2e/visual/${member || '*'}.cy.js`], stackEnv);
   if (mode === 'e2e' || mode === 'all') status = cypress(['run', '--e2e', ...memberSpecs], stackEnv);
   if (mode === 'component' || (mode === 'all' && !member)) status = cypress(['run', '--component'], stackEnv) || status;
   return status;
