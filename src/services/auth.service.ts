@@ -3,12 +3,12 @@ import type { AuthResponse, ApiResponse } from '../types/api';
 import type { User } from '../types';
 
 export interface UpdateProfileDTO {
-  name?: string;
-  gender?: string;
-  birthDate?: string;
-  heightCm?: number;
-  weightKg?: number;
-  experienceLevel?: string;
+  name?: string | null;
+  gender?: string | null;
+  birthDate?: string | null;
+  heightCm?: number | null;
+  weightKg?: number | null;
+  experienceLevel?: string | null;
 }
 
 export const authService = {

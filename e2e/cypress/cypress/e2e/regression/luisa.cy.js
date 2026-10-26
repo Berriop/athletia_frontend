@@ -23,7 +23,7 @@ describe(`[${INTEGRANTE}] Regresión E2E`, () => {
       cy.uiRegister(account);
 
       cy.wait('@register').its('response.statusCode').should('eq', 409);
-      cy.get('[role="alert"]').should('contain.text', 'Email already in use');
+      cy.get('[role="alert"]').should('contain.text', 'Ya existe una cuenta con este correo');
       cy.location('pathname').should('eq', '/register');
     });
   });

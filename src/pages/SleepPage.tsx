@@ -9,6 +9,8 @@ import { EditModeBadge } from '../components/EditModeBadge';
 import { RowActionButtons } from '../components/RowActionButtons';
 import { ListStatus } from '../components/ListStatus';
 import { FormSubmitActions } from '../components/FormSubmitActions';
+import { NumberInput } from '../components/NumberInput';
+import { getErrorMessage, parseNumberField, requirePastOrToday } from '../utils/formValidation';
 
 export const SleepPage: React.FC = () => {
   const [sleeps, setSleeps] = useState<SleepLog[]>([]);
@@ -19,10 +21,10 @@ export const SleepPage: React.FC = () => {
   const { addNotification } = useNotification();
 
   // Form states
-  const [hoursSlept, setHoursSlept] = useState(8);
-  const [sleepQuality, setSleepQuality] = useState(7);
+  const [hoursSlept, setHoursSlept] = useState('8');
+  const [sleepQuality, setSleepQuality] = useState('7');
   const [hadNightmares, setHadNightmares] = useState(false);
-  const [stressLevel, setStressLevel] = useState(5);
+  const [stressLevel, setStressLevel] = useState('5');
   const [notes, setNotes] = useState('');
   const [date, setDate] = useState(() => toLocalDateInput(new Date()));
 
@@ -42,16 +44,26 @@ export const SleepPage: React.FC = () => {
   }, []);
 
   const resetForm = () => {
-    setHoursSlept(8);
-    setSleepQuality(7);
+    setHoursSlept('8');
+    setSleepQuality('7');
     setHadNightmares(false);
-    setStressLevel(5);
+    setStressLevel('5');
     setNotes('');
     setDate(toLocalDateInput(new Date()));
     setEditingId(null);
   };
 
-  // RF-14 (crear) y RF-16 (modificar) quedan como funciones independientes,
+  // Valida el formulario antes de llamar a la API; lanza FormValidationError con el mensaje a mostrar.
+  const buildSleepData = (): CreateSleepDTO => ({
+    hoursSlept: parseNumberField(hoursSlept, { label: 'horas de sueño', min: 0, max: 24, positive: true }),
+    sleepQuality: parseNumberField(sleepQuality, { label: 'calidad del sueño', min: 1, max: 10, integer: true }),
+    hadNightmares,
+    stressLevel: parseNumberField(stressLevel, { label: 'nivel de estrés', min: 1, max: 10, integer: true }),
+    notes,
+    date: new Date(`${requirePastOrToday(date)}T00:00:00`).toISOString(),
+  });
+
+  // RF-11 (crear) y RF-12 (modificar) quedan como funciones independientes,
   // cada una con su propio try/catch, en vez de una sola función con un
   // if/else por dentro.
   const handleCreate = async (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -59,14 +71,15 @@ export const SleepPage: React.FC = () => {
     setIsLoading(true);
     setError('');
     try {
-      const data: CreateSleepDTO = { hoursSlept, sleepQuality, hadNightmares, stressLevel, notes, date: new Date(`${date}T00:00:00`).toISOString() };
+      const data = buildSleepData();
       await sleepService.create(data);
       addNotification('Registro de sueño creado', 'success');
       resetForm();
       await fetchSleeps();
-    } catch {
-      setError('Error al guardar el registro');
-      addNotification('Error al guardar el registro', 'error');
+    } catch (err) {
+      const msg = getErrorMessage(err, 'Error al guardar el registro');
+      setError(msg);
+      addNotification(msg, 'error');
       setIsLoading(false);
     }
   };
@@ -77,24 +90,25 @@ export const SleepPage: React.FC = () => {
     setIsLoading(true);
     setError('');
     try {
-      const data: CreateSleepDTO = { hoursSlept, sleepQuality, hadNightmares, stressLevel, notes, date: new Date(`${date}T00:00:00`).toISOString() };
+      const data = buildSleepData();
       await sleepService.update(editingId, data);
       addNotification('Registro de sueño actualizado', 'success');
       resetForm();
       await fetchSleeps();
-    } catch {
-      setError('Error al actualizar el registro');
-      addNotification('Error al actualizar el registro', 'error');
+    } catch (err) {
+      const msg = getErrorMessage(err, 'Error al actualizar el registro');
+      setError(msg);
+      addNotification(msg, 'error');
       setIsLoading(false);
     }
   };
 
   const handleEdit = (sleep: SleepLog) => {
     setEditingId(sleep.id);
-    setHoursSlept(sleep.hoursSlept);
-    setSleepQuality(sleep.sleepQuality);
+    setHoursSlept(String(sleep.hoursSlept));
+    setSleepQuality(String(sleep.sleepQuality));
     setHadNightmares(sleep.hadNightmares);
-    setStressLevel(sleep.stressLevel);
+    setStressLevel(String(sleep.stressLevel));
     setNotes(sleep.notes || '');
     setDate(toLocalDateInput(new Date(sleep.date)));
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -131,19 +145,19 @@ export const SleepPage: React.FC = () => {
         <form onSubmit={editingId ? handleUpdate : handleCreate} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="hours" style={{ fontSize: '0.9rem' }}>Horas de sueño</label>
-            <input id="hours" required type="number" step="0.5" min="0" max="24" value={hoursSlept} onChange={e => setHoursSlept(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <NumberInput id="hours" allowDecimal value={hoursSlept} onChange={setHoursSlept} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="quality" style={{ fontSize: '0.9rem' }}>Calidad del sueño (1-10)</label>
-            <input id="quality" required type="number" min="1" max="10" value={sleepQuality} onChange={e => setSleepQuality(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <NumberInput id="quality" value={sleepQuality} onChange={setSleepQuality} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="stress" style={{ fontSize: '0.9rem' }}>Nivel de estrés (1-10)</label>
-            <input id="stress" required type="number" min="1" max="10" value={stressLevel} onChange={e => setStressLevel(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <NumberInput id="stress" value={stressLevel} onChange={setStressLevel} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="date" style={{ fontSize: '0.9rem' }}>Fecha</label>
-            <input id="date" required type="date" value={date} onChange={e => setDate(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', backgroundColor: 'var(--bg-card)', color: 'inherit', border: '1px solid var(--border)' }} />
+            <input id="date" required type="date" max={toLocalDateInput(new Date())} value={date} onChange={e => setDate(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', backgroundColor: 'var(--bg-card)', color: 'inherit', border: '1px solid var(--border)' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', justifyContent: 'center' }}>
             <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', cursor: 'pointer' }}>
@@ -153,7 +167,7 @@ export const SleepPage: React.FC = () => {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', gridColumn: 'span 2' }}>
             <label htmlFor="notes" style={{ fontSize: '0.9rem' }}>Notas adicionales</label>
-            <textarea id="notes" placeholder="Notas adicionales..." value={notes} onChange={e => setNotes(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', minHeight: '80px', backgroundColor: 'var(--bg-card)', color: 'inherit', border: '1px solid var(--border)' }} />
+            <textarea id="notes" maxLength={1000} placeholder="Notas adicionales..." value={notes} onChange={e => setNotes(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', minHeight: '80px', backgroundColor: 'var(--bg-card)', color: 'inherit', border: '1px solid var(--border)' }} />
           </div>
           <FormSubmitActions
             isLoading={isLoading}

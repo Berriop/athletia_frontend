@@ -117,7 +117,7 @@ describe('RF-02 — LoginPage.handleSubmit (Fluent Assertions)', () => {
 
   it('credenciales inválidas → muestra el mensaje genérico y no inicia sesión', async () => {
     vi.mocked(authService.login).mockRejectedValue({
-      response: { data: { error: { message: 'Invalid credentials' } } },
+      response: { status: 401, data: { error: { message: 'Correo o contraseña incorrectos' } } },
     });
     const user = userEvent.setup();
     render(

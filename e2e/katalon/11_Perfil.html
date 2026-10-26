@@ -38,16 +38,16 @@
 </thead><tbody>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Editar perfil']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementPresent</td><td>xpath=//button[normalize-space()='Guardar cambios']<datalist></datalist></td><td></td></tr>
-<tr><td>select</td><td>xpath=//select[option[@value='female']]<datalist></datalist></td><td>label=Femenino</td></tr>
+<tr><td>select</td><td>xpath=//select[option[@value='FEMALE']]<datalist></datalist></td><td>label=Femenino</td></tr>
 <tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("input[placeholder='Ej. 175']"); s.call(e,'165'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
 <tr><td>runScript</td><td>var s=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; var e=document.querySelector("input[placeholder='Ej. 70']"); s.call(e,'58.5'); e.dispatchEvent(new Event('input',{bubbles:true}));<datalist></datalist></td><td></td></tr>
-<tr><td>select</td><td>xpath=//select[option[@value='intermediate']]<datalist></datalist></td><td>label=Intermedio</td></tr>
+<tr><td>select</td><td>xpath=//select[option[@value='INTERMEDIATE']]<datalist></datalist></td><td>label=Intermedio</td></tr>
 <tr><td>click</td><td>xpath=//button[normalize-space()='Guardar cambios']<datalist></datalist></td><td></td></tr>
 <tr><td>waitForElementNotPresent</td><td>xpath=//button[normalize-space()='Guardar cambios']<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementPresent</td><td>xpath=//span[normalize-space()='165 cm']<datalist></datalist></td><td></td></tr>
 <tr><td>verifyElementPresent</td><td>xpath=//span[normalize-space()='58.5 kg']<datalist></datalist></td><td></td></tr>
-<tr><td>verifyElementPresent</td><td>xpath=//span[normalize-space()='INTERMEDIATE']<datalist></datalist></td><td></td></tr>
-<tr><td>verifyElementPresent</td><td>xpath=//span[normalize-space()='FEMALE']<datalist></datalist></td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//span[normalize-space()='Intermedio']<datalist></datalist></td><td></td></tr>
+<tr><td>verifyElementPresent</td><td>xpath=//span[normalize-space()='Femenino']<datalist></datalist></td><td></td></tr>
 <tr><td>captureEntirePageScreenshot</td><td><datalist></datalist></td><td>perfil_editado</td></tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">

@@ -61,10 +61,10 @@ describe('LoginPage.handleSubmit', () => {
   });
 
   // Camino 2: INICIO,1,2,4,5,FIN
-  it('Camino 2: backend responde "Invalid credentials" → mensaje genérico', async () => {
+  it('Camino 2: backend responde 401 (credenciales incorrectas) → mensaje genérico', async () => {
     // Arrange
     vi.mocked(authService.login).mockRejectedValue({
-      response: { data: { error: { message: 'Invalid credentials' } } },
+      response: { status: 401, data: { error: { message: 'Correo o contraseña incorrectos' } } },
     });
     const user = userEvent.setup();
     renderPage();

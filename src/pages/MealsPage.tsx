@@ -10,6 +10,8 @@ import { EditModeBadge } from '../components/EditModeBadge';
 import { RowActionButtons } from '../components/RowActionButtons';
 import { ListStatus } from '../components/ListStatus';
 import { FormSubmitActions } from '../components/FormSubmitActions';
+import { NumberInput } from '../components/NumberInput';
+import { getErrorMessage, parseNumberField, requirePastOrToday, requireText } from '../utils/formValidation';
 
 const MEAL_TYPE_LABELS: Record<MealType, string> = {
   BREAKFAST: 'Desayuno',
@@ -30,11 +32,11 @@ export const MealsPage: React.FC = () => {
 
   // Form states
   const [name, setName] = useState('');
-  const [calories, setCalories] = useState(500);
+  const [calories, setCalories] = useState('500');
   const [mealType, setMealType] = useState<MealType>('LUNCH');
-  const [protein, setProtein] = useState(30);
-  const [carbs, setCarbs] = useState(50);
-  const [fat, setFat] = useState(15);
+  const [protein, setProtein] = useState('30');
+  const [carbs, setCarbs] = useState('50');
+  const [fat, setFat] = useState('15');
   const [date, setDate] = useState(() => toLocalDateInput(new Date()));
 
   const fetchMeals = async () => {
@@ -54,14 +56,25 @@ export const MealsPage: React.FC = () => {
 
   const resetForm = () => {
     setName('');
-    setCalories(500);
+    setCalories('500');
     setMealType('LUNCH');
-    setProtein(30);
-    setCarbs(50);
-    setFat(15);
+    setProtein('30');
+    setCarbs('50');
+    setFat('15');
     setDate(toLocalDateInput(new Date()));
     setEditingId(null);
   };
+
+  // Valida el formulario antes de llamar a la API; lanza FormValidationError con el mensaje a mostrar.
+  const buildMealData = (): CreateMealDTO => ({
+    name: requireText(name, 'nombre de la comida'),
+    calories: parseNumberField(calories, { label: 'calorías', min: 0, max: 10000, integer: true }),
+    mealType,
+    proteinG: parseNumberField(protein, { label: 'proteína', min: 0, max: 1000 }),
+    carbsG: parseNumberField(carbs, { label: 'carbohidratos', min: 0, max: 1000 }),
+    fatG: parseNumberField(fat, { label: 'grasa', min: 0, max: 1000 }),
+    date: new Date(`${requirePastOrToday(date)}T00:00:00`).toISOString(),
+  });
 
   // RF-10 (crear) y RF-12 (modificar) quedan como funciones independientes,
   // cada una con su propio try/catch, en vez de una sola función con un
@@ -71,21 +84,13 @@ export const MealsPage: React.FC = () => {
     setIsLoading(true);
     setError('');
     try {
-      const data: CreateMealDTO = {
-        name,
-        calories,
-        mealType,
-        proteinG: protein,
-        carbsG: carbs,
-        fatG: fat,
-        date: new Date(`${date}T00:00:00`).toISOString(),
-      };
+      const data = buildMealData();
       await mealService.create(data);
       addNotification('Comida registrada correctamente', 'success');
       resetForm();
       await fetchMeals();
-    } catch (err: any) {
-      const msg = err.response?.data?.error?.message || 'Error al crear comida';
+    } catch (err) {
+      const msg = getErrorMessage(err, 'Error al crear comida');
       setError(msg);
       addNotification(msg, 'error');
       setIsLoading(false);
@@ -98,21 +103,13 @@ export const MealsPage: React.FC = () => {
     setIsLoading(true);
     setError('');
     try {
-      const data: CreateMealDTO = {
-        name,
-        calories,
-        mealType,
-        proteinG: protein,
-        carbsG: carbs,
-        fatG: fat,
-        date: new Date(`${date}T00:00:00`).toISOString(),
-      };
+      const data = buildMealData();
       await mealService.update(editingId, data);
       addNotification('Comida actualizada correctamente', 'success');
       resetForm();
       await fetchMeals();
-    } catch (err: any) {
-      const msg = err.response?.data?.error?.message || 'Error al actualizar comida';
+    } catch (err) {
+      const msg = getErrorMessage(err, 'Error al actualizar comida');
       setError(msg);
       addNotification(msg, 'error');
       setIsLoading(false);
@@ -122,11 +119,11 @@ export const MealsPage: React.FC = () => {
   const handleEdit = (meal: Meal) => {
     setEditingId(meal.id);
     setName(meal.name);
-    setCalories(meal.calories);
+    setCalories(String(meal.calories));
     setMealType(meal.mealType);
-    setProtein(meal.proteinG);
-    setCarbs(meal.carbsG);
-    setFat(meal.fatG);
+    setProtein(String(meal.proteinG));
+    setCarbs(String(meal.carbsG));
+    setFat(String(meal.fatG));
     setDate(toLocalDateInput(new Date(meal.date)));
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -162,7 +159,7 @@ export const MealsPage: React.FC = () => {
         <form onSubmit={editingId ? handleUpdate : handleCreate} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="name" style={{ fontSize: '0.9rem' }}>Nombre de la comida</label>
-            <input id="name" required type="text" placeholder="Ej. Pollo con Arroz" value={name} onChange={(e) => setName(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <input id="name" required type="text" maxLength={255} placeholder="Ej. Pollo con Arroz" value={name} onChange={(e) => setName(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="mealType" style={{ fontSize: '0.9rem' }}>Tipo de comida</label>
@@ -179,23 +176,23 @@ export const MealsPage: React.FC = () => {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="calories" style={{ fontSize: '0.9rem' }}>Calorías</label>
-            <input id="calories" type="number" min="0" value={calories} onChange={(e) => setCalories(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <NumberInput id="calories" value={calories} onChange={setCalories} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="protein" style={{ fontSize: '0.9rem' }}>Proteína (g)</label>
-            <input id="protein" type="number" min="0" value={protein} onChange={(e) => setProtein(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <NumberInput id="protein" allowDecimal value={protein} onChange={setProtein} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="carbs" style={{ fontSize: '0.9rem' }}>Carbohidratos (g)</label>
-            <input id="carbs" type="number" min="0" value={carbs} onChange={(e) => setCarbs(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <NumberInput id="carbs" allowDecimal value={carbs} onChange={setCarbs} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="fat" style={{ fontSize: '0.9rem' }}>Grasa (g)</label>
-            <input id="fat" type="number" min="0" value={fat} onChange={(e) => setFat(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <NumberInput id="fat" allowDecimal value={fat} onChange={setFat} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="date" style={{ fontSize: '0.9rem' }}>Fecha</label>
-            <input id="date" required type="date" value={date} onChange={(e) => setDate(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', backgroundColor: 'var(--bg-card)', color: 'inherit', border: '1px solid var(--border)' }} />
+            <input id="date" required type="date" max={toLocalDateInput(new Date())} value={date} onChange={(e) => setDate(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', backgroundColor: 'var(--bg-card)', color: 'inherit', border: '1px solid var(--border)' }} />
           </div>
           <FormSubmitActions
             isLoading={isLoading}

@@ -58,7 +58,7 @@ describe(`[${INTEGRANTE}] API`, () => {
       cy.apiRequest('POST', '/auth/login', { body: { email: account.email, password: 'incorrecta' } }).then(({ status, body }) => {
         expect(status).to.eq(401);
         expect(body.error.code).to.eq('UNAUTHORIZED');
-        expect(body.error.message).to.eq('Invalid credentials');
+        expect(body.error.message).to.eq('Correo o contraseña incorrectos');
       });
     });
 
@@ -91,7 +91,7 @@ describe(`[${INTEGRANTE}] API`, () => {
     it('401: un token inválido se rechaza', () => {
       cy.apiRequest('GET', '/auth/me', { token: 'token.invalido.e2e' }).then(({ status, body }) => {
         expect(status).to.eq(401);
-        expect(body.error.message).to.eq('Invalid or expired token');
+        expect(body.error.message).to.eq('Token inválido o expirado');
       });
     });
   });
@@ -128,7 +128,7 @@ describe(`[${INTEGRANTE}] API`, () => {
         cy.apiRequest('GET', '/admin/users', { token }).then(({ status, body }) => {
           expect(status).to.eq(403);
           expect(body.success).to.eq(false);
-          expect(body.message).to.include('admin access required');
+          expect(body.message).to.include('permisos de administrador');
         });
       });
     });

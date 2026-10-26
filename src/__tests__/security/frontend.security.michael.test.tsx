@@ -16,7 +16,7 @@ import { fakeMeal, fakeSleep, fakeWorkout } from '../helpers/fixtures';
  * recuperación) y RF-25 (formulario de contacto).
  *
  * Reglas de seguridad convertidas en pruebas de regresión: datos mostrados como
- * texto (nunca como HTML), límites de los campos numéricos del formulario, el
+ * texto (nunca como HTML), límites de los campos numéricos del formulario (validados al guardar), el
  * cálculo de recuperación no se rompe con entradas hostiles y el código fuente
  * no usa sumideros de HTML peligrosos.
  */
@@ -52,25 +52,43 @@ describe('[Seguridad] RF-05/06/07 — WorkoutsPage', () => {
   });
 
   it.each([
-    ['Energía (1-10)', '1', '10'],
-    ['Fatiga (1-10)', '1', '10'],
-    ['Dolor (1-10)', '1', '10'],
-  ])('el campo "%s" limita el rango del navegador a %s–%s', async (etiqueta, min, max) => {
+    ['Energía (1-10)', 'energía'],
+    ['Fatiga (1-10)', 'fatiga'],
+    ['Dolor (1-10)', 'dolor'],
+  ])('el campo "%s" rechaza valores fuera de 1–10 sin llamar a la API', async (etiqueta, nombre) => {
     vi.mocked(workoutService.getAll).mockResolvedValue({ success: true, data: [] });
+    vi.mocked(workoutService.create).mockClear();
+    const user = userEvent.setup();
     render(<WorkoutsPage />);
+    await user.type(await screen.findByLabelText('Título'), 'Pierna');
+    const campo = screen.getByLabelText(etiqueta);
 
-    const campo = await screen.findByLabelText(etiqueta);
+    // Sin flechas de subir/bajar: es un campo de texto con teclado numérico.
+    expect(campo).toHaveAttribute('type', 'text');
+    expect(campo).toHaveAttribute('inputMode', 'numeric');
+    await user.clear(campo);
+    await user.type(campo, '11');
+    await user.click(screen.getByRole('button', { name: 'Guardar Entrenamiento' }));
 
-    expect(campo).toHaveAttribute('type', 'number');
-    expect(campo).toHaveAttribute('min', min);
-    expect(campo).toHaveAttribute('max', max);
+    expect(await screen.findByText(`El campo ${nombre} debe estar entre 1 y 10`)).toBeInTheDocument();
+    expect(workoutService.create).not.toHaveBeenCalled();
   });
 
-  it('la duración no admite valores menores que 1 minuto', async () => {
+  it('la duración no admite 0 minutos, ni letras ni el signo menos', async () => {
     vi.mocked(workoutService.getAll).mockResolvedValue({ success: true, data: [] });
+    vi.mocked(workoutService.create).mockClear();
+    const user = userEvent.setup();
     render(<WorkoutsPage />);
+    await user.type(await screen.findByLabelText('Título'), 'Pierna');
+    const duracion = screen.getByLabelText('Duración (min)');
 
-    expect(await screen.findByLabelText('Duración (min)')).toHaveAttribute('min', '1');
+    await user.clear(duracion);
+    await user.type(duracion, '-a0');
+    expect(duracion).toHaveValue('0');
+    await user.click(screen.getByRole('button', { name: 'Guardar Entrenamiento' }));
+
+    expect(await screen.findByText('El campo duración debe ser mayor que 0')).toBeInTheDocument();
+    expect(workoutService.create).not.toHaveBeenCalled();
   });
 
   it('si el servidor rechaza la rutina no se muestra éxito', async () => {

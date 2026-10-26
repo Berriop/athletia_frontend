@@ -201,6 +201,8 @@ describe('ProfilePage casos extra (RF-05 / RF-34)', () => {
     expect(screen.getByText(new Date('2000-05-10T12:00:00.000Z').toLocaleDateString())).toBeInTheDocument();
     expect(screen.getByText('175 cm')).toBeInTheDocument();
     expect(screen.getByText('70 kg')).toBeInTheDocument();
+    expect(screen.getByText('Masculino')).toBeInTheDocument();
+    expect(screen.getByText('Avanzado')).toBeInTheDocument();
 
     // Act (editar → valores precargados)
     await user.click(screen.getByRole('button', { name: /Editar perfil/i }));
@@ -225,7 +227,7 @@ describe('ProfilePage casos extra (RF-05 / RF-34)', () => {
     const nameInput = screen.getByPlaceholderText('Tu nombre');
     await user.clear(nameInput);
     await user.type(nameInput, 'Jane Doe');
-    await user.selectOptions(selects[0], 'female');
+    await user.selectOptions(selects[0], 'FEMALE');
     fireEvent.change(container.querySelector('input[type="date"]') as HTMLInputElement, {
       target: { value: '1999-01-05' },
     });
@@ -235,22 +237,22 @@ describe('ProfilePage casos extra (RF-05 / RF-34)', () => {
     const weightInput = screen.getByPlaceholderText('Ej. 70');
     await user.clear(weightInput);
     await user.type(weightInput, '65');
-    await user.selectOptions(selects[1], 'advanced');
+    await user.selectOptions(selects[1], 'ADVANCED');
     await user.click(screen.getByRole('button', { name: /Guardar cambios/i }));
 
     // Assert
     await waitFor(() => expect(authService.updateProfile).toHaveBeenCalledWith({
       name: 'Jane Doe',
-      gender: 'female',
+      gender: 'FEMALE',
       birthDate: '1999-01-05',
       heightCm: 168,
       weightKg: 65,
-      experienceLevel: 'advanced',
+      experienceLevel: 'ADVANCED',
     }));
   });
 
-  // Vaciar altura y peso: rama izquierda del ternario ('' → null) al guardar
-  it('al vaciar altura y peso → el DTO los manda como undefined', async () => {
+  // Vaciar altura y peso: se mandan como null para que el backend borre el valor anterior
+  it('al vaciar altura y peso → el DTO los manda como null', async () => {
     // Arrange
     fakeUser.heightCm = 180;
     fakeUser.weightKg = 90;
@@ -268,7 +270,7 @@ describe('ProfilePage casos extra (RF-05 / RF-34)', () => {
     // Assert
     await waitFor(() =>
       expect(authService.updateProfile).toHaveBeenCalledWith(
-        expect.objectContaining({ heightCm: undefined, weightKg: undefined }),
+        expect.objectContaining({ heightCm: null, weightKg: null }),
       ),
     );
   });
@@ -284,16 +286,55 @@ describe('ProfilePage casos extra (RF-05 / RF-34)', () => {
     // Assert (vista con fallbacks)
     expect(screen.getByText('Sin nombre')).toBeInTheDocument();
 
-    // Act (editar y guardar sin nombre → DTO con name undefined)
+    // Act (editar y guardar sin nombre → DTO con name null)
     await user.click(screen.getByRole('button', { name: /Editar perfil/i }));
     await user.click(screen.getByRole('button', { name: /Guardar cambios/i }));
 
     // Assert
     await waitFor(() =>
       expect(authService.updateProfile).toHaveBeenCalledWith(
-        expect.objectContaining({ name: undefined, birthDate: undefined }),
+        expect.objectContaining({ name: null, birthDate: null }),
       ),
     );
+  });
+});
+
+describe('ProfilePage — fecha de nacimiento y valores en español', () => {
+  // Hallazgo: el backend guarda la fecha de nacimiento como medianoche UTC; mostrarla
+  // en la hora local de Colombia (UTC-5) la corría al día anterior.
+  it('muestra el mismo día guardado aunque la zona horaria sea anterior a UTC', () => {
+    fakeUser.birthDate = '2000-05-10T00:00:00.000Z';
+    renderPage();
+
+    const esperado = new Date(Date.UTC(2000, 4, 10, 12)).toLocaleDateString();
+    expect(screen.getByText(esperado)).toBeInTheDocument();
+  });
+
+  it('muestra el rol, el género y el nivel de experiencia en español', () => {
+    fakeUser.gender = 'FEMALE';
+    fakeUser.experienceLevel = 'EXPERT';
+    renderPage();
+
+    expect(screen.getByText('Femenino')).toBeInTheDocument();
+    expect(screen.getByText('Experto')).toBeInTheDocument();
+    expect(screen.queryByText('FEMALE')).toBeNull();
+    expect(screen.queryByText('EXPERT')).toBeNull();
+  });
+
+  it('una altura fuera de rango no se envía y avisa en español', async () => {
+    vi.mocked(authService.updateProfile).mockClear();
+    const user = userEvent.setup();
+    renderPage();
+    await user.click(screen.getByRole('button', { name: /Editar perfil/i }));
+    const heightInput = screen.getByPlaceholderText('Ej. 175');
+    await user.clear(heightInput);
+    await user.type(heightInput, '999');
+    await user.click(screen.getByRole('button', { name: /Guardar cambios/i }));
+
+    await waitFor(() =>
+      expect(addNotification).toHaveBeenCalledWith('El campo altura debe estar entre 50 y 300', 'error'),
+    );
+    expect(authService.updateProfile).not.toHaveBeenCalled();
   });
 });
 

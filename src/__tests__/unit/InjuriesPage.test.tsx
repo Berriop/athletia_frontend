@@ -97,9 +97,9 @@ describe('InjuriesPage.handleCreate (RF-18) / handleUpdate (RF-20)', () => {
     // Act
     await user.click(screen.getByRole('button', { name: 'Registrar Lesión' }));
 
-    // Assert (texto en pantalla vs. texto de la notificación difieren — ver nota arriba)
+    // Assert (el mismo mensaje en pantalla y en la notificación)
     expect(await screen.findByText('Error al reportar lesión')).toBeInTheDocument();
-    expect(addNotification).toHaveBeenCalledWith('Error al registrar lesión', 'error');
+    expect(addNotification).toHaveBeenCalledWith('Error al reportar lesión', 'error');
   });
 
   // Hallazgo real: el backend sí manda el detalle específico de la validación

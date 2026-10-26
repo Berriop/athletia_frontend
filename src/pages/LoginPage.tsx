@@ -30,7 +30,7 @@ export const LoginPage: React.FC = () => {
         err.response?.data?.error?.message ||
         err.response?.data?.message;
 
-      if (backendMessage === 'Invalid credentials') {
+      if (err.response?.status === 401) {
         setError('Correo o contraseña incorrectos. Por favor, verifica tus datos.');
       } else if (backendMessage) {
         setError(backendMessage);

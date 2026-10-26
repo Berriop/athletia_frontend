@@ -9,6 +9,8 @@ import { EditModeBadge } from '../components/EditModeBadge';
 import { RowActionButtons } from '../components/RowActionButtons';
 import { ListStatus } from '../components/ListStatus';
 import { FormSubmitActions } from '../components/FormSubmitActions';
+import { NumberInput } from '../components/NumberInput';
+import { getErrorMessage, parseNumberField, requireText } from '../utils/formValidation';
 
 const BODY_PART_LABELS: Record<BodyPart, string> = {
   CHEST: 'Pecho',
@@ -36,10 +38,10 @@ export const WorkoutsPage: React.FC = () => {
   // Form states
   const [title, setTitle] = useState('');
   const [bodyPart, setBodyPart] = useState<BodyPart>('CHEST');
-  const [duration, setDuration] = useState(30);
-  const [energyLevel, setEnergyLevel] = useState(5);
-  const [fatigueLevel, setFatigueLevel] = useState(5);
-  const [painLevel, setPainLevel] = useState(1);
+  const [duration, setDuration] = useState('30');
+  const [energyLevel, setEnergyLevel] = useState('5');
+  const [fatigueLevel, setFatigueLevel] = useState('5');
+  const [painLevel, setPainLevel] = useState('1');
 
   const fetchWorkouts = async () => {
     try {
@@ -59,10 +61,10 @@ export const WorkoutsPage: React.FC = () => {
   const resetForm = () => {
     setTitle('');
     setBodyPart('CHEST');
-    setDuration(30);
-    setEnergyLevel(5);
-    setFatigueLevel(5);
-    setPainLevel(1);
+    setDuration('30');
+    setEnergyLevel('5');
+    setFatigueLevel('5');
+    setPainLevel('1');
     setEditingId(null);
   };
 
@@ -71,13 +73,14 @@ export const WorkoutsPage: React.FC = () => {
     setIsLoading(true);
     setError('');
     try {
+      // Se valida antes de llamar a la API; un error lanza FormValidationError con el mensaje a mostrar.
       const data: CreateWorkoutDTO = {
-        title,
+        title: requireText(title, 'título'),
         bodyPart,
-        durationMinutes: duration,
-        energyLevel,
-        fatigueLevel,
-        painLevel,
+        durationMinutes: parseNumberField(duration, { label: 'duración', min: 0, max: 1440, integer: true, positive: true }),
+        energyLevel: parseNumberField(energyLevel, { label: 'energía', min: 1, max: 10, integer: true }),
+        fatigueLevel: parseNumberField(fatigueLevel, { label: 'fatiga', min: 1, max: 10, integer: true }),
+        painLevel: parseNumberField(painLevel, { label: 'dolor', min: 1, max: 10, integer: true }),
         date: new Date().toISOString(),
       };
 
@@ -91,10 +94,8 @@ export const WorkoutsPage: React.FC = () => {
 
       resetForm();
       await fetchWorkouts();
-    } catch (err: any) {
-      const msg =
-        err.response?.data?.error?.message ||
-        (editingId ? 'Error al actualizar entrenamiento' : 'Error al crear entrenamiento');
+    } catch (err) {
+      const msg = getErrorMessage(err, editingId ? 'Error al actualizar entrenamiento' : 'Error al crear entrenamiento');
       setError(msg);
       addNotification(msg, 'error');
       setIsLoading(false);
@@ -105,10 +106,10 @@ export const WorkoutsPage: React.FC = () => {
     setEditingId(workout.id);
     setTitle(workout.title);
     setBodyPart(workout.bodyPart);
-    setDuration(workout.durationMinutes);
-    setEnergyLevel(workout.energyLevel);
-    setFatigueLevel(workout.fatigueLevel);
-    setPainLevel(workout.painLevel);
+    setDuration(String(workout.durationMinutes));
+    setEnergyLevel(String(workout.energyLevel));
+    setFatigueLevel(String(workout.fatigueLevel));
+    setPainLevel(String(workout.painLevel));
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -143,7 +144,7 @@ export const WorkoutsPage: React.FC = () => {
         <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="title" style={{ fontSize: '0.9rem' }}>Título</label>
-            <input id="title" required type="text" placeholder="Ej. Día de pecho" value={title} onChange={(e) => setTitle(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <input id="title" required type="text" maxLength={255} placeholder="Ej. Día de pecho" value={title} onChange={(e) => setTitle(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="bodyPart" style={{ fontSize: '0.9rem' }}>Parte del cuerpo</label>
@@ -161,19 +162,19 @@ export const WorkoutsPage: React.FC = () => {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="duration" style={{ fontSize: '0.9rem' }}>Duración (min)</label>
-            <input id="duration" type="number" min="1" value={duration} onChange={(e) => setDuration(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <NumberInput id="duration" value={duration} onChange={setDuration} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="energy" style={{ fontSize: '0.9rem' }}>Energía (1-10)</label>
-            <input id="energy" type="number" min="1" max="10" value={energyLevel} onChange={(e) => setEnergyLevel(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <NumberInput id="energy" value={energyLevel} onChange={setEnergyLevel} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="fatigue" style={{ fontSize: '0.9rem' }}>Fatiga (1-10)</label>
-            <input id="fatigue" type="number" min="1" max="10" value={fatigueLevel} onChange={(e) => setFatigueLevel(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <NumberInput id="fatigue" value={fatigueLevel} onChange={setFatigueLevel} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="pain" style={{ fontSize: '0.9rem' }}>Dolor (1-10)</label>
-            <input id="pain" type="number" min="1" max="10" value={painLevel} onChange={(e) => setPainLevel(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <NumberInput id="pain" value={painLevel} onChange={setPainLevel} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <FormSubmitActions
             isLoading={isLoading}

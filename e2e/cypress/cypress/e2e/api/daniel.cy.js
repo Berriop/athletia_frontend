@@ -84,7 +84,7 @@ describe(`[${INTEGRANTE}] API`, () => {
     it('200: la solicitud responde igual aunque el correo no exista', () => {
       cy.apiRequest('POST', '/auth/forgot-password', { body: { email: 'no.existe.api@athletia.test' } }).then(({ status, body }) => {
         expect(status).to.eq(200);
-        expect(body.data.message).to.eq('If email exists, a reset link has been sent.');
+        expect(body.data.message).to.eq('Si el correo está registrado, te enviamos un enlace para restablecer la contraseña.');
       });
     });
 
@@ -103,7 +103,7 @@ describe(`[${INTEGRANTE}] API`, () => {
       cy.task('resetTokenOf', cuenta.email).then((resetToken) => {
         cy.apiRequest('POST', '/auth/reset-password', { body: { token: resetToken, newPassword: NUEVA_CLAVE } }).then(({ status, body }) => {
           expect(status).to.eq(200);
-          expect(body.data.message).to.eq('Password has been reset successfully.');
+          expect(body.data.message).to.eq('La contraseña se restableció correctamente.');
         });
       });
       cy.apiRequest('POST', '/auth/login', { body: { email: cuenta.email, password: NUEVA_CLAVE } }).its('status').should('eq', 200);

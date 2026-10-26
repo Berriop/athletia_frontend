@@ -24,7 +24,7 @@ describe(`[${INTEGRANTE}] Regresión E2E`, () => {
       cy.contains('h4', '7 horas').should('not.exist');
     });
 
-    it('si se vacía el campo de horas el servidor rechaza el cambio y el registro no se modifica', () => {
+    it('si se vacía el campo de horas el formulario avisa y no envía el cambio', () => {
       cy.apiRegister(newAccount('sueno-editar-vacio')).then(({ token }) => {
         cy.apiCreate('/sleeps', token, sueno({ hoursSlept: 7 }));
         cy.visitWithSession('/sleep', token);
@@ -33,10 +33,11 @@ describe(`[${INTEGRANTE}] Regresión E2E`, () => {
 
       tarjeta('7 horas').find('button[title="Editar"]').click();
       cy.get('#hours').clear();
+      cy.get('#hours').should('have.value', '');
       cy.get('form button[type="submit"]').click();
 
-      cy.wait('@editar').its('response.statusCode').should('eq', 400);
-      cy.contains('Error al actualizar el registro').should('be.visible');
+      cy.contains('El campo horas de sueño es obligatorio').should('be.visible');
+      cy.get('@editar.all').should('have.length', 0);
       cy.contains('h4', '7 horas').should('exist');
     });
   });

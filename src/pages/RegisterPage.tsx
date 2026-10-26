@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { authService } from '../services/auth.service';
 import { PasswordStrengthMeter, checkPasswordStrength } from '../components/PasswordStrengthMeter';
+import { getErrorMessage } from '../utils/formValidation';
 
 export const RegisterPage: React.FC = () => {
   const [name, setName] = useState('');
@@ -41,12 +42,8 @@ export const RegisterPage: React.FC = () => {
       const response = await authService.register(email, password, confirmPassword, name);
       login(response.token, response.user);
       navigate('/dashboard', { replace: true });
-    } catch (err: any) {
-      const backendError =
-        err.response?.data?.error?.message ||
-        err.response?.data?.message ||
-        'Error al registrarse';
-      setError(backendError);
+    } catch (err) {
+      setError(getErrorMessage(err, 'Error al registrarse'));
     } finally {
       setIsLoading(false);
     }

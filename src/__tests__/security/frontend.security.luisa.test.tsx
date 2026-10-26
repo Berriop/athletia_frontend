@@ -125,7 +125,7 @@ describe('[Seguridad] RF-02 — el login falla sin dejar rastros de sesión', ()
   }
 
   it('credenciales incorrectas no guardan token ni inician sesión', async () => {
-    vi.mocked(authService.login).mockRejectedValue({ response: { data: { error: { message: 'Invalid credentials' } } } });
+    vi.mocked(authService.login).mockRejectedValue({ response: { status: 401, data: { error: { message: 'Correo o contraseña incorrectos' } } } });
 
     await intentarLogin();
 

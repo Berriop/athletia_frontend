@@ -30,5 +30,5 @@ Característica: [Luisa Espinal] RF-01 Registro de cuenta
   Escenario: [Luisa Espinal] Rechaza un correo que ya está registrado
     Dado Ana tiene una cuenta registrada pero no ha iniciado sesión
     Cuando ella intenta registrarse otra vez con el mismo correo
-    Entonces ella ve el mensaje de error "Email already in use"
+    Entonces ella ve el mensaje de error "Ya existe una cuenta con este correo"
     Y ella está en la ruta "/register"

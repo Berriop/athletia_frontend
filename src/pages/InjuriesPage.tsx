@@ -8,6 +8,8 @@ import { EditModeBadge } from '../components/EditModeBadge';
 import { RowActionButtons } from '../components/RowActionButtons';
 import { ListStatus } from '../components/ListStatus';
 import { FormSubmitActions } from '../components/FormSubmitActions';
+import { NumberInput } from '../components/NumberInput';
+import { getErrorMessage, parseNumberField, requireText } from '../utils/formValidation';
 
 export const InjuriesPage: React.FC = () => {
   const [injuries, setInjuries] = useState<Injury[]>([]);
@@ -20,7 +22,7 @@ export const InjuriesPage: React.FC = () => {
   // Form states
   const [injuryName, setInjuryName] = useState('');
   const [bodyArea, setBodyArea] = useState('');
-  const [severity, setSeverity] = useState(5);
+  const [severity, setSeverity] = useState('5');
   const [isActive, setIsActive] = useState(true);
   const [notes, setNotes] = useState('');
 
@@ -42,39 +44,35 @@ export const InjuriesPage: React.FC = () => {
   const resetForm = () => {
     setInjuryName('');
     setBodyArea('');
-    setSeverity(5);
+    setSeverity('5');
     setIsActive(true);
     setNotes('');
     setEditingId(null);
   };
 
-  // Extrae el mensaje de validación específico que manda el backend (Zod
-  // details), en vez de mostrar siempre un texto genérico. Si el error no
-  // trae esa forma (ej. red caída, sin response), devuelve null y quien
-  // llama usa su propio mensaje de respaldo.
-  const getBackendValidationMessage = (err: unknown): string | null => {
-    const details = (err as { response?: { data?: { error?: { details?: { message: string }[] } } } })?.response
-      ?.data?.error?.details;
-    if (Array.isArray(details) && details.length > 0) {
-      return details.map((d) => d.message).join(' ');
-    }
-    return null;
-  };
+  // Valida el formulario antes de llamar a la API; lanza FormValidationError con el mensaje a mostrar.
+  const buildInjuryData = (): CreateInjuryDTO => ({
+    injuryName: requireText(injuryName, 'nombre de la lesión'),
+    bodyArea: requireText(bodyArea, 'área del cuerpo'),
+    severity: parseNumberField(severity, { label: 'severidad', min: 1, max: 10, integer: true }),
+    isActive,
+    notes,
+  });
 
   const handleCreate = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
     try {
-      const data: CreateInjuryDTO = { injuryName, bodyArea, severity, isActive, notes };
+      const data = buildInjuryData();
       await injuryService.create(data);
       addNotification('Lesión registrada correctamente', 'success');
       resetForm();
       await fetchInjuries();
     } catch (err) {
-      const specificMessage = getBackendValidationMessage(err);
-      setError(specificMessage || 'Error al reportar lesión');
-      addNotification(specificMessage || 'Error al registrar lesión', 'error');
+      const msg = getErrorMessage(err, 'Error al reportar lesión');
+      setError(msg);
+      addNotification(msg, 'error');
       setIsLoading(false);
     }
   };
@@ -85,15 +83,15 @@ export const InjuriesPage: React.FC = () => {
     setIsLoading(true);
     setError('');
     try {
-      const data: CreateInjuryDTO = { injuryName, bodyArea, severity, isActive, notes };
+      const data = buildInjuryData();
       await injuryService.update(editingId, data);
       addNotification('Lesión actualizada correctamente', 'success');
       resetForm();
       await fetchInjuries();
     } catch (err) {
-      const specificMessage = getBackendValidationMessage(err);
-      setError(specificMessage || 'Error al actualizar lesión');
-      addNotification(specificMessage || 'Error al actualizar lesión', 'error');
+      const msg = getErrorMessage(err, 'Error al actualizar lesión');
+      setError(msg);
+      addNotification(msg, 'error');
       setIsLoading(false);
     }
   };
@@ -102,7 +100,7 @@ export const InjuriesPage: React.FC = () => {
     setEditingId(injury.id);
     setInjuryName(injury.injuryName);
     setBodyArea(injury.bodyArea);
-    setSeverity(injury.severity);
+    setSeverity(String(injury.severity));
     setIsActive(injury.isActive);
     setNotes(injury.notes || '');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -147,7 +145,7 @@ export const InjuriesPage: React.FC = () => {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label htmlFor="severity" style={{ fontSize: '0.9rem' }}>Severidad (1-10)</label>
-            <input id="severity" required type="number" min="1" max="10" value={severity} onChange={e => setSeverity(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '4px' }} />
+            <NumberInput id="severity" value={severity} onChange={setSeverity} style={{ padding: '0.5rem', borderRadius: '4px' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', justifyContent: 'center' }}>
             <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', cursor: 'pointer' }}>
@@ -157,7 +155,7 @@ export const InjuriesPage: React.FC = () => {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', gridColumn: 'span 2' }}>
             <label htmlFor="notes" style={{ fontSize: '0.9rem' }}>Notas sobre la lesión</label>
-            <textarea id="notes" placeholder="Notas sobre el tratamiento o dolor..." value={notes} onChange={e => setNotes(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', minHeight: '80px', backgroundColor: 'var(--bg-card)', color: 'inherit', border: '1px solid var(--border)' }} />
+            <textarea id="notes" maxLength={1000} placeholder="Notas sobre el tratamiento o dolor..." value={notes} onChange={e => setNotes(e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', minHeight: '80px', backgroundColor: 'var(--bg-card)', color: 'inherit', border: '1px solid var(--border)' }} />
           </div>
           <FormSubmitActions
             isLoading={isLoading}
