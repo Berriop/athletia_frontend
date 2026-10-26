@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { act, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { MealsPage } from '../../pages/MealsPage';
@@ -201,9 +201,7 @@ describe('[Seguridad] RF-30 — AdminPage', () => {
     renderConNotificaciones(<AdminPage />);
     await screen.findByText('otro@example.com');
 
-    await act(async () => {
-      await user.click(screen.getByTitle('Bloquear'));
-    });
+    await user.click(screen.getByTitle('Bloquear'));
 
     expect(api.patch).toHaveBeenCalledWith('/admin/users/u2/toggle-block', {});
     expect(await screen.findByText('Bloqueado')).toBeInTheDocument();

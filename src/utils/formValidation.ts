@@ -20,10 +20,10 @@ export interface NumberRule {
  * avisan al guardar que el valor debe ser entero.
  */
 export function sanitizeNumberInput(raw: string): string {
-  const onlyValid = raw.replace(',', '.').replace(/[^\d.]/g, '');
+  const onlyValid = raw.replaceAll(',', '.').replaceAll(/[^\d.]/g, '');
   const firstDot = onlyValid.indexOf('.');
   if (firstDot === -1) return onlyValid;
-  return onlyValid.slice(0, firstDot + 1) + onlyValid.slice(firstDot + 1).replace(/\./g, '');
+  return onlyValid.slice(0, firstDot + 1) + onlyValid.slice(firstDot + 1).replaceAll('.', '');
 }
 
 function checkNumber(raw: string, rule: NumberRule): number {
