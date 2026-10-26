@@ -8,7 +8,16 @@ const { promoteToAdmin, resetTokenOf } = require('./cypress/support/database.cjs
  * (backend con RATE_LIMIT_DISABLED=true y frontend de Vite). `scripts/run.cjs` la levanta
  * y define E2E_BASE_URL y E2E_API_URL; también se pueden apuntar a otra instalación.
  */
+// Pruebas con IA de Cypress (cy.prompt y Studio): necesitan la sesión de Cypress Cloud y
+// tienen límite de uso en el plan gratuito, así que solo se cargan con E2E_IA=true
+// (npm run ia:open / npm run ia:record) y quedan fuera de las ejecuciones normales.
+const IA_SPECS = 'cypress/e2e/ia/**/*.cy.js';
+const IA_MODE = process.env.E2E_IA === 'true';
+
 module.exports = defineConfig({
+  // Proyecto de Cypress Cloud. La record key NO va aquí: se pasa con CYPRESS_RECORD_KEY.
+  projectId: 'wq9m8m',
+
   reporter: 'mochawesome',
 
   reporterOptions: {
@@ -24,7 +33,8 @@ module.exports = defineConfig({
 
   e2e: {
     baseUrl: process.env.E2E_BASE_URL || 'http://localhost:5174',
-    specPattern: 'cypress/e2e/**/*.cy.js',
+    specPattern: IA_MODE ? IA_SPECS : 'cypress/e2e/**/*.cy.js',
+    excludeSpecPattern: IA_MODE ? [] : [IA_SPECS],
     setupNodeEvents(on, config) {
       on('task', {
         log: (message) => {

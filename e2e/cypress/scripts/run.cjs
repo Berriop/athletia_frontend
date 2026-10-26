@@ -9,6 +9,9 @@ const fs = require('node:fs');
  *   node scripts/run.cjs e2e [integrante] → solo E2E/API (luisa | juanpablo | daniel)
  *   node scripts/run.cjs visual [integrante] → solo las pruebas visuales (las que se envían a Argos)
  *   node scripts/run.cjs open             → abre la interfaz de Cypress con la pila levantada
+ *   node scripts/run.cjs ia-open          → abre Cypress solo con las pruebas de IA (cypress/e2e/ia)
+ *   node scripts/run.cjs ia-record [integrante] → ejecuta las pruebas de IA y las graba en Cypress Cloud
+ *                                           (requiere la variable CYPRESS_RECORD_KEY)
  *
  * Variables opcionales: E2E_BASE_URL (frontend ya desplegado, no se levanta nada),
  * E2E_BACKEND_DIR, E2E_API_PORT y E2E_FRONTEND_PORT.
@@ -84,6 +87,10 @@ function cypress(args, env) {
 }
 
 async function main() {
+  if (mode === 'ia-record' && !process.env.CYPRESS_RECORD_KEY) {
+    throw new Error('Falta la variable CYPRESS_RECORD_KEY con la record key del proyecto de Cypress Cloud.');
+  }
+
   let stackEnv = {};
   if (!process.env.E2E_BASE_URL && mode !== 'component') {
     const apiPort = process.env.E2E_API_PORT || String(pickFreePort([4002, 4102, 4202, 4302, 4402, 4502]));
@@ -113,6 +120,11 @@ async function main() {
   if (mode === 'visual') status = cypress(['run', '--e2e', '--spec', `cypress/e2e/visual/${member || '*'}.cy.js`], stackEnv);
   if (mode === 'e2e' || mode === 'all') status = cypress(['run', '--e2e', ...memberSpecs], stackEnv);
   if (mode === 'component' || (mode === 'all' && !member)) status = cypress(['run', '--component'], stackEnv) || status;
+
+  const iaEnv = { ...stackEnv, E2E_IA: 'true' };
+  const iaSpecs = member ? ['--spec', `cypress/e2e/ia/${member}.*.cy.js`] : [];
+  if (mode === 'ia-open') status = cypress(['open', '--e2e'], iaEnv);
+  if (mode === 'ia-record') status = cypress(['run', '--e2e', '--record', ...iaSpecs], iaEnv);
   return status;
 }
 

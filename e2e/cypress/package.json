@@ -12,7 +12,10 @@
     "test:daniel": "node scripts/run.cjs e2e daniel",
     "test:visual": "node scripts/run.cjs visual",
     "test:visual:luisa": "node scripts/run.cjs visual luisa",
-    "cypress:open": "node scripts/run.cjs open"
+    "cypress:open": "node scripts/run.cjs open",
+    "ia:open": "node scripts/run.cjs ia-open",
+    "ia:record": "node scripts/run.cjs ia-record",
+    "ia:record:juanpablo": "node scripts/run.cjs ia-record juanpablo"
   },
   "devDependencies": {
     "@argos-ci/cli": "6.11.0",
