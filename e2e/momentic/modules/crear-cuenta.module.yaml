@@ -1,0 +1,28 @@
+fileType: momentic/module/v2
+# Correo único para cada prueba (lo genera la prueba que usa el módulo).
+parameters:
+  - name: EMAIL
+id: crear-cuenta
+steps:
+  - navigate: /register
+  # El formulario aparece con una animación: si se escribe antes, se pierden letras.
+  - assert: The "Crear Cuenta" registration form is fully visible with its input fields
+  - type:
+      text: Ana Atleta
+      into: Nombre completo
+  - type:
+      text: "{{ env.EMAIL }}"
+      into: Correo electrónico
+  - type:
+      text: E2eP@ssw0rd2026!
+      into: Contraseña segura
+  - type:
+      text: E2eP@ssw0rd2026!
+      into: Confirmar contraseña
+  # El botón se habilita solo cuando la contraseña cumple la política y coincide.
+  - assert: The "Crear Cuenta" submit button is enabled and both password fields are
+      filled
+  # "Crear Cuenta" es también el título del formulario: si no se precisa, la IA a
+  # veces hace clic en el título y el registro no se envía.
+  - click: The purple "Crear Cuenta" submit button at the bottom of the form
+  - assert: The dashboard is shown with a welcome message for Ana Atleta

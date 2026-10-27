@@ -1,0 +1,24 @@
+fileType: momentic/test/v2
+id: jp-rf14-reportar-lesion
+url: http://localhost:5180
+before:
+  - module:
+      path: ../../modules/crear-cuenta.module.yaml
+      inputs:
+        EMAIL:
+          javascript: "'momentic.rf14.' + Date.now() + '@athletia.test'"
+steps:
+  - navigate: /injuries
+  - type:
+      text: Rodilla derecha
+      into: Área del cuerpo
+  - type:
+      text: Esguince leve
+      into: Nombre de la lesión
+  - type:
+      text: "4"
+      into: Severidad (1-10)
+      clear: inputs
+  - click: Registrar Lesión
+  - assert: An injury card "Esguince leve" for "Rodilla derecha" with severity 4/10
+      is listed and marked as ACTIVA

@@ -1,0 +1,23 @@
+fileType: momentic/test/v2
+id: jp-rf16-eliminar-lesion
+url: http://localhost:5180
+before:
+  - module:
+      path: ../../modules/crear-cuenta.module.yaml
+      inputs:
+        EMAIL:
+          javascript: "'momentic.rf16.' + Date.now() + '@athletia.test'"
+steps:
+  - navigate: /injuries
+  - type:
+      text: Hombro izquierdo
+      into: Área del cuerpo
+  - type:
+      text: Tendinitis rotuliana
+      into: Nombre de la lesión
+  - click: Registrar Lesión
+  - assert: An injury card "Tendinitis rotuliana" is listed
+  - click: The delete (trash) button on the "Tendinitis rotuliana" card
+  - click: Aceptar
+  - checkPageContains: No hay lesiones reportadas.
+  - checkPageDoesNotContain: Tendinitis rotuliana

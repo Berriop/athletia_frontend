@@ -27,26 +27,34 @@ function escapeHtml(text: string): string {
     .replaceAll("'", '&#39;');
 }
 
+// Con `loading=async` el evento load del <script> llega antes de que existan
+// google.maps.Map y los demás constructores; Google avisa que terminó llamando
+// a la función indicada en `callback`. Esperar al load dejaba la página en
+// "Buscando gimnasios..." con el error "google.maps.Map is not a constructor".
+const MAPS_READY_CALLBACK = '__athletiaGoogleMapsReady';
+let mapsScriptPromise: Promise<void> | null = null;
+
 function loadGoogleMapsScript(): Promise<void> {
-  return new Promise((resolve, reject) => {
-    if ((window as unknown as Record<string, unknown>).google) {
-      resolve();
-      return;
-    }
-    const existing = document.getElementById('google-maps-script');
-    if (existing) {
-      existing.addEventListener('load', () => resolve());
-      return;
-    }
+  // Mientras el script carga, `google` ya existe pero aún no está listo: se espera
+  // a esa misma carga en lugar de darlo por terminado.
+  if (mapsScriptPromise) return mapsScriptPromise;
+  const globals = window as unknown as Record<string, unknown>;
+  if (globals.google) return Promise.resolve();
+
+  mapsScriptPromise = new Promise((resolve, reject) => {
+    globals[MAPS_READY_CALLBACK] = () => resolve();
     const script = document.createElement('script');
     script.id = 'google-maps-script';
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${MAPS_API_KEY}&libraries=places&loading=async`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${MAPS_API_KEY}&libraries=places&loading=async&callback=${MAPS_READY_CALLBACK}`;
     script.async = true;
     script.defer = true;
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error('Failed to load Google Maps API'));
+    script.onerror = () => {
+      mapsScriptPromise = null;
+      reject(new Error('Failed to load Google Maps API'));
+    };
     document.head.appendChild(script);
   });
+  return mapsScriptPromise;
 }
 
 export const GymFinderPage: React.FC = () => {

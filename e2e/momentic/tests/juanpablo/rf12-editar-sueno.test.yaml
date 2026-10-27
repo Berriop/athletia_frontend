@@ -1,0 +1,26 @@
+fileType: momentic/test/v2
+id: jp-rf12-editar-sueno
+url: http://localhost:5180
+before:
+  - module:
+      path: ../../modules/crear-cuenta.module.yaml
+      inputs:
+        EMAIL:
+          javascript: "'momentic.rf12.' + Date.now() + '@athletia.test'"
+steps:
+  - navigate: /sleep
+  - type:
+      text: "7"
+      into: Horas de sueño
+      clear: inputs
+  - click: Guardar Registro
+  - assert: A sleep record card showing "7 horas" is listed
+  - click: The edit (pencil) button on the "7 horas" card
+  - assert: The form title is "Editar Registro" and the hours field shows 7
+  - type:
+      text: "9"
+      into: Horas de sueño
+      clear: inputs
+  - click: Actualizar Registro
+  - checkPageContains: 9 horas
+  - checkPageDoesNotContain: 7 horas

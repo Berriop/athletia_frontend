@@ -1,0 +1,29 @@
+fileType: momentic/test/v2
+id: jp-rf15-editar-lesion
+url: http://localhost:5180
+before:
+  - module:
+      path: ../../modules/crear-cuenta.module.yaml
+      inputs:
+        EMAIL:
+          javascript: "'momentic.rf15.' + Date.now() + '@athletia.test'"
+steps:
+  - navigate: /injuries
+  - type:
+      text: Rodilla derecha
+      into: Área del cuerpo
+  - type:
+      text: Esguince leve
+      into: Nombre de la lesión
+  - click: Registrar Lesión
+  - assert: An injury card "Esguince leve" is listed
+  - click: The edit (pencil) button on the "Esguince leve" card
+  - assert: The form title is "Editar Lesión" and the injury name field shows
+      "Esguince leve"
+  - type:
+      text: Esguince grave
+      into: Nombre de la lesión
+      clear: inputs
+  - click: Actualizar Lesión
+  - checkPageContains: Esguince grave
+  - checkPageDoesNotContain: Esguince leve

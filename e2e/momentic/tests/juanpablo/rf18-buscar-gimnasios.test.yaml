@@ -1,0 +1,27 @@
+fileType: momentic/test/v2
+id: jp-rf18-buscar-gimnasios
+url: http://localhost:5180
+# RF-18 contra Google Maps Places real (en Cypress, Screenplay y Stagehand está simulado).
+# El proyecto de Google Cloud de la API key no tiene facturación activa, así que Google
+# responde BillingNotEnabledMapError y no devuelve gimnasios. Esta prueba verifica que la
+# app maneja ese error del servicio externo: termina de cargar, avisa y deja buscar de nuevo.
+# Antes del arreglo de GymFinderPage, la página se quedaba en "Buscando gimnasios..."
+# (google.maps.Map is not a constructor) y esta prueba fallaba en el primer assert.
+before:
+  - module:
+      path: ../../modules/crear-cuenta.module.yaml
+      inputs:
+        EMAIL:
+          javascript: "'momentic.rf18.' + Date.now() + '@athletia.test'"
+steps:
+  - navigate: /gyms
+  - assert: The page is no longer showing "Buscando gimnasios..." and the "Buscar" button is enabled
+  - type:
+      text: Envigado
+      into: Buscar ciudad o zona...
+  - click: The "Buscar" button next to the search field
+  # Según la respuesta de Google la app muestra "Error al buscar gimnasios..." o
+  # "No se encontraron resultados para esa búsqueda."; ambas son avisos válidos.
+  - assert: The search has finished and the page shows a message that no gyms could be found or loaded, with no gym results listed
+  - checkPageDoesNotContain: Buscando gimnasios...
+  - assert: The "Buscar" button is enabled again so the user can retry the search

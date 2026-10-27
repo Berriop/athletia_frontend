@@ -1,0 +1,22 @@
+fileType: momentic/test/v2
+id: jp-rf13-eliminar-sueno
+url: http://localhost:5180
+before:
+  - module:
+      path: ../../modules/crear-cuenta.module.yaml
+      inputs:
+        EMAIL:
+          javascript: "'momentic.rf13.' + Date.now() + '@athletia.test'"
+steps:
+  - navigate: /sleep
+  - type:
+      text: "6"
+      into: Horas de sueño
+      clear: inputs
+  - click: Guardar Registro
+  - assert: A sleep record card showing "6 horas" is listed
+  - click: The delete (trash) button on the "6 horas" card
+  - assert: A confirmation dialog asks whether to delete the sleep record
+  - click: Aceptar
+  - checkPageContains: No hay registros de sueño.
+  - checkPageDoesNotContain: 6 horas
