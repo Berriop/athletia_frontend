@@ -1,0 +1,1205 @@
+[
+  {
+    "id": "TC001",
+    "title": "Create a sleep record",
+    "description": "This verifies that an authenticated user can save a new sleep record and see it appear in the list.",
+    "category": "RF-12 Editar registro de sueño",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the sleep section link"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the sleep hours field with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the sleep quality field with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the stress level field with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the nightmares field with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the notes field with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a valid date into the date field"
+      },
+      {
+        "type": "action",
+        "description": "Save the sleep record"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a new sleep record is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC002",
+    "title": "Log in and reach the dashboard",
+    "description": "This verifies that a valid test user can sign in and land on the main dashboard.",
+    "category": "Inicio de sesión",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the dashboard is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC003",
+    "title": "Create a valid injury record",
+    "description": "This test verifies that a user can register a new injury with valid text fields and see it added to the list.",
+    "category": "RF-14 Reportar lesión",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /injuries"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the body area field with Right knee"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the injury name field with Sprain"
+      },
+      {
+        "type": "action",
+        "description": "Select a valid severity level"
+      },
+      {
+        "type": "action",
+        "description": "Register the injury"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a new injury card is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC004",
+    "title": "Delete a sleep record after confirming",
+    "description": "This verifies that a sleep record can be deleted through the confirmation flow and no longer appears.",
+    "category": "RF-13 Eliminar registro de sueño",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the sleep section link"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the sleep hours field with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the sleep quality field with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the stress level field with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the nightmares field with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the notes field with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a valid date into the date field"
+      },
+      {
+        "type": "action",
+        "description": "Save the sleep record"
+      },
+      {
+        "type": "action",
+        "description": "Open the delete action for the created sleep record"
+      },
+      {
+        "type": "action",
+        "description": "Confirm the deletion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the sleep record is removed or an empty state is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC005",
+    "title": "Delete an injury after confirming",
+    "description": "This test verifies that a created injury can be deleted after confirmation and is removed from the list.",
+    "category": "RF-16 Eliminar lesión",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /injuries"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the body area field with Right wrist"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the injury name field with Contusion"
+      },
+      {
+        "type": "action",
+        "description": "Select a valid severity level"
+      },
+      {
+        "type": "action",
+        "description": "Register the injury"
+      },
+      {
+        "type": "action",
+        "description": "Open the delete action for the injury card"
+      },
+      {
+        "type": "action",
+        "description": "Confirm the deletion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the injury card disappears"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC006",
+    "title": "Edit a sleep record from its card",
+    "description": "This verifies that an existing sleep record can be opened in edit mode, updated, and reflected in the list.",
+    "category": "RF-12 Editar registro de sueño",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the sleep section link"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the sleep hours field with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the sleep quality field with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the stress level field with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the nightmares field with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the notes field with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a valid date into the date field"
+      },
+      {
+        "type": "action",
+        "description": "Save the sleep record"
+      },
+      {
+        "type": "action",
+        "description": "Open the edit mode for the created sleep record"
+      },
+      {
+        "type": "action",
+        "description": "Change the sleep hours to a different valid value"
+      },
+      {
+        "type": "action",
+        "description": "Update the sleep record"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated sleep record is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC007",
+    "title": "Edit an injury name from its card",
+    "description": "This test verifies that an existing injury can be opened in edit mode, updated, and shown with the new name in the list.",
+    "category": "RF-15 Editar lesión",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /injuries"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the body area field with Left ankle"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the injury name field with Strain"
+      },
+      {
+        "type": "action",
+        "description": "Select a valid severity level"
+      },
+      {
+        "type": "action",
+        "description": "Register the injury"
+      },
+      {
+        "type": "action",
+        "description": "Open edit mode for the injury card"
+      },
+      {
+        "type": "action",
+        "description": "Change the injury name to Mild strain"
+      },
+      {
+        "type": "action",
+        "description": "Update the injury"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated injury card is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC008",
+    "title": "Edit an injury record from its card",
+    "description": "This verifies that an existing injury can be opened in edit mode, changed, and reflected in the list.",
+    "category": "RF-15 editar lesión",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the injuries section link"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the injury name field with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the injury details field with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a valid date into the date field"
+      },
+      {
+        "type": "action",
+        "description": "Save the injury record"
+      },
+      {
+        "type": "action",
+        "description": "Open the edit mode for the created injury record"
+      },
+      {
+        "type": "action",
+        "description": "Change the injury name to a different valid value"
+      },
+      {
+        "type": "action",
+        "description": "Update the injury record"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated injury record is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC009",
+    "title": "Search for gyms and see the handled outcome",
+    "description": "An authenticated user can search for gyms by area and the page shows a handled error or no-results state with search available again.",
+    "category": "RF-18 Buscar gimnasios",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to open the gym search page"
+      },
+      {
+        "type": "action",
+        "description": "Wait for the page to finish loading"
+      },
+      {
+        "type": "action",
+        "description": "Fill the search field with Envigado"
+      },
+      {
+        "type": "action",
+        "description": "Start the search"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a handled search outcome is shown"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the search control is available again"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC010",
+    "title": "Show sleep validation errors for invalid input",
+    "description": "This verifies that invalid sleep form values are blocked and validation feedback is shown instead of saving.",
+    "category": "RF-12 Editar registro de sueño",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the sleep section link"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the sleep hours field with an invalid value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the sleep quality field with an out-of-range value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the stress level field with an out-of-range value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a future date into the date field"
+      },
+      {
+        "type": "action",
+        "description": "Save the sleep record"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify sleep validation errors are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify no new sleep record is saved"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC011",
+    "title": "Find gyms with a city search",
+    "description": "This test verifies that a signed-in user can search for gyms from the map page and see the app handle the search result state.",
+    "category": "Gym finder",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /gyms"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the location search field with Envigado"
+      },
+      {
+        "type": "action",
+        "description": "Submit the search"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the gym search state is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the app shows either a handled map error or a no-results state"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC012",
+    "title": "Search for gyms and handle an unavailable map result state",
+    "description": "This verifies that the gym finder accepts a search term and shows the handled no-results or map error state when real results are unavailable.",
+    "category": "RF-18",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the gym finder section link"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the search field with a city or area name"
+      },
+      {
+        "type": "action",
+        "description": "Submit the gym search"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the gym search result area shows either a handled error state or an empty result state"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC013",
+    "title": "Show injury validation errors for invalid input",
+    "description": "This verifies that invalid injury form values are blocked and validation feedback is shown instead of saving.",
+    "category": "RF-14 reportar lesión",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the injuries section link"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the injury name field with text-only invalid content"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the injury details field with an invalid value"
+      },
+      {
+        "type": "action",
+        "description": "Save the injury record"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify injury validation errors are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify no new injury record is saved"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC014",
+    "title": "Reject invalid sleep values",
+    "description": "This test verifies that invalid sleep hours, quality, stress, or future date input is blocked and the record is not saved.",
+    "category": "Sleep records",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /sleep"
+      },
+      {
+        "type": "action",
+        "description": "Fill an invalid sleep date into the date field"
+      },
+      {
+        "type": "action",
+        "description": "Fill an invalid number of sleep hours into the sleep hours field"
+      },
+      {
+        "type": "action",
+        "description": "Select an invalid sleep quality"
+      },
+      {
+        "type": "action",
+        "description": "Select an invalid stress level"
+      },
+      {
+        "type": "action",
+        "description": "Save the sleep record"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a sleep validation error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the sleep record is not saved"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC015",
+    "title": "Recover from the loading state and search normally",
+    "description": "An authenticated user can wait for the gym search page to finish loading and then submit a search.",
+    "category": "RF-18 Buscar gimnasios",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to open the gym search page"
+      },
+      {
+        "type": "action",
+        "description": "Wait for the page to finish loading"
+      },
+      {
+        "type": "action",
+        "description": "Fill the search field with Envigado"
+      },
+      {
+        "type": "action",
+        "description": "Start the search"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a handled search outcome is shown"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the search control is available again"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC016",
+    "title": "Reject invalid injury text input",
+    "description": "This test verifies that numbers or symbols in injury text fields are blocked by validation and the injury is not saved.",
+    "category": "RF-14 Reportar lesión",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /injuries"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the body area field with Knee 1"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the injury name field with Sprain!"
+      },
+      {
+        "type": "action",
+        "description": "Select a valid severity level"
+      },
+      {
+        "type": "action",
+        "description": "Register the injury"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a validation error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the injury is not registered"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC017",
+    "title": "Keep the search form usable after a handled search outcome",
+    "description": "An authenticated user can run a gym search and then perform another search after the page recovers from the handled outcome.",
+    "category": "RF-18 Buscar gimnasios",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to open the gym search page"
+      },
+      {
+        "type": "action",
+        "description": "Wait for the page to finish loading"
+      },
+      {
+        "type": "action",
+        "description": "Fill the search field with Envigado"
+      },
+      {
+        "type": "action",
+        "description": "Start the search"
+      },
+      {
+        "type": "action",
+        "description": "Wait for the search outcome to appear"
+      },
+      {
+        "type": "action",
+        "description": "Fill the search field with Envigado"
+      },
+      {
+        "type": "action",
+        "description": "Start the search again"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a handled search outcome is still shown"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the search control is available again"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC018",
+    "title": "Reject empty required injury fields",
+    "description": "This test verifies that required injury fields cannot be submitted empty and no injury is created.",
+    "category": "RF-14 Reportar lesión",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /injuries"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an injury validation error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the injury is not registered"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC019",
+    "title": "Show the search page while it is loading",
+    "description": "An authenticated user opening the gym search page sees the loading state before search controls are available.",
+    "category": "RF-18 Buscar gimnasios",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to open the gym search page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the loading state is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the search control is not yet available"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC020",
+    "title": "Cancel sleep record deletion",
+    "description": "This verifies that canceling the deletion confirmation leaves the sleep record intact.",
+    "category": "RF-13 Eliminar registro de sueño",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the sleep section link"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the sleep hours field with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the sleep quality field with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the stress level field with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the nightmares field with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the notes field with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a valid date into the date field"
+      },
+      {
+        "type": "action",
+        "description": "Save the sleep record"
+      },
+      {
+        "type": "action",
+        "description": "Open the delete action for the created sleep record"
+      },
+      {
+        "type": "action",
+        "description": "Cancel the deletion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the sleep record remains displayed"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC021",
+    "title": "Cancel injury deletion without removing the card",
+    "description": "This test verifies that canceling the delete confirmation keeps the injury record visible.",
+    "category": "RF-16 Eliminar lesión",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /injuries"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the body area field with Shoulder"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the injury name field with Overuse"
+      },
+      {
+        "type": "action",
+        "description": "Select a valid severity level"
+      },
+      {
+        "type": "action",
+        "description": "Register the injury"
+      },
+      {
+        "type": "action",
+        "description": "Open the delete action for the injury card"
+      },
+      {
+        "type": "action",
+        "description": "Cancel the deletion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the injury card remains visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC022",
+    "title": "Cancel injury record deletion",
+    "description": "This verifies that canceling the deletion confirmation leaves the injury record intact.",
+    "category": "RF-16 eliminar lesión",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the injuries section link"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the injury name field with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the injury details field with a valid value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a valid date into the date field"
+      },
+      {
+        "type": "action",
+        "description": "Save the injury record"
+      },
+      {
+        "type": "action",
+        "description": "Open the delete action for the created injury record"
+      },
+      {
+        "type": "action",
+        "description": "Cancel the deletion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the injury record remains displayed"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC023",
+    "title": "Show the login page for a visitor",
+    "description": "A visitor can open the login page and see the sign-in form before submitting credentials.",
+    "category": "RF-18 Buscar gimnasios",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the login form is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the sign-in controls are available"
+      }
+    ],
+    "priority": "Low"
+  }
+]

@@ -41,3 +41,5 @@ e2e/momentic/test-results/
 e2e/cypress/reports/
 e2e/cypress/cypress/screenshots/
 e2e/cypress/cypress/downloads/
+testsprite_tests/tmp/
+testsprite_tests/tmp/config.json
